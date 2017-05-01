@@ -1,0 +1,10 @@
+name: "DefUninyAds"
+
+platforms:
+  arm64-ios:
+    context:
+        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
+
+  armv7-ios:
+    context:
+        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
