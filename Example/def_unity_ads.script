@@ -7,7 +7,7 @@ local function unity_ads_callback(self, msg_type, message)
 		print(message.placementId," is ready")
 		btn_ready(self, message.placementId)
 	elseif msg_type == unityads.TYPE_DID_START then
-		print(message.placementId," is start")
+		print(message.placementId," did start")
 	elseif msg_type == unityads.TYPE_DID_ERROR then
 		print(message.message)
 -- errors info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_errors
@@ -34,11 +34,11 @@ local function unity_ads_callback(self, msg_type, message)
 		end
 	elseif msg_type == unityads.TYPE_DID_FINISH then
 --all finish states info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_finishstates
-		if message.error == unityads.FINISH_STATE_ERROR then
+		if message.state == unityads.FINISH_STATE_ERROR then
 			print("kUnityAdsFinishStateError")
-		elseif message.error == unityads.FINISH_STATE_SKIPPED then
+		elseif message.state == unityads.FINISH_STATE_SKIPPED then
 			print("kUnityAdsFinishStateSkipped")
-		elseif message.error == unityads.FINISH_STATE_COMPLETED then
+		elseif message.state == unityads.FINISH_STATE_COMPLETED then
 			print("kUnityAdsFinishStateCompleted")
 		end
 	end
@@ -62,7 +62,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("show_ads") then
-		show_ad(self, placementId)
+		show_ad(self, message.placementId)
 	elseif message_id == hash("init_unity_ads") then
 		init_unity_ads(self, message.appId)
 	end
