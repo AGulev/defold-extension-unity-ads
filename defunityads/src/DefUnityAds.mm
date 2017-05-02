@@ -5,7 +5,7 @@
 
 #include <AVFoundation/AVFoundation.h>
 #include <UIKit/UIKit.h>
-#include "DefUnityAdsDelegate.h"
+#include <UnityAds/UnityAds.h>
 
 struct DispatchToLua {
     DefUnityAdsListener listener;
@@ -13,17 +13,17 @@ struct DispatchToLua {
 
 DispatchToLua* defUtoLua;
 
-@interface DefUnityAdsDispatcherDelegate : NSObject <DispatchToLuaDelegate>{
+@interface DefUnityAdsDelegate : UIViewController<UnityAdsDelegate>{
 }
 
 @end
 
-@interface DefUnityAdsDispatcherDelegate ()
+@interface DefUnityAdsDelegate ()
 -(int)error_convert:(UnityAdsError)error;
 -(int)finish_state_convert:(UnityAdsFinishState)state;
 @end
 
-@implementation DefUnityAdsDispatcherDelegate
+@implementation DefUnityAdsDelegate
 
 -(int)error_convert:(UnityAdsError)error {
     switch(error){
@@ -76,7 +76,11 @@ DispatchToLua* defUtoLua;
     return(-1);
 }
 
--(void)dispatchUnityAdsReady:(NSString *)placementId {
+- (void)didReceiveMemoryWarning {
+    NSLog(@"didReceiveMemoryWarning\n");
+}
+
+-(void)unityAdsReady:(NSString *)placementId {
     lua_State* L = defUtoLua->listener.m_L;
     int top = lua_gettop(L);
     
@@ -101,7 +105,7 @@ DispatchToLua* defUtoLua;
     }
     assert(top == lua_gettop(L));
 }
--(void)dispatchUnityAdsDidStart:(NSString *)placementId {
+-(void)unityAdsDidStart:(NSString *)placementId {
     lua_State* L = defUtoLua->listener.m_L;
     int top = lua_gettop(L);
     
@@ -126,7 +130,7 @@ DispatchToLua* defUtoLua;
     }
     assert(top == lua_gettop(L));
 }
--(void)dispatchUnityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
+-(void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
     lua_State* L = defUtoLua->listener.m_L;
     int top = lua_gettop(L);
     
@@ -154,7 +158,7 @@ DispatchToLua* defUtoLua;
     }
     assert(top == lua_gettop(L));
 }
--(void)dispatchUnityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
+-(void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
     lua_State* L = defUtoLua->listener.m_L;
     int top = lua_gettop(L);
     
@@ -195,9 +199,6 @@ void DefUnityAds_Initialize(lua_State* L) {
     unityAds = [[DefUnityAdsDelegate alloc] init];
     unityAds.view.bounds = view.bounds;
     [view addSubview:unityAds.view];
-    
-    DefUnityAdsDispatcherDelegate *dUToLuaDelegate = [[DefUnityAdsDispatcherDelegate alloc] init];
-    unityAds.delegate = dUToLuaDelegate;
     
     [UnityAds initialize:gameId delegate:unityAds];
     

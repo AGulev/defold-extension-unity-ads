@@ -1,6 +1,6 @@
 # DefUnityAds
 
-This is [UnityAds](https://unity3d.com/ru/services/ads) native extansion for [Defold engine](http://www.defold.com).
+This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
 
 ## Installation
 
@@ -12,7 +12,7 @@ Open your game.project file and in the dependencies field under project add:
 ## Known issues
 
 - The currently supported platform is iOS.
-- Extansion do not support [getPlacementState](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate) method.
+- Extension do not support [getPlacementState](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate) method.
 
 ## Example
 
