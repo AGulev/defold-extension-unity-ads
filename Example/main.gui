@@ -45,21 +45,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  blend_mode: BLEND_MODE_ALPHA
   id: "video"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   template: "/dirtylarry/button.gui"
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -173,9 +164,6 @@ nodes {
   parent: "video/larrybutton"
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
@@ -185,7 +173,6 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
@@ -219,21 +206,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  blend_mode: BLEND_MODE_ALPHA
   id: "rewardedVideo"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   template: "/dirtylarry/button.gui"
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -348,9 +326,6 @@ nodes {
   parent: "rewardedVideo/larrybutton"
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
@@ -360,7 +335,6 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
@@ -394,21 +368,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  blend_mode: BLEND_MODE_ALPHA
   id: "init"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   template: "/dirtylarry/button.gui"
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -523,9 +488,6 @@ nodes {
   parent: "init/larrybutton"
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
@@ -534,7 +496,6 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
@@ -568,21 +529,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  blend_mode: BLEND_MODE_ALPHA
   id: "default"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   template: "/dirtylarry/button.gui"
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -698,9 +650,6 @@ nodes {
   parent: "default/larrybutton"
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
@@ -710,7 +659,6 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
@@ -744,21 +692,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  blend_mode: BLEND_MODE_ALPHA
   id: "input"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   template: "/dirtylarry/input.gui"
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -981,16 +920,12 @@ nodes {
   parent: "input/inner"
   layer: ""
   inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

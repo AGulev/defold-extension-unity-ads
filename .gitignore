@@ -8,3 +8,5 @@ build
 .cproject
 builtins
 .internal
+/bob.jar
+/bundle.sh

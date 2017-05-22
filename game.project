@@ -1,7 +1,7 @@
 [project]
 title = DefUnityAds
 version = 0.1
-dependencies = https://github.com/andsve/dirtylarry/archive/master.zip
+dependencies = https://github.com/andsve/dirtylarry/archive/master.zip https://github.com/britzl/defcon/archive/master.zip https://github.com/britzl/defnet/archive/3.1.zip
 
 [bootstrap]
 main_collection = /Example/main.collectionc
@@ -25,4 +25,8 @@ include_dirs = defunityads
 
 [ios]
 bundle_identifier = com.agulev.test
+
+[android]
+manifest = /defunityads/AndroidManifest.xml
+package = com.agulev.test
 
