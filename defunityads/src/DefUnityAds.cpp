@@ -8,7 +8,7 @@
 
 #if defined(DM_PLATFORM_IOS)
 
-#include "DefUnityAds_private.h"
+#include "objc/DefUnityAds_private.h"
 
 static int Initialize(lua_State* L) {
     DefUnityAds_Initialize(L);
@@ -124,6 +124,20 @@ dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
 
 #elif defined(DM_PLATFORM_ANDROID)
 
+static bool luaL_checkbool(lua_State *L, int numArg)
+{
+    bool b = false;
+    if (lua_isboolean(L, numArg))
+    {
+        b = lua_toboolean(L, numArg);
+    }
+    else
+    {
+        luaL_typerror(L, numArg, lua_typename(L, LUA_TBOOLEAN));
+    }
+    return b;
+}
+
 const char* unity_jar_path = "com/agulev/defunityads/DefUnityAds";
 
 static JNIEnv* Attach()
@@ -171,15 +185,36 @@ static jclass GetClass(JNIEnv* env, const char* classname)
     return outcls;
 }
 
-//static int Initialize(lua_State* L) {
-//    DefUnityAds_Initialize(L);
-//    return 0;
-//}
-//
-//static int Show(lua_State* L) {
-//    DefUnityAds_Show(L);
-//    return 0;
-//}
+static int Initialize(lua_State* L) {
+    AttachScope attachscope;
+    JNIEnv* env = attachscope.m_Env;
+    jclass cls = GetClass(env, unity_jar_path);
+    bool testmode_lua = false;
+    const char *appid_lua = luaL_checkstring(L, 1);
+    if (lua_type(L, 2) != LUA_TNONE){
+        testmode_lua = luaL_checkbool(L, 2);
+    }
+    jstring appid = env->NewStringUTF(appid_lua);
+    jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_Initialize", "(Ljava/lang/String;Z)V");
+    env->CallStaticBooleanMethod(cls, method, appid, testmode_lua? JNI_TRUE : JNI_FALSE);
+    return 0;
+
+}
+
+static int Show(lua_State* L) {
+    AttachScope attachscope;
+    JNIEnv* env = attachscope.m_Env;
+    jclass cls = GetClass(env, unity_jar_path);
+    
+    const char *placementId_lua = luaL_checkstring(L, 1);
+    jstring placementId = env->NewStringUTF(placementId_lua);
+    jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_Show", "(Ljava/lang/String;)V");
+    if (method == NULL){
+        dmLogInfo("SOMETHING WRONG");
+    }
+    env->CallStaticBooleanMethod(cls, method, placementId);
+    return 0;
+}
 
 static int isReady(lua_State* L) {
     AttachScope attachscope;
@@ -189,9 +224,6 @@ static int isReady(lua_State* L) {
     const char *placementId_lua = luaL_checkstring(L, 1);
     jstring placementId = env->NewStringUTF(placementId_lua);
     jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_isReady", "(Ljava/lang/String;)Z");
-    if (method == NULL){
-        dmLogInfo("SOMETHING WRONG");
-    }
 
     jboolean return_value = (jboolean)env->CallStaticBooleanMethod(cls, method, placementId);
     lua_pushboolean(L, JNI_TRUE == return_value);
@@ -245,20 +277,6 @@ static int getVersion(lua_State* L) {
     return 1;
 }
 
-static bool luaL_checkbool(lua_State *L, int numArg)
-{
-    bool b = false;
-    if (lua_isboolean(L, numArg))
-    {
-        b = lua_toboolean(L, numArg);
-    }
-    else
-    {
-        luaL_typerror(L, numArg, lua_typename(L, LUA_TBOOLEAN));
-    }
-    return b;
-}
-
 static int setDebugMode(lua_State* L) {
     bool enableDebugMode = luaL_checkbool(L, 1);
     AttachScope attachscope;
@@ -271,8 +289,8 @@ static int setDebugMode(lua_State* L) {
 
 static const luaL_reg Module_methods[] =
 {
-//    {"initialize", Initialize},
-//    {"show", Show},
+    {"initialize", Initialize},
+    {"show", Show},
     {"isReady", isReady},
     {"isSupported", isSupported},
     {"isInitialized", isInitialized},
@@ -281,6 +299,16 @@ static const luaL_reg Module_methods[] =
     {"setDebugMode", setDebugMode},
     {0, 0}
 };
+
+static void PreInit()
+{
+    AttachScope attachscope;
+    JNIEnv* env = attachscope.m_Env;
+    jclass cls = GetClass(env, unity_jar_path);
+    
+    jmethodID method = env->GetStaticMethodID(cls, "sdk_pre_init", "(Landroid/app/Activity;)V");
+    env->CallStaticObjectMethod(cls, method, dmGraphics::GetNativeAndroidActivity());
+}
 
 static void LuaInit(lua_State* L)
 {
@@ -323,6 +351,7 @@ dmExtension::Result AppInitializeUnityAds(dmExtension::AppParams* params)
 dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 {
     LuaInit(params->m_L);
+    PreInit();
     return dmExtension::RESULT_OK;
 }
 
