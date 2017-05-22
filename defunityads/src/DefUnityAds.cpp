@@ -124,6 +124,8 @@ dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
 
 #elif defined(DM_PLATFORM_ANDROID)
 
+#include "com_agulev_defunityads_DefUnityAds.h"
+
 static bool luaL_checkbool(lua_State *L, int numArg)
 {
     bool b = false;
@@ -136,6 +138,46 @@ static bool luaL_checkbool(lua_State *L, int numArg)
         luaL_typerror(L, numArg, lua_typename(L, LUA_TBOOLEAN));
     }
     return b;
+}
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsReady(JNIEnv *env, jclass jcls, jstring jstr)
+{
+	dmLogInfo("onUnityAdsReady WORK!");
+    const char* ch = env->GetStringUTFChars(jstr, 0);
+
+	dmLogInfo("placement id = %s", ch);
+
+    env->ReleaseStringUTFChars(jstr, ch);
+}
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsStart(JNIEnv *env, jclass jcls, jstring jstr)
+{
+	dmLogInfo("onUnityAdsStart WORK!");
+    const char* ch = env->GetStringUTFChars(jstr, 0);
+
+	dmLogInfo("placement id = %s ", ch);
+
+    env->ReleaseStringUTFChars(jstr, ch);
+}
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+{
+	dmLogInfo("onUnityAdsError WORK!");
+    const char* ch = env->GetStringUTFChars(jstr, 0);
+
+	dmLogInfo("%s %i", ch, (int)type);
+
+    env->ReleaseStringUTFChars(jstr, ch);
+}
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(JNIEnv *env, jclass jcls, jstring jstr, jint type)
+{
+	dmLogInfo("onUnityAdsFinish WORK!");
+    const char* ch = env->GetStringUTFChars(jstr, 0);
+
+	dmLogInfo("%s %i", ch, (int)type);
+
+    env->ReleaseStringUTFChars(jstr, ch);
 }
 
 const char* unity_jar_path = "com/agulev/defunityads/DefUnityAds";
@@ -209,9 +251,6 @@ static int Show(lua_State* L) {
     const char *placementId_lua = luaL_checkstring(L, 1);
     jstring placementId = env->NewStringUTF(placementId_lua);
     jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_Show", "(Ljava/lang/String;)V");
-    if (method == NULL){
-        dmLogInfo("SOMETHING WRONG");
-    }
     env->CallStaticBooleanMethod(cls, method, placementId);
     return 0;
 }
