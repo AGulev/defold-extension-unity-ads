@@ -4,7 +4,7 @@ version = 0.1
 dependencies = https://github.com/andsve/dirtylarry/archive/master.zip
 
 [bootstrap]
-main_collection = /Example/main.collectionc
+main_collection = /example/main.collectionc
 
 [input]
 game_binding = /input/game.input_bindingc
