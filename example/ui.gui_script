@@ -1,0 +1,35 @@
+local dirtylarry = require "dirtylarry/dirtylarry"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+   if message_id == hash("btn_redy") then
+		gui.set_color(gui.get_node(message.id.."/larrylabel"), vmath.vector4(1,1,1,1))
+   end
+end
+
+function on_input(self, action_id, action)
+	self.input_default  = dirtylarry:input("input", action_id, action, gui.KEYBOARD_TYPE_DEFAULT, "AppId")
+	dirtylarry:button("init", action_id, action, function ()
+		if self.input_default == "Empty" then
+			if sysinfo.system_name == "Android" then
+				self.input_default  = "1401815"
+			elseif sysinfo.system_name == "iPhone OS" then
+				self.input_default  = "1425385"
+			end
+		end
+    	msg.post(".", "init_unity_ads", {appId = self.input_default})
+    end)
+    dirtylarry:button("rewardedVideo", action_id, action, function ()
+    	msg.post(".", "show_ads", {placementId = "rewardedVideo"})
+    end)
+    dirtylarry:button("video", action_id, action, function ()
+    	msg.post(".", "show_ads", {placementId = "video"})
+    end)
+    
+    dirtylarry:button("default", action_id, action, function ()
+    	msg.post(".", "show_ads")
+    end)
+end
