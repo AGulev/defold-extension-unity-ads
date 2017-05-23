@@ -42,15 +42,12 @@ struct DefUnityAdsListener {
     int        m_Self;
 };
 
-extern void DefUnityAds_Initialize(lua_State* L);
-extern void DefUnityAds_Show(lua_State* L);
-extern void DefUnityAds_setDebugMode(lua_State* L);
+struct DispatchToLua {
+    DefUnityAdsListener listener;
+};
 
-extern bool DefUnityAds_isReady(lua_State* L);
-extern bool DefUnityAds_isSupported();
-extern bool DefUnityAds_isInitialized();
-extern bool DefUnityAds_getDebugMode();
-
-extern char const* DefUnityAds_getVersion();
-
-bool luaL_checkbool(lua_State* L, int numArg);
+void set_callback(lua_State* L, int pos);
+void lua_unityAdsReady(char*placementId);
+void lua_unityAdsDidStart(char*placementId);
+void lua_unityAdsDidError(int error, char* message);
+void lua_unityAdsDidFinish (char *placementId, int state);
