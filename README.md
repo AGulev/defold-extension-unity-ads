@@ -17,7 +17,8 @@ Open your game.project file and in the dependencies field under project add:
 ## Example
 
 See the [example folder](https://github.com/AGulev/DefUnityAds/tree/master/Example) for understand how to use extesion. Especially [def_unity_ads.script](https://github.com/AGulev/DefUnityAds/blob/master/Example/def_unity_ads.script) file.
-!(Example screenshot)[https://cdn.rawgit.com/AGulev/DefUnityAds/878c86b5/example/screenshot.PNG]
+
+![Example screenshot](https://cdn.rawgit.com/AGulev/DefUnityAds/2f17110e/example/example_screenshot.png)
 
 
 ## LUA Api
