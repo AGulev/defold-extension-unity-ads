@@ -10,7 +10,7 @@ Open your game.project file and in the dependencies field under project add:
 
 >https://github.com/AGulev/DefUnityAds/archive/master.zip
 
-##### Android only
+##### Android installation info
 Set `defunityads/AndroindManifest.xml` as default manifest for your project or add the next Activities to your manifest:
 ```xml
 <!-- For DefUnityAds -->
