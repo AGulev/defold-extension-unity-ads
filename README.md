@@ -10,6 +10,21 @@ Open your game.project file and in the dependencies field under project add:
 
 >https://github.com/AGulev/DefUnityAds/archive/master.zip
 
+##### Android only
+Set `defunityads/AndroindManifest.xml` as default manifest for your project or add the next Activities to your manifest:
+```xml
+<!-- For DefUnityAds -->
+<activity
+android:name="com.unity3d.ads.adunit.AdUnitActivity"
+android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+android:hardwareAccelerated="true"
+android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+<activity
+android:name="com.unity3d.ads.adunit.AdUnitSoftwareActivity"
+android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+android:hardwareAccelerated="false"
+android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+```
 ## Known issues
 
 - Extension do not support [getPlacementState](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate) method.
