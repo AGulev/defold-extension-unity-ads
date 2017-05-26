@@ -29,7 +29,11 @@ void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2){
    	lua_pushvalue(L, -1);
     dmScript::SetInstance(L);
     lua_pushnumber(L, type);
-    lua_createtable(L, 0, 1);
+    int count_table_elements = 1;
+    if (key_2 != NULL){
+        count_table_elements = 2;
+    }
+    lua_createtable(L, 0, count_table_elements);
     luaL_push_pair_str_str(L, key_1, value_1);
     if (key_2 != NULL){
         luaL_push_pair_str_num(L, key_2, value_2);

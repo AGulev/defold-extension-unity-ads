@@ -62,6 +62,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("show_ads") then
+		print("show_ads")
 		show_ad(self, message.placementId)
 	elseif message_id == hash("init_unity_ads") then
 		init_unity_ads(self, message.appId)
