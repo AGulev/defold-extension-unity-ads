@@ -21,78 +21,39 @@ void set_callback(lua_State* L, int pos){
     defUtoLua->listener.m_Self = dmScript::Ref(L, LUA_REGISTRYINDEX);
 }
 
-void lua_unityAdsReady(char*placementId) {
+void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2){
     lua_State* L = defUtoLua->listener.m_L;
     int top = lua_gettop(L);
     lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
    	lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
    	lua_pushvalue(L, -1);
-   	dmScript::SetInstance(L);
-   	lua_pushnumber(L, (int)TYPE_IS_READY);
+    dmScript::SetInstance(L);
+    lua_pushnumber(L, type);
     lua_createtable(L, 0, 1);
-    luaL_push_pair_str_str(L, (char*)"placementId", placementId);
+    luaL_push_pair_str_str(L, key_1, value_1);
+    if (key_2 != NULL){
+        luaL_push_pair_str_num(L, key_2, value_2);
+    }
     int ret = lua_pcall(L, 3, LUA_MULTRET, 0);
     if (ret != 0) {
         dmLogError("Error running defUtoLua callback: %s", lua_tostring(L, -1));
         lua_pop(L, 1);
     }
     assert(top == lua_gettop(L));
+}
+
+void lua_unityAdsReady(char*placementId) {
+    send_callback((int)TYPE_IS_READY,(char*)"placementId", placementId, NULL, 0);
 }
 
 void lua_unityAdsDidStart(char*placementId) {
-    lua_State* L = defUtoLua->listener.m_L;
-    int top = lua_gettop(L);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
-   	lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
-   	lua_pushvalue(L, -1);
-   	dmScript::SetInstance(L);
-   	lua_pushnumber(L, (int)TYPE_DID_START);
-    lua_createtable(L, 0, 1);
-    luaL_push_pair_str_str(L, (char*)"placementId", placementId);
-    
-    int ret = lua_pcall(L, 3, LUA_MULTRET, 0);
-    if (ret != 0) {
-        dmLogError("Error running defUtoLua callback: %s", lua_tostring(L, -1));
-        lua_pop(L, 1);
-    }
-    assert(top == lua_gettop(L));
+    send_callback((int)TYPE_DID_START,(char*)"placementId", placementId, NULL, 0);
 }
 
 void lua_unityAdsDidError(int error, char* message) {
-    lua_State* L = defUtoLua->listener.m_L;
-    int top = lua_gettop(L);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
-   	lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
-   	lua_pushvalue(L, -1);
-   	dmScript::SetInstance(L);
-    lua_pushnumber(L, (int)TYPE_DID_ERROR);
-    lua_createtable(L, 0, 2);
-    luaL_push_pair_str_str(L, (char*)"message", message);
-    luaL_push_pair_str_num(L, (char*)"error", error);
-    
-    int ret = lua_pcall(L, 3, LUA_MULTRET, 0);
-    if (ret != 0) {
-        dmLogError("Error running defUtoLua callback: %s", lua_tostring(L, -1));
-        lua_pop(L, 1);
-    }
-    assert(top == lua_gettop(L));
+    send_callback((int)TYPE_DID_ERROR,(char*)"message", message, (char*)"error", error);
 }
+
 void lua_unityAdsDidFinish (char *placementId, int state) {
-    lua_State* L = defUtoLua->listener.m_L;
-    int top = lua_gettop(L);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
-   	lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
-   	lua_pushvalue(L, -1);
-   	dmScript::SetInstance(L);
-   	lua_pushnumber(L, (int)TYPE_DID_FINISH);
-    lua_createtable(L, 0, 2);
-    luaL_push_pair_str_str(L, (char*)"placementId", (char*)placementId);
-    luaL_push_pair_str_num(L, (char*)"state", state);
-    
-    int ret = lua_pcall(L, 3, LUA_MULTRET, 0);
-    if (ret != 0) {
-        dmLogError("Error running defUtoLua callback: %s", lua_tostring(L, -1));
-        lua_pop(L, 1);
-    }
-    assert(top == lua_gettop(L));
+    send_callback((int)TYPE_DID_FINISH,(char*)"placementId", placementId, (char*)"state", state);
 }
