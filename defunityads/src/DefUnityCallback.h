@@ -48,6 +48,8 @@ struct DispatchToLua {
 
 void set_callback(lua_State* L, int pos);
 void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
+void callback_updates();
+
 void lua_unityAdsReady(char*placementId);
 void lua_unityAdsDidStart(char*placementId);
 void lua_unityAdsDidError(int error, char* message);

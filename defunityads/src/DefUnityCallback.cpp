@@ -4,6 +4,17 @@
 DispatchToLua g_DefUAds;
 DispatchToLua* defUtoLua;
 
+struct CallbackData
+{
+    int msg_type;
+    char* key_1;
+    char* value_1;
+    char* key_2;
+    int value_2;
+};
+
+dmArray<CallbackData> m_callbacksQueue;
+
 void set_callback(lua_State* L, int pos){
     defUtoLua = &g_DefUAds;
     luaL_checktype(L, pos, LUA_TFUNCTION);
@@ -46,18 +57,45 @@ void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2){
     assert(top == lua_gettop(L));
 }
 
+void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
+    CallbackData data;
+    data.msg_type = type;
+    data.key_1 = key_1;
+    data.value_1 = value_1 ? strdup(value_1) : NULL;
+    data.key_2 = key_2;
+    data.value_2 = value_2;
+    
+    if(m_callbacksQueue.Full())
+    {
+        m_callbacksQueue.OffsetCapacity(8);
+    }
+    m_callbacksQueue.Push(data);
+}
+
 void lua_unityAdsReady(char*placementId) {
-    send_callback((int)TYPE_IS_READY,(char*)"placementId", placementId, NULL, 0);
+    add_to_queue((int)TYPE_IS_READY,(char*)"placementId", placementId, NULL, 0);
 }
 
 void lua_unityAdsDidStart(char*placementId) {
-    send_callback((int)TYPE_DID_START,(char*)"placementId", placementId, NULL, 0);
+    add_to_queue((int)TYPE_DID_START,(char*)"placementId", placementId, NULL, 0);
 }
 
 void lua_unityAdsDidError(int error, char* message) {
-    send_callback((int)TYPE_DID_ERROR,(char*)"message", message, (char*)"error", error);
+    add_to_queue((int)TYPE_DID_ERROR,(char*)"message", message, (char*)"error", error);
 }
 
 void lua_unityAdsDidFinish (char *placementId, int state) {
-    send_callback((int)TYPE_DID_FINISH,(char*)"placementId", placementId, (char*)"state", state);
+    add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", placementId, (char*)"state", state);
+}
+
+void callback_updates(){
+    for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
+    {
+        CallbackData* data = &m_callbacksQueue[i];
+        send_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2);
+        if( data->value_1 )
+            free(data->value_1);
+        data->value_1 = 0;
+        m_callbacksQueue.EraseSwap(i--);
+    }
 }

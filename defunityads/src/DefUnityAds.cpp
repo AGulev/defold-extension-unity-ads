@@ -143,6 +143,12 @@ dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
     return dmExtension::RESULT_OK;
 }
 
+static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
+{
+    callback_updates();
+    return dmExtension::RESULT_OK;
+}
+
 #else // unsupported platforms
 
 static int isSupported(lua_State* L) {
@@ -232,7 +238,12 @@ static dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
     return dmExtension::RESULT_OK;
 }
 
+static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
+{
+    return dmExtension::RESULT_OK;
+}
+
 #endif // platforms
 
 
-DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitializeUnityAds, AppFinalizeUnityAds, InitializeUnityAds, 0, 0, FinalizeUnityAds)
+DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitializeUnityAds, AppFinalizeUnityAds, InitializeUnityAds, UpdateUnityAds, 0, FinalizeUnityAds)
