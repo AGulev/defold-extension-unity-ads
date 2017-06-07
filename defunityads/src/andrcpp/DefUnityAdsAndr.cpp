@@ -83,11 +83,11 @@ void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
     jclass cls = GetClass(env, unity_jar_path);
     
     jmethodID method = env->GetStaticMethodID(cls, "sdk_pre_init", "(Landroid/app/Activity;)V");
-    env->CallStaticObjectMethod(cls, method, dmGraphics::GetNativeAndroidActivity());
+    env->CallStaticVoidMethod(cls, method, dmGraphics::GetNativeAndroidActivity());
 
     jstring appid = env->NewStringUTF(game_id);
     method = env->GetStaticMethodID(cls, "DefUnityAds_Initialize", "(Ljava/lang/String;Z)V");
-    env->CallStaticBooleanMethod(cls, method, appid, is_debug? JNI_TRUE : JNI_FALSE);
+    env->CallStaticVoidMethod(cls, method, appid, is_debug? JNI_TRUE : JNI_FALSE);
 }
 
 void DefUnityAds_Show(char* placementId) {
@@ -97,7 +97,7 @@ void DefUnityAds_Show(char* placementId) {
 
     jstring jplacementId = env->NewStringUTF(placementId);
     jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_Show", "(Ljava/lang/String;)V");
-    env->CallStaticBooleanMethod(cls, method, jplacementId);
+    env->CallStaticVoidMethod(cls, method, jplacementId);
 }
 
 void DefUnityAds_setDebugMode(bool is_debug) {
