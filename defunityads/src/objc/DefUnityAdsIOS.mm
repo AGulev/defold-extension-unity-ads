@@ -7,7 +7,7 @@
 #include <UnityAds/UnityAds.h>
 
 
-@interface DefUnityAdsDelegate : UIViewController<UnityAdsDelegate>{
+@interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>{
 }
 @end
 
@@ -15,10 +15,6 @@
 @end
 
 @implementation DefUnityAdsDelegate
-
--(void)didReceiveMemoryWarning {
-    NSLog(@"didReceiveMemoryWarning\n");
-}
 
 -(void)unityAdsReady:(NSString *)placementId {
     lua_unityAdsReady((char*)[placementId UTF8String]);
@@ -38,26 +34,24 @@
 
 @end
 
-DefUnityAdsDelegate *unityAds;
+UIViewController *uiViewController;
 
 void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
-    
-    UIView *view = dmGraphics::GetNativeiOSUIView();
-    unityAds = [[DefUnityAdsDelegate alloc] init];
-    unityAds.view.bounds = view.bounds;
-    [view addSubview:unityAds.view];
-    
+    DefUnityAdsDelegate* unityAds = [[DefUnityAdsDelegate alloc] init];
     [UnityAds initialize:gameId delegate:unityAds testMode:is_debug?YES:NO];
+    
+    UIWindow* window = dmGraphics::GetNativeiOSUIWindow();
+	uiViewController = window.rootViewController;
 }
 
 void DefUnityAds_Show(char* placementId) {
     NSString* placementId_s = [NSString stringWithUTF8String:placementId];
     if ([placementId_s length] != 0){
-        [UnityAds show:unityAds placementId:placementId_s];
+        [UnityAds show:uiViewController placementId:placementId_s];
     }
     else{
-        [UnityAds show:unityAds];
+        [UnityAds show:uiViewController];
     }
 }
 
