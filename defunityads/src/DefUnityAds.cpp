@@ -159,7 +159,11 @@ static int isSupported(lua_State* L) {
 }
 
 static int Show(lua_State* L) {
-	dmLogInfo("DefUnityAds[UnsupportedPlatform]: Show()");
+	char *placementId_lua = "";
+    if (lua_type(L, 1) != LUA_TNONE){
+		placementId_lua = (char*)luaL_checkstring(L, 1);
+    }
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: Show(\"%s\")", placementId_lua);
     return 0;
 }
 
