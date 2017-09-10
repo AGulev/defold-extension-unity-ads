@@ -140,6 +140,7 @@ dmExtension::Result AppFinalizeUnityAds(dmExtension::AppParams* params)
 
 dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
 {
+	finalize();
     return dmExtension::RESULT_OK;
 }
 

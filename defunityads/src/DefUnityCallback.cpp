@@ -15,6 +15,10 @@ struct CallbackData
 
 dmArray<CallbackData> m_callbacksQueue;
 
+void finalize(){
+	defUtoLua->listener.m_Callback = LUA_NOREF;
+}
+
 void set_callback(lua_State* L, int pos){
     defUtoLua = &g_DefUAds;
     luaL_checktype(L, pos, LUA_TFUNCTION);
