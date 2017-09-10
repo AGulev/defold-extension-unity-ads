@@ -153,44 +153,51 @@ static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
 
 static int isSupported(lua_State* L) {
     bool status = false;
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: isSupported() == false");
     lua_pushboolean(L, status);
     return 1;
 }
 
 static int Show(lua_State* L) {
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: Show()");
     return 0;
 }
 
 static int Initialize(lua_State* L) {
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: Initialize()");
     return 0;
 }
 
 static int isReady(lua_State* L) {
     bool status = false;
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: isReady() == false");
     lua_pushboolean(L, status);
     return 1;
 }
 
 static int isInitialized(lua_State* L) {
     bool status = false;
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: isInitialized() == false");
     lua_pushboolean(L, status);
     return 1;
 }
 
 static int getDebugMode(lua_State* L) {
     bool status = true;
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: getDebugMode() == true");
     lua_pushboolean(L, status);
     return 1;
 }
 
 static int getVersion(lua_State* L) {
-    bool status = true;
-    lua_pushstring(L, "0.0.0");
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: getVersion() ==  2.1.1");
+    lua_pushstring(L, "2.1.1");
     return 1;
 }
 
 static int setDebugMode(lua_State* L) {
     bool status = true;
+	dmLogInfo("DefUnityAds[UnsupportedPlatform]: setDebugMode()");
     lua_pushboolean(L, status);
     return 1;
 }
