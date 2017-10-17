@@ -185,4 +185,4 @@ local function defunityads_callback(self, msg_type, message)
 end
 ```
 
-If you have any questions or suggestions contact me: me@agulev.com
+If you have any questions or suggestions contact: me@agulev.com
