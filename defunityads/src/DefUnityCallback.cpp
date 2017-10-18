@@ -1,3 +1,4 @@
+#if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 #include "DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
@@ -103,3 +104,4 @@ void callback_updates(){
         m_callbacksQueue.EraseSwap(i--);
     }
 }
+#endif
