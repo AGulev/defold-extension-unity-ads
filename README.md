@@ -1,3 +1,5 @@
+![DefUnityADS](https://user-images.githubusercontent.com/2209596/37794961-23a6c3a4-2e24-11e8-8117-6d7ae3c970f2.jpg)
+
 # DefUnityAds
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
