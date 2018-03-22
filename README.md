@@ -25,9 +25,6 @@ android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigati
 android:hardwareAccelerated="false"
 android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 ```
-## Known issues
-
-- Extension do not support [getPlacementState](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate) method.
 
 ## Example
 
@@ -59,6 +56,22 @@ unityads.setDebugMode(true) -- set debug mod
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getdebugmode)
 ```lua
 unityads.getDebugMode() -- Returns true if current mod is debug
+```
+
+#### unityads.getPlacementState()
+#### unityads.getPlacementState(placementId)
+[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate)
+```lua
+
+unityads.getPlacementState() -- Returns a default ad state
+unityads.getPlacementState("rewardedVideo") -- Returns rewardedVideo ad state
+
+--possible states:
+unityads.PLACEMENT_STATE_READY
+unityads.PLACEMENT_STATE_NOT_AVAILABLE
+unityads.PLACEMENT_STATE_DISABLED
+unityads.PLACEMENT_STATE_WAITING
+unityads.PLACEMENT_STATE_NO_FILL
 ```
 
 #### unityads.isReady()
