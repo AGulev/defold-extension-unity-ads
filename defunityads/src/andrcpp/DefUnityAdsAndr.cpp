@@ -186,4 +186,21 @@ char const* DefUnityAds_getVersion() {
 
   return new_char;
 }
+
+int DefUnityAds_getPlacementState(char* placementId) {
+  AttachScope attachscope;
+  JNIEnv* env = attachscope.m_Env;
+  jclass cls = GetClass(env, unity_jar_path);
+
+  jstring jplacementId = env->NewStringUTF(placementId);
+  jmethodID method = env->GetStaticMethodID(cls, "DefUnityAds_getPlacementState", "(Ljava/lang/String;)I");
+
+  jint return_value = (jint)env->CallStaticIntMethod(cls, method, jplacementId);
+
+  env->DeleteLocalRef(cls);
+  env->DeleteLocalRef(jplacementId);
+
+  return JNI_TRUE == return_value;
+}
+
 #endif
