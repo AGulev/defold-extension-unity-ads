@@ -21,13 +21,15 @@ end
 
 function init(self)
   msg.post(".", "acquire_input_focus")
-  print("VERSION IS: ", unityads.getVersion())
-  print("DEBUG MODE IS:", unityads.getDebugMode())
-  print("isInitialized:", unityads.isInitialized())
-  print("isSupported:", unityads.isSupported())
-  print("isReady:", unityads.isReady())
-  print_placement_state()
-  unityads.setDebugMode(true)
+  if unityads then
+    print("VERSION IS: ", unityads.getVersion())
+    print("DEBUG MODE IS:", unityads.getDebugMode())
+    print("isInitialized:", unityads.isInitialized())
+    print("isSupported:", unityads.isSupported())
+    print("isReady:", unityads.isReady())
+    print_placement_state()
+    unityads.setDebugMode(true)
+  end
 end
 
 local function unity_ads_callback(self, msg_type, message)
