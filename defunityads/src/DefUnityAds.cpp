@@ -78,7 +78,13 @@ static int getVersion(lua_State* L) {
 
 static int getPlacementState(lua_State* L) {
   char *placementId_lua;
-  if (lua_type(L, 1) != LUA_TNONE) {
+  if (lua_type(L, 1) == LUA_TNONE) {
+    char msg[256];
+    snprintf(msg, sizeof(msg), "You have to use placementId parameter in method getPlacementState(placementId)");
+    luaL_error(L, msg);
+    return 0;
+  }
+  else {
     placementId_lua = (char*)luaL_checkstring(L, 1);
   }
   int state = DefUnityAds_getPlacementState(placementId_lua);

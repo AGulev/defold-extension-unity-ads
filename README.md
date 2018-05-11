@@ -59,13 +59,10 @@ unityads.setDebugMode(true) -- set debug mod
 ```lua
 unityads.getDebugMode() -- Returns true if current mod is debug
 ```
-
-#### unityads.getPlacementState()
 #### unityads.getPlacementState(placementId)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate)
 ```lua
 
-unityads.getPlacementState() -- Returns a default ad state
 unityads.getPlacementState("rewardedVideo") -- Returns rewardedVideo ad state
 
 --possible states:
