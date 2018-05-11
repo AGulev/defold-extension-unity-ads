@@ -26,9 +26,12 @@ function init(self)
     print("DEBUG MODE IS:", unityads.getDebugMode())
     print("isInitialized:", unityads.isInitialized())
     print("isSupported:", unityads.isSupported())
-    print("isReady:", unityads.isReady())
+    print("isReady video:", unityads.isReady("video"))
+    print("isReady rewardedVideo:", unityads.isReady("rewardedVideo"))
     print_placement_state()
     unityads.setDebugMode(true)
+
+    unityads.isReady() -- deprecated, you have to use placementID
   end
 end
 
@@ -86,7 +89,7 @@ local function show_ad(self, placementId)
     if placementId then
       unityads.show(placementId)
     else
-      unityads.show()
+      unityads.show() -- deprecated, you have to use placementID
     end
   end
 end
