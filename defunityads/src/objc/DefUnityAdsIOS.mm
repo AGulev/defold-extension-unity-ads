@@ -46,12 +46,13 @@ void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
 }
 
 void DefUnityAds_Show(char* placementId) {
-  if (placementId != NULL) {
+  if (![UnityAds isInitialized]) return;
+  if ((placementId != NULL) && (placementId[0] == '\0')) {
+    [UnityAds show:uiViewController];
+  }
+  else {
     NSString* placementId_s = [NSString stringWithUTF8String:placementId];
     [UnityAds show:uiViewController placementId:placementId_s];
-  }
-  else{
-    [UnityAds show:uiViewController];
   }
 }
 
@@ -62,12 +63,12 @@ void DefUnityAds_setDebugMode(bool is_debug) {
 
 bool DefUnityAds_isReady(char* placementId) {
   BOOL status;
-  if (placementId != NULL) {
+  if ((placementId != NULL) && (placementId[0] == '\0')) {
+    status = [UnityAds isReady];
+  }
+  else {
     NSString* placementId_s = [NSString stringWithUTF8String:placementId];
     status = [UnityAds isReady:placementId_s];
-  }
-  else{
-    status = [UnityAds isReady];
   }
   return status == YES;
 }
@@ -94,14 +95,13 @@ char const* DefUnityAds_getVersion() {
 }
 
 int DefUnityAds_getPlacementState(char* placementId) {
-
   UnityAdsPlacementState state;
-  if (placementId != NULL) {
+  if ((placementId != NULL) && (placementId[0] == '\0')) {
+    state =[UnityAds getPlacementState];
+  }
+  else {
     NSString* placementId_s = [NSString stringWithUTF8String:placementId];
     state =[UnityAds getPlacementState:placementId_s];
-  }
-  else{
-    state =[UnityAds getPlacementState];
   }
   return (int)state;
 }

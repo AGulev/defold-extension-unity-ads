@@ -1,7 +1,7 @@
 local dirtylarry = require "dirtylarry/dirtylarry"
 
 local function print_placement_state(placement)
-  local state = unityads.getPlacementState(placement)
+  local state = placement and unityads.getPlacementState(placement) or unityads.getPlacementState()
   if state == unityads.PLACEMENT_STATE_READY then
     print("PLACEMENT_STATE_READY ", placement)
   elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
@@ -26,13 +26,13 @@ function init(self)
     print("DEBUG MODE IS:", unityads.getDebugMode())
     print("isInitialized:", unityads.isInitialized())
     print("isSupported:", unityads.isSupported())
-    print("isReady video:", unityads.isReady("video"))
-    print("isReady rewardedVideo:", unityads.isReady("rewardedVideo"))
+    print("isReady(video):", unityads.isReady("video"))
+    print("isReady(rewardedVideo):", unityads.isReady("rewardedVideo"))
+    print("isReady():", unityads.isReady())
     print_placement_state("video")
     print_placement_state("rewardedVideo")
+    print_placement_state()
     unityads.setDebugMode(true)
-
-    unityads.isReady() -- deprecated, you have to use placementID
   end
 end
 
@@ -90,7 +90,7 @@ local function show_ad(self, placementId)
     if placementId then
       unityads.show(placementId)
     else
-      unityads.show() -- deprecated, you have to use placementID
+      unityads.show()
     end
   end
 end

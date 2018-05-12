@@ -59,10 +59,12 @@ unityads.setDebugMode(true) -- set debug mod
 ```lua
 unityads.getDebugMode() -- Returns true if current mod is debug
 ```
+
+#### unityads.getPlacementState()
 #### unityads.getPlacementState(placementId)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate)
 ```lua
-
+unityads.getPlacementState() -- Returns a default ad state
 unityads.getPlacementState("rewardedVideo") -- Returns rewardedVideo ad state
 
 --possible states:
@@ -73,10 +75,11 @@ unityads.PLACEMENT_STATE_WAITING
 unityads.PLACEMENT_STATE_NO_FILL
 ```
 
-
+#### unityads.isReady()
 #### unityads.isReady(placementId)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#isready)
 ```lua
+unityads.isReady() -- Returns true if default ad is ready
 unityads.isReady("rewardedVideo") -- Returns true if rewardedVideo is ready
 ```
 
@@ -98,10 +101,11 @@ unityads.isSupported() -- Returns true if Unity Ads is supported by the current 
 unityads.getVersion() -- Returns the Unity Ads SDK version as a string.
 ```
 
-
+#### unityads.show()
 #### unityads.show(placementId)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#show)
 ```lua
+unityads.show() -- show default ad
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
 
