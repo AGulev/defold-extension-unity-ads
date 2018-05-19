@@ -2,49 +2,63 @@
 #include "DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
-DispatchToLua g_DefUAds;
-DispatchToLua* defUtoLua;
-
-struct CallbackData
-{
-  int msg_type;
-  char* key_1;
-  char* value_1;
-  char* key_2;
-  int value_2;
-};
-
+DefUnityAdsListener defUtoLua;
 dmArray<CallbackData> m_callbacksQueue;
 
-void finalize(){
-  if(defUtoLua) {
-    defUtoLua->listener.m_Callback = LUA_NOREF;
+static void ClearQueue()
+{
+  for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
+  {
+    CallbackData* data = &m_callbacksQueue[i];
+    if(data->value_1)
+      free(data->value_1);
+    data->value_1 = 0;
+    m_callbacksQueue.EraseSwap(i--);
   }
 }
-void set_callback(lua_State* L, int pos){
-  defUtoLua = &g_DefUAds;
-  luaL_checktype(L, pos, LUA_TFUNCTION);
-  lua_pushvalue(L, pos);
-  int cb = dmScript::Ref(L, LUA_REGISTRYINDEX);
 
-  if (defUtoLua->listener.m_Callback != LUA_NOREF) {
-    dmScript::Unref(defUtoLua->listener.m_L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
-    dmScript::Unref(defUtoLua->listener.m_L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
+static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
+{
+  if(cbk->m_Callback != LUA_NOREF)
+  {
+    dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Callback);
+    dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Self);
   }
 
-  defUtoLua->listener.m_L = dmScript::GetMainThread(L);
-  defUtoLua->listener.m_Callback = cb;
+  cbk->m_L = dmScript::GetMainThread(L);
+
+  luaL_checktype(L, index, LUA_TFUNCTION);
+  lua_pushvalue(L, index);
+  cbk->m_Callback = dmScript::Ref(L, LUA_REGISTRYINDEX);
+
   dmScript::GetInstance(L);
-  defUtoLua->listener.m_Self = dmScript::Ref(L, LUA_REGISTRYINDEX);
+  cbk->m_Self = dmScript::Ref(L, LUA_REGISTRYINDEX);
 }
 
-void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2){
-  lua_State* L = defUtoLua->listener.m_L;
+static void UnregisterCallback(DefUnityAdsListener* cbk)
+{
+  if(cbk->m_Callback != LUA_NOREF)
+  {
+    dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Callback);
+    dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Self);
+    cbk->m_Callback = LUA_NOREF;
+  }
+}
+
+static void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
+{
+  if(cbk->m_Callback == LUA_NOREF)
+  {
+    return;
+  }
+
+  lua_State* L = cbk->m_L;
   int top = lua_gettop(L);
-  lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Callback);
-  lua_rawgeti(L, LUA_REGISTRYINDEX, defUtoLua->listener.m_Self);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, cbk->m_Callback);
+  lua_rawgeti(L, LUA_REGISTRYINDEX, cbk->m_Self);
   lua_pushvalue(L, -1);
   dmScript::SetInstance(L);
+
   lua_pushnumber(L, type);
   int count_table_elements = 1;
   if (key_2 != NULL) {
@@ -55,12 +69,23 @@ void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2){
   if (key_2 != NULL) {
     luaL_push_pair_str_num(L, key_2, value_2);
   }
-  int ret = lua_pcall(L, 3, LUA_MULTRET, 0);
-  if (ret != 0) {
-    dmLogError("Error running defUtoLua callback: %s", lua_tostring(L, -1));
+
+  int number_of_arguments = 3;
+  int ret = lua_pcall(L, number_of_arguments, 0, 0);
+  if(ret != 0) {
+    dmLogError("Error running callback: %s", lua_tostring(L, -1));
     lua_pop(L, 1);
   }
   assert(top == lua_gettop(L));
+}
+
+void finalize(){
+  UnregisterCallback(&defUtoLua);
+  ClearQueue();
+}
+
+void set_callback(lua_State* L, int pos){
+  RegisterCallback(L, pos, &defUtoLua);
 }
 
 void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
@@ -73,7 +98,7 @@ void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
 
   if(m_callbacksQueue.Full())
   {
-    m_callbacksQueue.OffsetCapacity(8);
+    m_callbacksQueue.OffsetCapacity(4);
   }
   m_callbacksQueue.Push(data);
 }
@@ -98,8 +123,8 @@ void callback_updates(){
   for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
   {
     CallbackData* data = &m_callbacksQueue[i];
-    send_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2);
-    if( data->value_1 )
+    invoke_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
+    if(data->value_1)
       free(data->value_1);
     data->value_1 = 0;
     m_callbacksQueue.EraseSwap(i--);

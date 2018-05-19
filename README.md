@@ -46,7 +46,16 @@ local function defunityads_callback(self, msg_type, message)
 end
 ...
 unityads.initialize("1401815", defunityads_callback) -- testMode is optional parameter
+unityads.initialize("1401815", defunityads_callback, true) -- testMode is optional parameter
 ```
+
+
+#### unityads.setCallback(callback)
+[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_android_api_reference#unityadssetlistener)
+```lua
+unityads.setCallback(defunityads_callback) -- set callback
+```
+
 
 #### unityads.setDebugMode(isDebug)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#setdebugmode)

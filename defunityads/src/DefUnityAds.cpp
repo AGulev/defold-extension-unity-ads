@@ -21,6 +21,11 @@ static int Initialize(lua_State* L) {
   return 0;
 }
 
+static int setCallback(lua_State* L) {
+  set_callback(L, 1);
+  return 0;
+}
+
 static int Show(lua_State* L) {
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
@@ -91,6 +96,7 @@ static const luaL_reg Module_methods[] =
   {"getVersion", getVersion},
   {"getPlacementState", getPlacementState},
   {"setDebugMode", setDebugMode},
+  {"setCallback", setCallback},
   {0, 0}
 };
 

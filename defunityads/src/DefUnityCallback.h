@@ -32,22 +32,24 @@ enum DefUnityAdsError
 };
 
 struct DefUnityAdsListener {
-  DefUnityAdsListener() {
-    m_L = 0;
-    m_Callback = LUA_NOREF;
-    m_Self = LUA_NOREF;
+  DefUnityAdsListener() : m_L(0), m_Callback(LUA_NOREF), m_Self(LUA_NOREF) {
   }
   lua_State* m_L;
   int m_Callback;
   int m_Self;
 };
 
-struct DispatchToLua {
-  DefUnityAdsListener listener;
+struct CallbackData
+{
+  int msg_type;
+  char* key_1;
+  char* value_1;
+  char* key_2;
+  int value_2;
 };
 
 void set_callback(lua_State* L, int pos);
-void send_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
+void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
 void callback_updates();
 void finalize();
 
