@@ -6,21 +6,25 @@ local gameIDs = {
   ["iPhone OS"] = "1425385"
 }
 
+local BACK_KEY = hash("back")
+
 local REWARDED = "rewardedVideo"
 local VIDEO = "video"
 
 local function print_placement_state(placement)
-  local state = placement and unityads.getPlacementState(placement) or unityads.getPlacementState()
-  if state == unityads.PLACEMENT_STATE_READY then
-    print("PLACEMENT_STATE_READY ", placement)
-  elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
-    print("PLACEMENT_STATE_NOT_AVAILABLE ", placement)
-  elseif state == unityads.PLACEMENT_STATE_DISABLED then
-    print("PLACEMENT_STATE_DISABLED ", placement)
-  elseif state == unityads.PLACEMENT_STATE_WAITING then
-    print("PLACEMENT_STATE_WAITING ", placement)
-  elseif state == unityads.PLACEMENT_STATE_NO_FILL then
-    print("PLACEMENT_STATE_NO_FILL ", placement)
+  if unityads then
+    local state = placement and unityads.getPlacementState(placement) or unityads.getPlacementState()
+    if state == unityads.PLACEMENT_STATE_READY then
+      print("PLACEMENT_STATE_READY ", placement)
+    elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
+      print("PLACEMENT_STATE_NOT_AVAILABLE ", placement)
+    elseif state == unityads.PLACEMENT_STATE_DISABLED then
+      print("PLACEMENT_STATE_DISABLED ", placement)
+    elseif state == unityads.PLACEMENT_STATE_WAITING then
+      print("PLACEMENT_STATE_WAITING ", placement)
+    elseif state == unityads.PLACEMENT_STATE_NO_FILL then
+      print("PLACEMENT_STATE_NO_FILL ", placement)
+    end
   end
 end
 
@@ -88,6 +92,13 @@ function init(self)
   end
 end
 
+function final(self)
+  print("Final! Remove Callback!")
+  if unityads then
+    unityads.setCallback()
+  end
+end
+
 local function init_unity_ads(self, appId)
   if unityads and appId then
     if not unityads.isInitialized() then
@@ -116,6 +127,20 @@ local function show_ad(self, placementId)
   end
 end
 
+local function set_callback(self)
+  if unityads then
+    print("Set Callback!")
+    unityads.setCallback(unity_ads_callback)
+  end
+end
+
+local function remove_callback(self)
+  if unityads then
+    print("Remove Callback!")
+    unityads.setCallback(nil) -- same as unityads.setCallback()
+  end
+end
+
 function on_input(self, action_id, action)
   self.input_default = dirtylarry:input("input", action_id, action, gui.KEYBOARD_TYPE_DEFAULT, "AppId")
   dirtylarry:button("init", action_id, action, function ()
@@ -124,10 +149,12 @@ function on_input(self, action_id, action)
   end
   init_unity_ads(self, self.input_default)
 end)
+
 dirtylarry:button(REWARDED, action_id, action, function ()
   print_placement_state(REWARDED)
   show_ad(self, REWARDED)
 end)
+
 dirtylarry:button(VIDEO, action_id, action, function ()
   print_placement_state(VIDEO)
   show_ad(self, VIDEO)
@@ -136,4 +163,18 @@ end)
 dirtylarry:button("default", action_id, action, function ()
   show_ad(self)
 end)
+
+dirtylarry:button("set_callback", action_id, action, function ()
+  set_callback(self)
+end)
+
+dirtylarry:button("remove_callback", action_id, action, function ()
+  remove_callback(self)
+end)
+
+if action_id == BACK_KEY and action.released then
+  print("Time to exit!")
+  msg.post("@system:", "exit", {code = 0})
+end
+
 end

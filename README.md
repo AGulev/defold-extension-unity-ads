@@ -32,7 +32,7 @@ android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
 See the [example folder](https://github.com/AGulev/DefUnityAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefUnityAds/blob/master/example/ui.gui_script) file.
 
-![Example screenshot](https://cdn.rawgit.com/AGulev/DefUnityAds/2f17110e/example/example_screenshot.png)
+![Example screenshot](https://user-images.githubusercontent.com/2209596/40448649-cf08e002-5ede-11e8-9681-c20d17c0512a.jpg)
 
 
 ## LUA Api
@@ -54,6 +54,8 @@ unityads.initialize("1401815", defunityads_callback, true) -- testMode is option
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_android_api_reference#unityadssetlistener)
 ```lua
 unityads.setCallback(defunityads_callback) -- set callback
+unityads.setCallback(nil) -- remove callback
+unityads.setCallback() -- remove callback
 ```
 
 

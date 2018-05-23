@@ -5,18 +5,6 @@
 DefUnityAdsListener defUtoLua;
 dmArray<CallbackData> m_callbacksQueue;
 
-static void ClearQueue()
-{
-  for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
-  {
-    CallbackData* data = &m_callbacksQueue[i];
-    if(data->value_1)
-      free(data->value_1);
-    data->value_1 = 0;
-    m_callbacksQueue.EraseSwap(i--);
-  }
-}
-
 static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
 {
   if(cbk->m_Callback != LUA_NOREF)
@@ -49,6 +37,7 @@ static void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int 
 {
   if(cbk->m_Callback == LUA_NOREF)
   {
+    dmLogInfo("DefUnityAds callback do not exist.");
     return;
   }
 
@@ -59,33 +48,45 @@ static void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int 
   lua_pushvalue(L, -1);
   dmScript::SetInstance(L);
 
-  lua_pushnumber(L, type);
-  int count_table_elements = 1;
-  if (key_2 != NULL) {
-    count_table_elements = 2;
+  if (!dmScript::IsInstanceValid(L)) {
+    UnregisterCallback(&defUtoLua);
+    dmLogError("Could not run DefUnityAds callback because the instance has been deleted.");
+    lua_pop(L, 2);
   }
-  lua_createtable(L, 0, count_table_elements);
-  luaL_push_pair_str_str(L, key_1, value_1);
-  if (key_2 != NULL) {
-    luaL_push_pair_str_num(L, key_2, value_2);
-  }
+  else {
+    lua_pushnumber(L, type);
+    int count_table_elements = 1;
+    if (key_2 != NULL) {
+      count_table_elements = 2;
+    }
+    lua_createtable(L, 0, count_table_elements);
+    luaL_push_pair_str_str(L, key_1, value_1);
+    if (key_2 != NULL) {
+      luaL_push_pair_str_num(L, key_2, value_2);
+    }
 
-  int number_of_arguments = 3;
-  int ret = lua_pcall(L, number_of_arguments, 0, 0);
-  if(ret != 0) {
-    dmLogError("Error running callback: %s", lua_tostring(L, -1));
-    lua_pop(L, 1);
+    int number_of_arguments = 3;
+    int ret = lua_pcall(L, number_of_arguments, 0, 0);
+    if(ret != 0) {
+      dmLogError("Error running callback: %s", lua_tostring(L, -1));
+      lua_pop(L, 1);
+    }
   }
   assert(top == lua_gettop(L));
 }
 
 void finalize(){
   UnregisterCallback(&defUtoLua);
-  ClearQueue();
 }
 
 void set_callback(lua_State* L, int pos){
-  RegisterCallback(L, pos, &defUtoLua);
+  int type = lua_type(L, pos);
+  if (type == LUA_TNONE || type == LUA_TNIL) {
+    UnregisterCallback(&defUtoLua);
+  }
+  else{
+    RegisterCallback(L, pos, &defUtoLua);
+  }
 }
 
 void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
