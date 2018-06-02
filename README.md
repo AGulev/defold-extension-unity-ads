@@ -1,4 +1,4 @@
-![DefUnityADS](https://user-images.githubusercontent.com/2209596/37794961-23a6c3a4-2e24-11e8-8117-6d7ae3c970f2.jpg)
+![DefUnityADS](https://user-images.githubusercontent.com/2209596/40877172-edf73614-6684-11e8-98fe-ba389638fc60.jpg)
 
 # DefUnityAds
 
