@@ -1,6 +1,8 @@
+_“This plugin is not endorsed or sponsored by Unity Technologies. This is an independent, unofficial plugin. UNITY and the Unity logo are Unity Technologies’ registered trademarks in the US and other countries--All rights reserved.“_
+
 ![DefVideoAds (plugin for Unity ADS)](https://user-images.githubusercontent.com/2209596/40907996-32afc3ec-67ee-11e8-987f-9b536a8820a3.jpg)
 
-# DefUnityAds
+# DefVideoAds (plugin for Unity ADS)
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
 Extension supported IOS and Android.
@@ -10,7 +12,7 @@ Extension supported IOS and Android.
 You can use the DefVideoAds extension in your own project by adding this project as a [Defold library dependency](http://www.defold.com/manuals/libraries/).
 Open your game.project file and in the dependencies field under project add:
 
->https://github.com/AGulev/DefUnityAds/archive/master.zip
+>https://github.com/AGulev/DefVideoAds/archive/master.zip
 
 ##### Android installation info
 Set `defunityads/AndroindManifest.xml` as default manifest for your project or add the next Activities to your manifest:
@@ -30,7 +32,7 @@ android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
 ## Example
 
-See the [example folder](https://github.com/AGulev/DefUnityAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefUnityAds/blob/master/example/ui.gui_script) file.
+See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.
 
 ![Example screenshot](https://user-images.githubusercontent.com/2209596/40448649-cf08e002-5ede-11e8-9681-c20d17c0512a.jpg)
 
