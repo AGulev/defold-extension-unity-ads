@@ -1,4 +1,4 @@
-![DefUnityADS](https://user-images.githubusercontent.com/2209596/40877172-edf73614-6684-11e8-98fe-ba389638fc60.jpg)
+![DefVideoAds (plugin for Unity ADS)](https://user-images.githubusercontent.com/2209596/40907996-32afc3ec-67ee-11e8-987f-9b536a8820a3.jpg)
 
 # DefUnityAds
 
@@ -7,7 +7,7 @@ Extension supported IOS and Android.
 
 ## Installation
 
-You can use the DefUnityAds extension in your own project by adding this project as a [Defold library dependency](http://www.defold.com/manuals/libraries/).
+You can use the DefVideoAds extension in your own project by adding this project as a [Defold library dependency](http://www.defold.com/manuals/libraries/).
 Open your game.project file and in the dependencies field under project add:
 
 >https://github.com/AGulev/DefUnityAds/archive/master.zip
@@ -15,7 +15,7 @@ Open your game.project file and in the dependencies field under project add:
 ##### Android installation info
 Set `defunityads/AndroindManifest.xml` as default manifest for your project or add the next Activities to your manifest:
 ```xml
-<!-- For DefUnityAds -->
+<!-- For DefVideoAds -->
 <activity
 android:name="com.unity3d.ads.adunit.AdUnitActivity"
 android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
