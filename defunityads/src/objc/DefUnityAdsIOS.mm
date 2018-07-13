@@ -46,7 +46,6 @@ void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
 }
 
 void DefUnityAds_Show(char* placementId) {
-  if (![UnityAds isInitialized]) return;
   if ((placementId != NULL) && (placementId[0] == '\0')) {
     [UnityAds show:uiViewController];
   }

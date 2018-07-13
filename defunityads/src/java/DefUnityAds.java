@@ -24,9 +24,6 @@ public static void DefUnityAds_Initialize(String gameId, boolean testMode) {
 }
 
 public static void DefUnityAds_Show(String placementId) {
-  if (!UnityAds.isInitialized()) {
-    return;
-  }
   if (placementId == null || placementId.isEmpty()) {
     UnityAds.show(activity);
   } else {
