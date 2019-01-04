@@ -1,6 +1,6 @@
 _“This plugin is not endorsed or sponsored by Unity Technologies. This is an independent, unofficial plugin. UNITY and the Unity logo are Unity Technologies’ registered trademarks in the US and other countries--All rights reserved.“_
 
-![DefVideoAds (plugin for Unity ADS)](https://user-images.githubusercontent.com/2209596/40907996-32afc3ec-67ee-11e8-987f-9b536a8820a3.jpg)
+![defvideoads-01](https://user-images.githubusercontent.com/2209596/50695591-6086b080-103d-11e9-9a94-77929169199e.png)
 
 # DefVideoAds (plugin for Unity ADS)
 
