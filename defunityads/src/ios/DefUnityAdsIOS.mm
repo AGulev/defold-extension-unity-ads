@@ -1,6 +1,6 @@
 #if defined(DM_PLATFORM_IOS)
-#include "../DefUnityAds.h"
-#include "../DefUnityCallback.h"
+#include "../private_DefUnityAds.h"
+#include "../private_DefUnityCallback.h"
 
 #include <AVFoundation/AVFoundation.h>
 #include <UIKit/UIKit.h>
@@ -17,24 +17,28 @@
 @implementation DefUnityAdsDelegate
 
 -(void)unityAdsReady:(NSString *)placementId {
-  lua_unityAdsReady((char*)[placementId UTF8String]);
+  DefUnityCallback_lua_unityAdsReady((char*)[placementId UTF8String]);
 }
 
 -(void)unityAdsDidStart:(NSString *)placementId {
-  lua_unityAdsDidStart((char*)[placementId UTF8String]);
+  DefUnityCallback_lua_unityAdsDidStart((char*)[placementId UTF8String]);
 }
 
 -(void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-  lua_unityAdsDidError((int)error, (char*)[message UTF8String]);
+  DefUnityCallback_lua_unityAdsDidError((int)error, (char*)[message UTF8String]);
 }
 
 -(void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-  lua_unityAdsDidFinish ((char*)[placementId UTF8String], (int)state);
+  DefUnityCallback_lua_unityAdsDidFinish ((char*)[placementId UTF8String], (int)state);
 }
 
 @end
 
 UIViewController *uiViewController;
+
+void DefUnityAds_InitExtension() {
+
+}
 
 void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
   NSString* gameId = [NSString stringWithUTF8String:game_id];

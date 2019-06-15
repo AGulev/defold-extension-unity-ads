@@ -7,13 +7,13 @@
 
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 #include "utils/LuaUtils.h"
-#include "DefUnityCallback.h"
-#include "DefUnityAds.h"
+#include "private_DefUnityCallback.h"
+#include "private_DefUnityAds.h"
 
 static int Initialize(lua_State* L) {
   const char *gameId_lua = luaL_checkstring(L, 1);
   bool enableDebugMode_lua = false;
-  set_callback(L, 2);
+  DefUnityCallback_set_callback(L, 2);
   if (lua_type(L, 3) != LUA_TNONE) {
     enableDebugMode_lua = luaL_checkbool(L, 3);
   }
@@ -22,7 +22,7 @@ static int Initialize(lua_State* L) {
 }
 
 static int setCallback(lua_State* L) {
-  set_callback(L, 1);
+  DefUnityCallback_set_callback(L, 1);
   return 0;
 }
 
@@ -148,6 +148,8 @@ dmExtension::Result AppInitializeUnityAds(dmExtension::AppParams* params)
 dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 {
   LuaInit(params->m_L);
+  DefUnityAds_InitExtension();
+  DefUnityCallback_initialize();
   return dmExtension::RESULT_OK;
 }
 
@@ -158,13 +160,13 @@ dmExtension::Result AppFinalizeUnityAds(dmExtension::AppParams* params)
 
 dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
 {
-  finalize();
+  DefUnityCallback_finalize();
   return dmExtension::RESULT_OK;
 }
 
 static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
 {
-  callback_updates();
+  DefUnityCallback_callback_updates();
   return dmExtension::RESULT_OK;
 }
 

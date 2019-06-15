@@ -8,3 +8,7 @@ platforms:
   armv7-ios:
     context:
         frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
+
+  x86_64-ios:
+    context:
+        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]

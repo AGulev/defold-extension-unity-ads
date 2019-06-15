@@ -1,9 +1,10 @@
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
-#include "DefUnityCallback.h"
+#include "private_DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
-DefUnityAdsListener defUtoLua;
-dmArray<CallbackData> m_callbacksQueue;
+DefUnityAdsListener     defUtoLua;
+dmArray<CallbackData>   m_callbacksQueue;
+dmMutex::HMutex         m_mutex;
 
 static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
 {
@@ -33,7 +34,7 @@ static void UnregisterCallback(DefUnityAdsListener* cbk)
   }
 }
 
-static void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
+static void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
 {
   if(cbk->m_Callback == LUA_NOREF)
   {
@@ -75,11 +76,16 @@ static void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int 
   assert(top == lua_gettop(L));
 }
 
-void finalize(){
+void DefUnityCallback_initialize(){
+  m_mutex = dmMutex::New();
+}
+
+void DefUnityCallback_finalize(){
+  dmMutex::Delete(m_mutex);
   UnregisterCallback(&defUtoLua);
 }
 
-void set_callback(lua_State* L, int pos){
+void DefUnityCallback_set_callback(lua_State* L, int pos){
   int type = lua_type(L, pos);
   if (type == LUA_TNONE || type == LUA_TNIL) {
     UnregisterCallback(&defUtoLua);
@@ -90,6 +96,8 @@ void set_callback(lua_State* L, int pos){
 }
 
 void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
+  DM_MUTEX_SCOPED_LOCK(m_mutex);
+  
   CallbackData data;
   data.msg_type = type;
   data.key_1 = key_1;
@@ -104,27 +112,33 @@ void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
   m_callbacksQueue.Push(data);
 }
 
-void lua_unityAdsReady(char*placementId) {
+void DefUnityCallback_lua_unityAdsReady(char*placementId) {
   add_to_queue((int)TYPE_IS_READY,(char*)"placementId", placementId, NULL, 0);
 }
 
-void lua_unityAdsDidStart(char*placementId) {
+void DefUnityCallback_lua_unityAdsDidStart(char*placementId) {
   add_to_queue((int)TYPE_DID_START,(char*)"placementId", placementId, NULL, 0);
 }
 
-void lua_unityAdsDidError(int error, char* message) {
+void DefUnityCallback_lua_unityAdsDidError(int error, char* message) {
   add_to_queue((int)TYPE_DID_ERROR,(char*)"message", message, (char*)"error", error);
 }
 
-void lua_unityAdsDidFinish (char *placementId, int state) {
+void DefUnityCallback_lua_unityAdsDidFinish (char *placementId, int state) {
   add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", placementId, (char*)"state", state);
 }
 
-void callback_updates(){
+void DefUnityCallback_callback_updates(){
+  if (m_callbacksQueue.Empty()) {
+    return;
+  }
+
+  DM_MUTEX_SCOPED_LOCK(m_mutex);
+  
   for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
   {
     CallbackData* data = &m_callbacksQueue[i];
-    invoke_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
+    DefUnityCallback_invoke_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
     if(data->value_1)
       free(data->value_1);
     data->value_1 = 0;

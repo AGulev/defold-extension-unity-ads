@@ -6,7 +6,6 @@ import com.unity3d.ads.UnityAds;
 
 public class DefUnityAds {
 
-public static Activity activity;
 public static DefUnityAdsListener defUnityAdsListener;
 
 public static native void onUnityAdsReady(String placementId);
@@ -14,16 +13,20 @@ public static native void onUnityAdsStart(String placementId);
 public static native void onUnityAdsError(int error, String message);
 public static native void onUnityAdsFinish(String placementId, int result);
 
-public static void sdk_pre_init(Activity appActivity) {
+//-----
+
+private Activity activity;
+
+public DefUnityAds(Activity appActivity) {
   activity = appActivity;
   defUnityAdsListener = new DefUnityAdsListener();
 }
 
-public static void DefUnityAds_Initialize(String gameId, boolean testMode) {
+public void initialize(String gameId, boolean testMode) {
   UnityAds.initialize(activity, gameId, defUnityAdsListener, testMode);
 }
 
-public static void DefUnityAds_Show(String placementId) {
+public void show(String placementId) {
   if (placementId == null || placementId.isEmpty()) {
     UnityAds.show(activity);
   } else {
@@ -31,34 +34,34 @@ public static void DefUnityAds_Show(String placementId) {
   }
 }
 
-public static void DefUnityAds_setDebugMode(boolean debugMode) {
+public void setDebugMode(boolean debugMode) {
   UnityAds.setDebugMode(debugMode);
 }
 
-public static boolean DefUnityAds_getDebugMode() {
+public boolean getDebugMode() {
   return UnityAds.getDebugMode();
 }
 
-public static boolean DefUnityAds_isReady(String placementId) {
+public boolean isReady(String placementId) {
   if (placementId == null || placementId.isEmpty()) {
     return UnityAds.isReady();
   }
   return UnityAds.isReady(placementId);
 }
 
-public static boolean DefUnityAds_isInitialized() {
+public boolean isInitialized() {
   return UnityAds.isInitialized();
 }
 
-public static boolean DefUnityAds_isSupported() {
+public boolean isSupported() {
   return UnityAds.isSupported();
 }
 
-public static String DefUnityAds_getVersion() {
+public String getVersion() {
   return UnityAds.getVersion();
 }
 
-public static int DefUnityAds_getPlacementState(String placementId) {
+public int getPlacementState(String placementId) {
   if (placementId == null || placementId.isEmpty()) {
     return UnityAds.getPlacementState().ordinal();
   }

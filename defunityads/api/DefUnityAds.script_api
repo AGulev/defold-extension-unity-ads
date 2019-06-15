@@ -1,0 +1,144 @@
+- name: unityads
+  type: table
+  desc: Functions and constants for interacting with UnityAds APIs
+
+  members:
+
+#*****************************************************************************************************
+
+  - name: initialize
+    type: function
+
+    parameters:
+    - name: gameId
+      type: table
+
+    - name: callback
+      type: function
+      parameters:
+        - name: self
+          type: object
+
+        - name: msg_type
+          type: string
+
+        - name: message
+          type: table
+
+    - name: testMode
+      type: table
+
+#*****************************************************************************************************
+
+  - name: setCallback
+    type: function
+
+    parameters:
+    - name: callback
+      type: function
+
+#*****************************************************************************************************
+
+  - name: setDebugMode
+    type: function
+
+    parameters:
+    - name: isDebug
+      type: boolean
+
+#*****************************************************************************************************
+
+  - name: getDebugMode
+    type: function
+
+#*****************************************************************************************************
+
+  - name: getPlacementState
+    type: function
+
+    parameters:
+    - name: placementId
+      type: string
+
+#*****************************************************************************************************
+
+  - name: isReady
+    type: function
+
+    parameters:
+    - name: placementId
+      type: string
+
+#*****************************************************************************************************
+
+  - name: isInitialized
+    type: function
+
+#*****************************************************************************************************
+
+  - name: isSupported
+    type: function
+
+#*****************************************************************************************************
+
+  - name: getVersion
+    type: function
+
+#*****************************************************************************************************
+
+  - name: show
+    type: function
+
+    parameters:
+    - name: placementId
+      type: string
+
+#*****************************************************************************************************
+
+  - name: TYPE_IS_READY
+    type: number
+
+  - name: TYPE_DID_START
+    type: number
+
+  - name: TYPE_DID_ERROR
+    type: number
+
+  - name: TYPE_DID_FINISH
+    type: number
+
+
+#*****************************************************************************************************
+
+  - name: ERROR_NOT_INITIALIZED
+    type: number
+
+  - name: ERROR_INITIALIZED_FAILED
+    type: number
+
+  - name: ERROR_INVALID_ARGUMENT
+    type: number
+
+  - name: ERROR_VIDEO_PLAYER
+    type: number
+
+  - name: ERROR_INIT_SANITY_CHECK_FAIL
+    type: number
+
+  - name: ERROR_AD_BLOCKER_DETECTED
+    type: number
+
+  - name: ERROR_FILE_IO
+    type: number
+
+  - name: ERROR_DEVICE_ID
+    type: number
+
+  - name: ERROR_SHOW
+    type: number
+
+  - name: ERROR_INTERNAL
+    type: number
+
+
+#*****************************************************************************************************
