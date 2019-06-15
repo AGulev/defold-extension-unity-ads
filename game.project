@@ -1,6 +1,6 @@
 [project]
-title = DefUnityAds
-version = 0.1
+title = DefVideoAds
+version = 1.0
 dependencies = https://github.com/andsve/dirtylarry/archive/master.zip
 
 [bootstrap]
@@ -27,6 +27,5 @@ include_dirs = defunityads
 bundle_identifier = com.agulev.test
 
 [android]
-manifest = /defunityads/AndroidManifest.xml
 package = com.agulev.test
 

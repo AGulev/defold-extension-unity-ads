@@ -14,22 +14,6 @@ Open your game.project file and in the dependencies field under project add:
 
 >https://github.com/AGulev/DefVideoAds/archive/master.zip
 
-##### Android installation info
-Set `defunityads/AndroindManifest.xml` as default manifest for your project or add the next Activities to your manifest:
-```xml
-<!-- For DefVideoAds -->
-<activity
-android:name="com.unity3d.ads.adunit.AdUnitActivity"
-android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-android:hardwareAccelerated="true"
-android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-<activity
-android:name="com.unity3d.ads.adunit.AdUnitSoftwareActivity"
-android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-android:hardwareAccelerated="false"
-android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-```
-
 ## Example
 
 See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.
