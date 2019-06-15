@@ -149,6 +149,7 @@ dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 {
   LuaInit(params->m_L);
   DefUnityAds_InitExtension();
+  DefUnityCallback_initialize();
   return dmExtension::RESULT_OK;
 }
 

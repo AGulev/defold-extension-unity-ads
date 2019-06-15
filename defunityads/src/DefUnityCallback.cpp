@@ -2,8 +2,9 @@
 #include "private_DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
-DefUnityAdsListener defUtoLua;
-dmArray<CallbackData> m_callbacksQueue;
+DefUnityAdsListener     defUtoLua;
+dmArray<CallbackData>   m_callbacksQueue;
+dmMutex::HMutex         m_mutex;
 
 static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
 {
@@ -75,7 +76,12 @@ static void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1,
   assert(top == lua_gettop(L));
 }
 
+void DefUnityCallback_initialize(){
+  m_mutex = dmMutex::New();
+}
+
 void DefUnityCallback_finalize(){
+  dmMutex::Delete(m_mutex);
   UnregisterCallback(&defUtoLua);
 }
 
@@ -90,6 +96,8 @@ void DefUnityCallback_set_callback(lua_State* L, int pos){
 }
 
 void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
+  DM_MUTEX_SCOPED_LOCK(m_mutex);
+  
   CallbackData data;
   data.msg_type = type;
   data.key_1 = key_1;
@@ -121,6 +129,12 @@ void DefUnityCallback_lua_unityAdsDidFinish (char *placementId, int state) {
 }
 
 void DefUnityCallback_callback_updates(){
+  if (m_callbacksQueue.Empty()) {
+    return;
+  }
+
+  DM_MUTEX_SCOPED_LOCK(m_mutex);
+  
   for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
   {
     CallbackData* data = &m_callbacksQueue[i];
