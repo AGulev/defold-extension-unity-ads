@@ -14,6 +14,8 @@ Open your game.project file and in the dependencies field under project add:
 
 >https://github.com/AGulev/DefVideoAds/archive/master.zip
 
+or point to the ZIP file of a [specific release](https://github.com/AGulev/DefVideoAds/releases).
+
 ## Example
 
 See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.
@@ -196,4 +198,4 @@ local function defunityads_callback(self, msg_type, message)
 end
 ```
 
-If you have any questions or suggestions contact: me@agulev.com
+If you have any issues, questions or suggestions please [create an issue](https://github.com/AGulev/DefVideoAds/issues) or contact me: me@agulev.com
