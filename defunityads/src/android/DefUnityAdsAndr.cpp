@@ -6,28 +6,28 @@
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsReady(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  lua_unityAdsReady((char*)ch);
+  DefUnityCallback_lua_unityAdsReady((char*)ch);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsStart(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  lua_unityAdsDidStart((char*)ch);
+  DefUnityCallback_lua_unityAdsDidStart((char*)ch);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  lua_unityAdsDidError((int)type, (char*)ch);
+  DefUnityCallback_lua_unityAdsDidError((int)type, (char*)ch);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(JNIEnv *env, jclass jcls, jstring jstr, jint type)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  lua_unityAdsDidFinish((char*)ch, (int)type);
+  DefUnityCallback_lua_unityAdsDidFinish((char*)ch, (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 

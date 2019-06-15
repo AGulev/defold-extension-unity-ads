@@ -48,12 +48,12 @@ struct CallbackData
   int value_2;
 };
 
-void set_callback(lua_State* L, int pos);
-void invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
-void callback_updates();
-void finalize();
+void DefUnityCallback_set_callback(lua_State* L, int pos);
+void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
+void DefUnityCallback_callback_updates();
+void DefUnityCallback_finalize();
 
-void lua_unityAdsReady(char*placementId);
-void lua_unityAdsDidStart(char*placementId);
-void lua_unityAdsDidError(int error, char* message);
-void lua_unityAdsDidFinish (char *placementId, int state);
+void DefUnityCallback_lua_unityAdsReady(char*placementId);
+void DefUnityCallback_lua_unityAdsDidStart(char*placementId);
+void DefUnityCallback_lua_unityAdsDidError(int error, char* message);
+void DefUnityCallback_lua_unityAdsDidFinish(char *placementId, int state);
