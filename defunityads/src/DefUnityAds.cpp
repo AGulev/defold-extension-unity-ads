@@ -7,8 +7,8 @@
 
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 #include "utils/LuaUtils.h"
-#include "DefUnityCallback.h"
-#include "DefUnityAds.h"
+#include "private_DefUnityCallback.h"
+#include "private_DefUnityAds.h"
 
 static int Initialize(lua_State* L) {
   const char *gameId_lua = luaL_checkstring(L, 1);
@@ -148,6 +148,7 @@ dmExtension::Result AppInitializeUnityAds(dmExtension::AppParams* params)
 dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 {
   LuaInit(params->m_L);
+  DefUnityAds_InitExtension();
   return dmExtension::RESULT_OK;
 }
 

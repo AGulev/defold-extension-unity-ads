@@ -1,5 +1,5 @@
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
-#include "DefUnityCallback.h"
+#include "private_DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
 DefUnityAdsListener defUtoLua;

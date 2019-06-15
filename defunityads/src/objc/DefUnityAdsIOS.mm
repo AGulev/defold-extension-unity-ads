@@ -1,6 +1,6 @@
 #if defined(DM_PLATFORM_IOS)
-#include "../DefUnityAds.h"
-#include "../DefUnityCallback.h"
+#include "../private_DefUnityAds.h"
+#include "../private_DefUnityCallback.h"
 
 #include <AVFoundation/AVFoundation.h>
 #include <UIKit/UIKit.h>
@@ -35,6 +35,10 @@
 @end
 
 UIViewController *uiViewController;
+
+void DefUnityAds_InitExtension() {
+
+}
 
 void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
   NSString* gameId = [NSString stringWithUTF8String:game_id];
