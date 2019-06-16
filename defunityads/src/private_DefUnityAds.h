@@ -10,11 +10,26 @@ enum DefUnityAdsPlacementState
   PLACEMENT_STATE_NO_FILL
 };
 
+enum DefUnityBannerPosition
+{
+  BANNER_POSITION_TOP_LEFT,
+  BANNER_POSITION_TOP_CENTER,
+  BANNER_POSITION_TOP_RIGHT,
+  BANNER_POSITION_BOTTOM_LEFT,
+  BANNER_POSITION_BOTTOM_CENTER,
+  BANNER_POSITION_BOTTOM_RIGHT,
+  BANNER_POSITION_CENTER,
+  BANNER_POSITION_NONE
+};
+
 void DefUnityAds_InitExtension();
 
 void DefUnityAds_Initialize(const char*game_id, bool is_debug);
 void DefUnityAds_Show(char* placementId);
 void DefUnityAds_setDebugMode(bool is_debug);
+void DefUnityAds_setBannerPosition(int position);
+void DefUnityAds_loadBanner(char* placementId);
+void DefUnityAds_unloadBanner();
 
 bool DefUnityAds_isReady(char* placementId);
 bool DefUnityAds_isSupported();

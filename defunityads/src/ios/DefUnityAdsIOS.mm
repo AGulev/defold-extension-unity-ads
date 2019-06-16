@@ -6,9 +6,9 @@
 #include <UIKit/UIKit.h>
 #include <UnityAds/UnityAds.h>
 
+UIViewController *uiViewController;
 
-@interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>{
-}
+@interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>
 @end
 
 @interface DefUnityAdsDelegate ()
@@ -34,7 +34,35 @@
 
 @end
 
-UIViewController *uiViewController;
+@interface DefUnityAdsBannerDelegate: NSObject <UnityAdsBannerDelegate>
+@end
+
+@interface DefUnityAdsBannerDelegate ()
+@end
+
+@implementation DefUnityAdsBannerDelegate
+
+-(void) unityAdsBannerDidClick: (NSString *) placementId {
+  
+}
+
+-(void) unityAdsBannerDidError: (NSString *) message {
+
+}
+
+-(void) unityAdsBannerDidHide: (NSString *) placementId {
+}
+
+-(void) unityAdsBannerDidShow: (NSString *) placementId {
+}
+
+-(void) unityAdsBannerDidLoad: (NSString *) placementId view: (UIView *) view {
+  [uiViewController.view addSubview:view];
+}
+
+-(void) unityAdsBannerDidUnload: (NSString *) placementId {
+}
+@end
 
 void DefUnityAds_InitExtension() {
 
@@ -43,6 +71,8 @@ void DefUnityAds_InitExtension() {
 void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
   NSString* gameId = [NSString stringWithUTF8String:game_id];
   DefUnityAdsDelegate* unityAds = [[DefUnityAdsDelegate alloc] init];
+  DefUnityAdsBannerDelegate* unityBannerAds = [[DefUnityAdsBannerDelegate alloc] init];
+  [UnityAdsBanner setDelegate: unityBannerAds];
   [UnityAds initialize:gameId delegate:unityAds testMode:is_debug ? YES : NO];
 
   UIWindow* window = dmGraphics::GetNativeiOSUIWindow();
@@ -107,6 +137,24 @@ int DefUnityAds_getPlacementState(char* placementId) {
     state =[UnityAds getPlacementState:placementId_s];
   }
   return (int)state;
+}
+
+void DefUnityAds_setBannerPosition(int position) {
+  [UnityAdsBanner setBannerPosition:position];
+}
+
+void DefUnityAds_loadBanner(char* placementId) {
+  if ((placementId != NULL) && (placementId[0] == '\0')) {
+    [UnityAdsBanner loadBanner];
+  }
+  else {
+    NSString* placementId_s = [NSString stringWithUTF8String:placementId];
+    [UnityAdsBanner loadBanner:placementId_s];
+  }
+}
+
+void DefUnityAds_unloadBanner() {
+  [UnityAdsBanner destroy];
 }
 
 #endif

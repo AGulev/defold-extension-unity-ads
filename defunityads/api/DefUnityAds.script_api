@@ -95,6 +95,29 @@
 
 #*****************************************************************************************************
 
+  - name: loadBanner
+    type: function
+
+    parameters:
+    - name: placementId
+      type: string
+
+#*****************************************************************************************************
+
+  - name: unloadBanner
+    type: function
+
+#*****************************************************************************************************
+
+  - name: setBannerPosition
+    type: function
+
+    parameters:
+    - name: position
+      type: number
+
+#*****************************************************************************************************
+
   - name: TYPE_IS_READY
     type: number
 
@@ -140,5 +163,31 @@
   - name: ERROR_INTERNAL
     type: number
 
+
+#*****************************************************************************************************
+
+  - name: BANNER_POSITION_TOP_LEFT
+    type: number
+
+  - name: BANNER_POSITION_TOP_CENTER
+    type: number
+
+  - name: BANNER_POSITION_TOP_RIGHT
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_LEFT
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_CENTER
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_RIGHT
+    type: number
+
+  - name: BANNER_POSITION_CENTER
+    type: number
+
+  - name: BANNER_POSITION_NONE
+    type: number
 
 #*****************************************************************************************************

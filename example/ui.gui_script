@@ -28,8 +28,8 @@ local function print_placement_state(placement)
   end
 end
 
-local function btn_ready(self, placementId)
-  gui.set_color(gui.get_node(placementId.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
+local function btn_ready(self, button_name)
+  gui.set_color(gui.get_node(button_name.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
 end
 
 local function unity_ads_callback(self, msg_type, message)
@@ -103,6 +103,7 @@ local function init_unity_ads(self, appId)
   if unityads and appId then
     if not unityads.isInitialized() then
       print("Init SDK with id", appId)
+      btn_ready(self, "show_banner")
       unityads.initialize(appId, unity_ads_callback, true)
     else
       print("UnityADS already inited. Just set callback one more time")
@@ -141,6 +142,45 @@ local function remove_callback(self)
   end
 end
 
+local function loadbanner(self)
+  if unityads then
+    if not self.is_banner then
+      unityads.loadBanner("banner")
+      self.is_banner = true
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Unload Banner")
+    else
+      unityads.unloadBanner()
+      self.is_banner = nil
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Load Banner")
+    end
+  end
+end
+
+local function change_banner_pos(self)
+  if unityads then
+    local banners = {
+      "BANNER_POSITION_TOP_LEFT",
+      "BANNER_POSITION_TOP_CENTER",
+      "BANNER_POSITION_TOP_RIGHT",
+      "BANNER_POSITION_BOTTOM_LEFT",
+      "BANNER_POSITION_BOTTOM_CENTER",
+      "BANNER_POSITION_BOTTOM_RIGHT",
+      "BANNER_POSITION_CENTER",
+      "BANNER_POSITION_NONE"
+    }
+    if not self.banner_pos_num then
+      self.banner_pos_num = 1
+    else
+      self.banner_pos_num = self.banner_pos_num + 1
+      if self.banner_pos_num > #banners then
+        self.banner_pos_num = 1
+      end
+    end
+    unityads.setBannerPosition(unityads[banners[self.banner_pos_num]])
+    gui.set_text(gui.get_node("baner_pos"), banners[self.banner_pos_num])
+  end
+end
+
 function on_input(self, action_id, action)
   self.input_default = dirtylarry:input("input", action_id, action, gui.KEYBOARD_TYPE_DEFAULT, "AppId")
   dirtylarry:button("init", action_id, action, function ()
@@ -170,6 +210,14 @@ end)
 
 dirtylarry:button("remove_callback", action_id, action, function ()
   remove_callback(self)
+end)
+
+dirtylarry:button("show_banner", action_id, action, function ()
+  loadbanner(self)
+end)
+
+dirtylarry:button("banner_pos", action_id, action, function ()
+  change_banner_pos(self)
 end)
 
 if action_id == BACK_KEY and action.released then

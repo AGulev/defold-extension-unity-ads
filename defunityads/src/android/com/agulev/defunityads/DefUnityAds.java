@@ -3,6 +3,7 @@ package com.agulev.defunityads;
 import android.app.Activity;
 
 import com.unity3d.ads.UnityAds;
+import com.unity3d.services.banners.UnityBanners;
 
 public class DefUnityAds {
 
@@ -66,6 +67,10 @@ public int getPlacementState(String placementId) {
     return UnityAds.getPlacementState().ordinal();
   }
   return UnityAds.getPlacementState(placementId).ordinal();
+}
+
+public void setBannerPosition(int position) {
+  UnityAdsBanner.setBannerPosition(position);
 }
 
 }

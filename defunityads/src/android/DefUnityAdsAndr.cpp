@@ -46,6 +46,7 @@ struct DefUnityAdsClass
   jmethodID               m_getDebugMode;
   jmethodID               m_getVersion;
   jmethodID               m_getPlacementState;
+  jmethodID               m_setBannerPosition;
 };
 
 DefUnityAdsClass g_duads;
@@ -65,6 +66,7 @@ void DefUnityAds_InitExtension() {
   g_duads.m_getDebugMode = env->GetMethodID(cls, "getDebugMode", "()Z");
   g_duads.m_getVersion = env->GetMethodID(cls, "getVersion", "()Ljava/lang/String;");
   g_duads.m_getPlacementState = env->GetMethodID(cls, "getPlacementState", "(Ljava/lang/String;)I");
+  g_duads.m_setBannerPosition = env->GetMethodID(cls, "setBannerPosition", "(I)V");
 
   jmethodID jni_constructor = env->GetMethodID(cls, "<init>", "(Landroid/app/Activity;)V");
   g_duads.m_DUADS_JNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, dmGraphics::GetNativeAndroidActivity()));
@@ -154,6 +156,13 @@ int DefUnityAds_getPlacementState(char* placementId) {
   env->DeleteLocalRef(jplacementId);
 
   return JNI_TRUE == return_value;
+}
+
+void DefUnityAds_setBannerPosition(int position) {
+  ThreadAttacher attacher;
+  JNIEnv *env = attacher.env;
+
+  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setBannerPosition, position);
 }
 
 #endif

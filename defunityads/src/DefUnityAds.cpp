@@ -85,6 +85,26 @@ static int setDebugMode(lua_State* L) {
   return 0;
 }
 
+static int setBannerPosition(lua_State* L) {
+  int position_lua = luaL_checknumber(L, 1);
+  DefUnityAds_setBannerPosition(position_lua);
+  return 0;
+}
+
+static int loadBanner(lua_State* L) {
+  char *placementId_lua = "";
+  if (lua_type(L, 1) != LUA_TNONE) {
+    placementId_lua = (char*)luaL_checkstring(L, 1);
+  }
+  DefUnityAds_loadBanner(placementId_lua);
+  return 0;
+}
+
+static int unloadBanner(lua_State* L) {
+  DefUnityAds_unloadBanner();
+  return 0;
+}
+
 static const luaL_reg Module_methods[] =
 {
   {"initialize", Initialize},
@@ -97,6 +117,9 @@ static const luaL_reg Module_methods[] =
   {"getPlacementState", getPlacementState},
   {"setDebugMode", setDebugMode},
   {"setCallback", setCallback},
+  {"setBannerPosition", setBannerPosition},
+  {"loadBanner", loadBanner},
+  {"unloadBanner", unloadBanner},
   {0, 0}
 };
 
@@ -134,6 +157,15 @@ static void LuaInit(lua_State* L)
   SETCONSTANT(PLACEMENT_STATE_DISABLED)
   SETCONSTANT(PLACEMENT_STATE_WAITING)
   SETCONSTANT(PLACEMENT_STATE_NO_FILL)
+
+  SETCONSTANT(BANNER_POSITION_TOP_LEFT)
+  SETCONSTANT(BANNER_POSITION_TOP_CENTER)
+  SETCONSTANT(BANNER_POSITION_TOP_RIGHT)
+  SETCONSTANT(BANNER_POSITION_BOTTOM_LEFT)
+  SETCONSTANT(BANNER_POSITION_BOTTOM_CENTER)
+  SETCONSTANT(BANNER_POSITION_BOTTOM_RIGHT)
+  SETCONSTANT(BANNER_POSITION_CENTER)
+  SETCONSTANT(BANNER_POSITION_NONE)
 
 #undef SETCONSTANT
   lua_pop(L, 1);
