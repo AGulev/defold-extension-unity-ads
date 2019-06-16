@@ -7,7 +7,8 @@ enum DefUnityAdsCallbackType
   TYPE_IS_READY,
   TYPE_DID_START,
   TYPE_DID_ERROR,
-  TYPE_DID_FINISH
+  TYPE_DID_FINISH,
+  TYPE_BANNER
 };
 
 enum DefUnityAdsFinishState
@@ -29,6 +30,16 @@ enum DefUnityAdsError
   ERROR_DEVICE_ID,
   ERROR_SHOW,
   ERROR_INTERNAL
+};
+
+enum DefUnityAdsBannerEvent
+{
+  BANNER_EVENT_DID_LOAD,
+  BANNER_EVENT_DID_UNLOAD,
+  BANNER_EVENT_DID_SHOW,
+  BANNER_EVENT_DID_HIDE,
+  BANNER_EVENT_DID_CLICK,
+  BANNER_EVENT_DID_ERROR
 };
 
 struct DefUnityAdsListener {
@@ -54,7 +65,4 @@ void DefUnityCallback_callback_updates();
 void DefUnityCallback_initialize();
 void DefUnityCallback_finalize();
 
-void DefUnityCallback_lua_unityAdsReady(char*placementId);
-void DefUnityCallback_lua_unityAdsDidStart(char*placementId);
-void DefUnityCallback_lua_unityAdsDidError(int error, char* message);
-void DefUnityCallback_lua_unityAdsDidFinish(char *placementId, int state);
+void DefUnityCallback_add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2);

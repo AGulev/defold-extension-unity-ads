@@ -7,6 +7,7 @@
 #include <UnityAds/UnityAds.h>
 
 UIViewController *uiViewController;
+UIView *bannerView;
 
 @interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>
 @end
@@ -17,19 +18,19 @@ UIViewController *uiViewController;
 @implementation DefUnityAdsDelegate
 
 -(void)unityAdsReady:(NSString *)placementId {
-  DefUnityCallback_lua_unityAdsReady((char*)[placementId UTF8String]);
+  DefUnityCallback_add_to_queue((int)TYPE_IS_READY,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
 }
 
 -(void)unityAdsDidStart:(NSString *)placementId {
-  DefUnityCallback_lua_unityAdsDidStart((char*)[placementId UTF8String]);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_START,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
 }
 
 -(void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-  DefUnityCallback_lua_unityAdsDidError((int)error, (char*)[message UTF8String]);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_ERROR,(char*)"message", (char*)[message UTF8String], (char*)"error", (int)error);
 }
 
 -(void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-  DefUnityCallback_lua_unityAdsDidFinish ((char*)[placementId UTF8String], (int)state);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", (char*)[placementId UTF8String], (char*)"state", (int)state);
 }
 
 @end
@@ -43,24 +44,29 @@ UIViewController *uiViewController;
 @implementation DefUnityAdsBannerDelegate
 
 -(void) unityAdsBannerDidClick: (NSString *) placementId {
-  
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", BANNER_EVENT_DID_CLICK);
 }
 
 -(void) unityAdsBannerDidError: (NSString *) message {
-
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)[message UTF8String], (char*)"event", BANNER_EVENT_DID_ERROR);
 }
 
 -(void) unityAdsBannerDidHide: (NSString *) placementId {
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", BANNER_EVENT_DID_HIDE);
 }
 
 -(void) unityAdsBannerDidShow: (NSString *) placementId {
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", BANNER_EVENT_DID_SHOW);
 }
 
 -(void) unityAdsBannerDidLoad: (NSString *) placementId view: (UIView *) view {
-  [uiViewController.view addSubview:view];
+  bannerView = view;
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", BANNER_EVENT_DID_LOAD);
 }
 
 -(void) unityAdsBannerDidUnload: (NSString *) placementId {
+  bannerView = nil;
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", BANNER_EVENT_DID_UNLOAD);
 }
 @end
 
@@ -155,6 +161,18 @@ void DefUnityAds_loadBanner(char* placementId) {
 
 void DefUnityAds_unloadBanner() {
   [UnityAdsBanner destroy];
+}
+
+void DefUnityAds_showBanner() {
+  if (bannerView){
+    [uiViewController.view addSubview:bannerView];
+  }
+}
+
+void DefUnityAds_hideBanner() {
+  if (bannerView) {
+    [bannerView removeFromSuperview];
+  }
 }
 
 #endif

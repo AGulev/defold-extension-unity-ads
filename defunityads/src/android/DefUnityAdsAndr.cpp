@@ -6,28 +6,28 @@
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsReady(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_lua_unityAdsReady((char*)ch);
+  DefUnityCallback_add_to_queue((int)TYPE_IS_READY,(char*)"placementId", (char*)ch, NULL, 0);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsStart(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_lua_unityAdsDidStart((char*)ch);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_START,(char*)"placementId", (char*)ch, NULL, 0);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_lua_unityAdsDidError((int)type, (char*)ch);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(JNIEnv *env, jclass jcls, jstring jstr, jint type)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_lua_unityAdsDidFinish((char*)ch, (int)type);
+  DefUnityCallback_add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", (char*)ch, (char*)"state", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 

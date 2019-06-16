@@ -105,6 +105,16 @@ static int unloadBanner(lua_State* L) {
   return 0;
 }
 
+static int showBanner(lua_State* L) {
+  DefUnityAds_showBanner();
+  return 0;
+}
+
+static int hideBanner(lua_State* L) {
+  DefUnityAds_hideBanner();
+  return 0;
+}
+
 static const luaL_reg Module_methods[] =
 {
   {"initialize", Initialize},
@@ -120,6 +130,8 @@ static const luaL_reg Module_methods[] =
   {"setBannerPosition", setBannerPosition},
   {"loadBanner", loadBanner},
   {"unloadBanner", unloadBanner},
+  {"showBanner", showBanner},
+  {"hideBanner", hideBanner},
   {0, 0}
 };
 
@@ -166,6 +178,13 @@ static void LuaInit(lua_State* L)
   SETCONSTANT(BANNER_POSITION_BOTTOM_RIGHT)
   SETCONSTANT(BANNER_POSITION_CENTER)
   SETCONSTANT(BANNER_POSITION_NONE)
+
+  SETCONSTANT(BANNER_EVENT_DID_LOAD)
+  SETCONSTANT(BANNER_EVENT_DID_UNLOAD)
+  SETCONSTANT(BANNER_EVENT_DID_SHOW)
+  SETCONSTANT(BANNER_EVENT_DID_HIDE)
+  SETCONSTANT(BANNER_EVENT_DID_CLICK)
+  SETCONSTANT(BANNER_EVENT_DID_ERROR)
 
 #undef SETCONSTANT
   lua_pop(L, 1);

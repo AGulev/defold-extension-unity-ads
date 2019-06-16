@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.unity3d.ads.UnityAds;
 import com.unity3d.services.banners.UnityBanners;
+import com.unity3d.services.banners.view.BannerPosition;
 
 public class DefUnityAds {
 
@@ -70,7 +71,7 @@ public int getPlacementState(String placementId) {
 }
 
 public void setBannerPosition(int position) {
-  UnityAdsBanner.setBannerPosition(position);
+  UnityBanners.setBannerPosition(BannerPosition.values()[position]);
 }
 
 }

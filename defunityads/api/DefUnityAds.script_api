@@ -109,6 +109,16 @@
 
 #*****************************************************************************************************
 
+  - name: showBanner
+    type: function
+
+#*****************************************************************************************************
+
+  - name: hideBanner
+    type: function
+
+#*****************************************************************************************************
+
   - name: setBannerPosition
     type: function
 
@@ -191,3 +201,24 @@
     type: number
 
 #*****************************************************************************************************
+    
+  - name: BANNER_EVENT_DID_LOAD
+    type: number
+
+  - name: BANNER_EVENT_DID_UNLOAD
+    type: number
+
+  - name: BANNER_EVENT_DID_SHOW
+    type: number
+
+  - name: BANNER_EVENT_DID_HIDE
+    type: number
+
+  - name: BANNER_EVENT_DID_CLICK
+    type: number
+
+  - name: BANNER_EVENT_DID_ERROR
+    type: number
+
+#*****************************************************************************************************
+      

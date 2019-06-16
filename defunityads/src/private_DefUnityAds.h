@@ -30,6 +30,8 @@ void DefUnityAds_setDebugMode(bool is_debug);
 void DefUnityAds_setBannerPosition(int position);
 void DefUnityAds_loadBanner(char* placementId);
 void DefUnityAds_unloadBanner();
+void DefUnityAds_showBanner();
+void DefUnityAds_hideBanner();
 
 bool DefUnityAds_isReady(char* placementId);
 bool DefUnityAds_isSupported();
