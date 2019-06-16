@@ -12,9 +12,6 @@ UIView *bannerView;
 @interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>
 @end
 
-@interface DefUnityAdsDelegate ()
-@end
-
 @implementation DefUnityAdsDelegate
 
 -(void)unityAdsReady:(NSString *)placementId {
@@ -36,9 +33,6 @@ UIView *bannerView;
 @end
 
 @interface DefUnityAdsBannerDelegate: NSObject <UnityAdsBannerDelegate>
-@end
-
-@interface DefUnityAdsBannerDelegate ()
 @end
 
 @implementation DefUnityAdsBannerDelegate
