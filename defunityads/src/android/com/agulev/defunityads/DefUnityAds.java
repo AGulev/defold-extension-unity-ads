@@ -99,15 +99,33 @@ public class DefUnityAds {
     }
 
     public void showBanner() {
-        if (bannerView != null) {
-            ((ViewGroup)activity.findViewById(android.R.id.content)).addView(bannerView);
+        if (bannerView == null) {
+            return;
         }
+
+        activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                ((ViewGroup)activity.findViewById(android.R.id.content).getParent()).addView(bannerView);
+            }
+        });    
+
     }
 
     public void hideBanner() {
-        if (bannerView != null) {
-            ((ViewGroup)activity.findViewById(android.R.id.content)).removeView(bannerView);
+        if (bannerView == null) {
+            return;
         }
+            
+        activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                ((ViewGroup)activity.findViewById(android.R.id.content).getParent()).removeView(bannerView);
+            }
+        });
+
     }
 
     private class DefUnityAdsListener implements IUnityAdsListener {

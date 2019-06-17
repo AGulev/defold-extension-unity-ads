@@ -41,52 +41,52 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish
 //------
   
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerLoaded
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerLoaded
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerLoaded
-  (JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerUnloaded
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerUnloaded
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerUnloaded
-  (JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerShow
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerShow
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerShow
-(JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerClick
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerClick
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClick
-(JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerHide
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerHide
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerHide
-(JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 /*
-* Class:     com_agulev_defunityads_DefUnityAds
-* Method:    onUnityBannerError
-* Signature: (ILjava/lang/String;)V
-*/
+ * Class:     com_agulev_defunityads_DefUnityAds
+ * Method:    onUnityBannerError
+ * Signature: (Ljava/lang/String;)V
+ */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError
-(JNIEnv *, jclass, jint, jstring);
+  (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
 }

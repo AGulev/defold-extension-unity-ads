@@ -33,45 +33,45 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(
 
 //----
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerLoaded(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerLoaded(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", BANNER_EVENT_DID_LOAD);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_LOAD);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerUnloaded(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerUnloaded(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", BANNER_EVENT_DID_UNLOAD);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_UNLOAD);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerShow(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerShow(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", BANNER_EVENT_DID_SHOW);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_SHOW);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClick(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClick(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", BANNER_EVENT_DID_CLICK);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_CLICK);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerHide(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerHide(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", BANNER_EVENT_DID_HIDE);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_HIDE);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)ch, (char*)"event", BANNER_EVENT_DID_ERROR);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_ERROR);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
@@ -222,7 +222,7 @@ void DefUnityAds_loadBanner(char* placementId) {
   JNIEnv *env = attacher.env;
 
   jstring jplacementId = env->NewStringUTF(placementId);
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_loadBanner);
+  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_loadBanner, jplacementId);
   env->DeleteLocalRef(jplacementId);
 }
 
