@@ -32,6 +32,7 @@ public class DefUnityAds {
     //-----
 
     private Activity activity;
+    private BannerPosition m_bannerPosition = BannerPosition.BOTTOM_CENTER;
 
     public DefUnityAds(Activity appActivity) {
         activity = appActivity;
@@ -86,11 +87,12 @@ public class DefUnityAds {
         return UnityAds.getPlacementState(placementId).ordinal();
     }
 
-    public void setBannerPosition(int position) {
-        UnityBanners.setBannerPosition(BannerPosition.values()[position]);
+    public void setBannerPosition(String position) {
+        m_bannerPosition = BannerPosition.fromString(position);
     }
 
     public void loadBanner(String placementId) {
+        UnityBanners.setBannerPosition(m_bannerPosition);
         UnityBanners.loadBanner(activity, placementId);
     }
 

@@ -114,7 +114,7 @@ void DefUnityAds_InitExtension() {
   g_duads.m_getDebugMode = env->GetMethodID(cls, "getDebugMode", "()Z");
   g_duads.m_getVersion = env->GetMethodID(cls, "getVersion", "()Ljava/lang/String;");
   g_duads.m_getPlacementState = env->GetMethodID(cls, "getPlacementState", "(Ljava/lang/String;)I");
-  g_duads.m_setBannerPosition = env->GetMethodID(cls, "setBannerPosition", "(I)V");
+  g_duads.m_setBannerPosition = env->GetMethodID(cls, "setBannerPosition", "(Ljava/lang/String;)V");
   g_duads.m_loadBanner = env->GetMethodID(cls, "loadBanner", "(Ljava/lang/String;)V");
   g_duads.m_unloadBanner = env->GetMethodID(cls, "unloadBanner", "()V");
   g_duads.m_showBanner = env->GetMethodID(cls, "showBanner", "()V");
@@ -210,11 +210,16 @@ int DefUnityAds_getPlacementState(char* placementId) {
   return JNI_TRUE == return_value;
 }
 
+static const char *positions[] = { "topleft", "topcenter", 
+  "topright", "bottomleft", "bottomcenter", "bottomright", "center", "none" };
+
 void DefUnityAds_setBannerPosition(int position) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
+  jstring jposition = env->NewStringUTF(positions[position]);
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setBannerPosition, position);
+  env->DeleteLocalRef(jposition);
 }
 
 void DefUnityAds_loadBanner(char* placementId) {
