@@ -198,7 +198,7 @@ local function change_banner_pos(self)
       "BANNER_POSITION_NONE"
     }
     if not self.banner_pos_num then
-      self.banner_pos_num = 1
+      self.banner_pos_num = 2
     else
       self.banner_pos_num = self.banner_pos_num + 1
       if self.banner_pos_num > #banners then

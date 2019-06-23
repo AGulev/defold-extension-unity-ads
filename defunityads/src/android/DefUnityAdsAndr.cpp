@@ -218,7 +218,7 @@ void DefUnityAds_setBannerPosition(int position) {
   JNIEnv *env = attacher.env;
 
   jstring jposition = env->NewStringUTF(positions[position]);
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setBannerPosition, position);
+  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setBannerPosition, jposition);
   env->DeleteLocalRef(jposition);
 }
 
