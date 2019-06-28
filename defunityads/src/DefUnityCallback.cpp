@@ -95,7 +95,7 @@ void DefUnityCallback_set_callback(lua_State* L, int pos){
   }
 }
 
-void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
+void DefUnityCallback_add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
   DM_MUTEX_SCOPED_LOCK(m_mutex);
   
   CallbackData data;
@@ -110,22 +110,6 @@ void add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
     m_callbacksQueue.OffsetCapacity(4);
   }
   m_callbacksQueue.Push(data);
-}
-
-void DefUnityCallback_lua_unityAdsReady(char*placementId) {
-  add_to_queue((int)TYPE_IS_READY,(char*)"placementId", placementId, NULL, 0);
-}
-
-void DefUnityCallback_lua_unityAdsDidStart(char*placementId) {
-  add_to_queue((int)TYPE_DID_START,(char*)"placementId", placementId, NULL, 0);
-}
-
-void DefUnityCallback_lua_unityAdsDidError(int error, char* message) {
-  add_to_queue((int)TYPE_DID_ERROR,(char*)"message", message, (char*)"error", error);
-}
-
-void DefUnityCallback_lua_unityAdsDidFinish (char *placementId, int state) {
-  add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", placementId, (char*)"state", state);
 }
 
 void DefUnityCallback_callback_updates(){

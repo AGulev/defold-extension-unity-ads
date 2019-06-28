@@ -1,71 +1,232 @@
 package com.agulev.defunityads;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.view.Gravity;
 
+import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
+import com.unity3d.services.banners.IUnityBannerListener;
+import com.unity3d.services.banners.UnityBanners;
+import com.unity3d.services.banners.view.BannerPosition;
 
 public class DefUnityAds {
 
-public static DefUnityAdsListener defUnityAdsListener;
+    private DefUnityAdsListener defUnityAdsListener;
+    private DefUnityBannerListener defUnityAdsBannerListener;
+    private View bannerView;
 
-public static native void onUnityAdsReady(String placementId);
-public static native void onUnityAdsStart(String placementId);
-public static native void onUnityAdsError(int error, String message);
-public static native void onUnityAdsFinish(String placementId, int result);
+    public static native void onUnityAdsReady(String placementId);
+    public static native void onUnityAdsStart(String placementId);
+    public static native void onUnityAdsError(int error, String message);
+    public static native void onUnityAdsFinish(String placementId, int result);
 
-//-----
+    public static native void onUnityBannerLoaded(String placementId);
+    public static native void onUnityBannerUnloaded(String placementId);
+    public static native void onUnityBannerShow(String placementId);
+    public static native void onUnityBannerClick(String placementId);
+    public static native void onUnityBannerHide(String placementId);
+    public static native void onUnityBannerError(String message);
 
-private Activity activity;
+    //-----
 
-public DefUnityAds(Activity appActivity) {
-  activity = appActivity;
-  defUnityAdsListener = new DefUnityAdsListener();
-}
+    private Activity activity;
+    private LinearLayout layout;
+    private WindowManager.LayoutParams windowParams;
+    private BannerPosition m_bannerPosition = BannerPosition.BOTTOM_CENTER;
 
-public void initialize(String gameId, boolean testMode) {
-  UnityAds.initialize(activity, gameId, defUnityAdsListener, testMode);
-}
+    private boolean isShown = false;
 
-public void show(String placementId) {
-  if (placementId == null || placementId.isEmpty()) {
-    UnityAds.show(activity);
-  } else {
-    UnityAds.show(activity, placementId);
-  }
-}
+    public DefUnityAds(Activity appActivity) {
+        activity = appActivity;
+        defUnityAdsListener = new DefUnityAdsListener();
+        defUnityAdsBannerListener = new DefUnityBannerListener();
+    }
 
-public void setDebugMode(boolean debugMode) {
-  UnityAds.setDebugMode(debugMode);
-}
+    public void initialize(String gameId, boolean testMode) {
+        UnityBanners.setBannerListener(defUnityAdsBannerListener);
+        UnityAds.initialize(activity, gameId, defUnityAdsListener, testMode);
+    }
 
-public boolean getDebugMode() {
-  return UnityAds.getDebugMode();
-}
+    public void show(String placementId) {
+        if (placementId == null || placementId.isEmpty()) {
+            UnityAds.show(activity);
+        } else {
+            UnityAds.show(activity, placementId);
+        }
+    }
 
-public boolean isReady(String placementId) {
-  if (placementId == null || placementId.isEmpty()) {
-    return UnityAds.isReady();
-  }
-  return UnityAds.isReady(placementId);
-}
+    public void setDebugMode(boolean debugMode) {
+        UnityAds.setDebugMode(debugMode);
+    }
 
-public boolean isInitialized() {
-  return UnityAds.isInitialized();
-}
+    public boolean getDebugMode() {
+        return UnityAds.getDebugMode();
+    }
 
-public boolean isSupported() {
-  return UnityAds.isSupported();
-}
+    public boolean isReady(String placementId) {
+        if (placementId == null || placementId.isEmpty()) {
+            return UnityAds.isReady();
+        }
+        return UnityAds.isReady(placementId);
+    }
 
-public String getVersion() {
-  return UnityAds.getVersion();
-}
+    public boolean isInitialized() {
+        return UnityAds.isInitialized();
+    }
 
-public int getPlacementState(String placementId) {
-  if (placementId == null || placementId.isEmpty()) {
-    return UnityAds.getPlacementState().ordinal();
-  }
-  return UnityAds.getPlacementState(placementId).ordinal();
-}
+    public boolean isSupported() {
+        return UnityAds.isSupported();
+    }
+
+    public String getVersion() {
+        return UnityAds.getVersion();
+    }
+
+    public int getPlacementState(String placementId) {
+        if (placementId == null || placementId.isEmpty()) {
+            return UnityAds.getPlacementState().ordinal();
+        }
+        return UnityAds.getPlacementState(placementId).ordinal();
+    }
+
+    public void setBannerPosition(String position) {
+        m_bannerPosition = BannerPosition.fromString(position);
+    }
+
+    public void loadBanner(String placementId) {
+        UnityBanners.setBannerPosition(m_bannerPosition);
+        UnityBanners.loadBanner(activity, placementId);
+    }
+
+    public void unloadBanner() {
+        _hideBanner();
+        UnityBanners.destroy();
+    }
+
+    private void _hideBanner() {
+        if (!isShown) {
+            return;
+        }
+
+        isShown = false;
+        activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                wm.removeView(layout);
+            }
+
+        });
+
+    }
+
+    public void showBanner() {
+        if (bannerView == null) {
+            return;
+        }
+
+        activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                windowParams.gravity = m_bannerPosition.getGravity();
+                wm.addView(layout, windowParams);
+            }
+        });
+    }
+
+    public void hideBanner() {
+        if (bannerView == null) {
+            return;
+        }
+
+        _hideBanner();
+    }
+
+    private class DefUnityAdsListener implements IUnityAdsListener {
+        @Override
+        public void onUnityAdsReady(final String placementId) {
+            DefUnityAds.onUnityAdsReady(placementId);
+        }
+
+        @Override
+        public void onUnityAdsStart(String placementId) {
+            DefUnityAds.onUnityAdsStart(placementId);
+        }
+
+        @Override
+        public void onUnityAdsError(UnityAds.UnityAdsError error, String message) {
+            DefUnityAds.onUnityAdsError(error.ordinal(), message);
+        }
+
+        @Override
+        public void onUnityAdsFinish(String placementId, UnityAds.FinishState result) {
+            DefUnityAds.onUnityAdsFinish(placementId, result.ordinal());
+        }
+    }
+
+    private class DefUnityBannerListener implements IUnityBannerListener {
+
+        @Override
+        public void onUnityBannerLoaded(String placementId, View view) {
+            bannerView = view;
+
+            layout = new LinearLayout(activity);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            MarginLayoutParams params = new MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.setMargins(0, 0, 0, 0);
+
+            layout.addView(bannerView, params);
+
+            windowParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT);
+
+            DefUnityAds.onUnityBannerLoaded(placementId);
+        }
+
+        @Override 
+        public void onUnityBannerUnloaded(String placementId) {
+            layout = null;
+            bannerView = null;
+            windowParams = null;
+            DefUnityAds.onUnityBannerUnloaded(placementId);
+        }
+
+        @Override
+        public void onUnityBannerShow(String placementId) {
+            isShown = true;
+            DefUnityAds.onUnityBannerShow(placementId);
+        }
+
+        @Override
+        public void onUnityBannerClick(String placementId) {
+            DefUnityAds.onUnityBannerClick(placementId);
+        }
+
+        @Override
+        public void onUnityBannerHide(String placementId) {
+            DefUnityAds.onUnityBannerHide(placementId);
+        }
+
+        @Override
+        public void onUnityBannerError(String message) {
+            DefUnityAds.onUnityBannerError(message);
+        }
+    }
 
 }

@@ -20,7 +20,7 @@ or point to the ZIP file of a [specific release](https://github.com/AGulev/DefVi
 
 See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.
 
-![Example screenshot](https://user-images.githubusercontent.com/2209596/40448649-cf08e002-5ede-11e8-9681-c20d17c0512a.jpg)
+![Example screenshot](https://user-images.githubusercontent.com/2209596/60367270-1b40ab80-99ee-11e9-87e8-7dc9f8108615.gif)
 
 
 ## LUA Api
@@ -107,6 +107,36 @@ unityads.getVersion() -- Returns the Unity Ads SDK version as a string.
 unityads.show() -- show default ad
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
+#### unityads.loadBanner(placementId)
+```lua
+unityads.loadBanner("banner") -- load banner
+```
+#### unityads.unloadBanner()
+```lua
+unityads.unloadBanner() -- unload banner
+```
+#### unityads.showBanner()
+```lua
+unityads.showBanner() -- show loaded banner
+```
+#### unityads.hideBanner()
+```lua
+unityads.hideBanner() -- hide banner
+```
+#### unityads.setBannerPosition(position)
+```lua
+unityads.setBannerPosition(position) -- set position of the banner
+-- default value is unityads.BANNER_POSITION_TOP_CENTER
+--possible positions:
+unityads.BANNER_POSITION_TOP_LEFT
+unityads.BANNER_POSITION_TOP_CENTER
+unityads.BANNER_POSITION_TOP_RIGHT
+unityads.BANNER_POSITION_BOTTOM_LEFT
+unityads.BANNER_POSITION_BOTTOM_CENTER
+unityads.BANNER_POSITION_BOTTOM_RIGHT
+unityads.BANNER_POSITION_CENTER
+unityads.BANNER_POSITION_NONE
+```
 
 ### Constants
 ```lua
@@ -121,6 +151,7 @@ unityads.TYPE_IS_READY
 unityads.TYPE_DID_START
 unityads.TYPE_DID_ERROR
 unityads.TYPE_DID_FINISH
+unityads.TYPE_BANNER
 ```
 ##### unityads.TYPE_IS_READY
 ```lua
@@ -151,6 +182,18 @@ end
 local function defunityads_callback(self, msg_type, message)
   if msg_type == unityads.TYPE_DID_FINISH then
     pprint(message) -- message = {state = FINISH_STATE_*, placementId = "string"}
+  end
+end
+```
+##### unityads.TYPE_BANNER
+```lua
+local function defunityads_callback(self, msg_type, message)
+  if msg_type == unityads.TYPE_BANNER then
+      if message.event == BANNER_EVENT_DID_ERROR then
+        pprint(message) -- message = {event = BANNER_EVENT_DID_ERROR, error = "string"}
+      else
+        pprint(message) -- message = {event = BANNER_EVENT_*, placementId = "string"}
+      end
   end
 end
 ```
@@ -197,5 +240,27 @@ local function defunityads_callback(self, msg_type, message)
   end
 end
 ```
+#### Banner events
+```lua
+--possible banner events:
+unityads.BANNER_EVENT_DID_LOAD
+unityads.BANNER_EVENT_DID_UNLOAD
+unityads.BANNER_EVENT_DID_SHOW
+unityads.BANNER_EVENT_DID_HIDE
+unityads.BANNER_EVENT_DID_CLICK
+unityads.BANNER_EVENT_DID_ERROR
+```
+```lua
+local function defunityads_callback(self, msg_type, message)
+  if msg_type == unityads.TYPE_BANNER then
+    if message.event == unityads.BANNER_EVENT_DID_LOAD then
+      ...
+    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
+    ...
+  end
+end
+```
+
+---
 
 If you have any issues, questions or suggestions please [create an issue](https://github.com/AGulev/DefVideoAds/issues) or contact me: me@agulev.com

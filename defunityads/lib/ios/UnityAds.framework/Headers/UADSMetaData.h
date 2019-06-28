@@ -1,6 +1,6 @@
-#import "UADSJsonStorage.h"
+#import "USRVJsonStorage.h"
 
-@interface UADSMetaData : UADSJsonStorage
+@interface UADSMetaData : USRVJsonStorage
 
 @property (nonatomic, strong) NSString *category;
 

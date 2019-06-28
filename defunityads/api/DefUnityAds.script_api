@@ -95,6 +95,39 @@
 
 #*****************************************************************************************************
 
+  - name: loadBanner
+    type: function
+
+    parameters:
+    - name: placementId
+      type: string
+
+#*****************************************************************************************************
+
+  - name: unloadBanner
+    type: function
+
+#*****************************************************************************************************
+
+  - name: showBanner
+    type: function
+
+#*****************************************************************************************************
+
+  - name: hideBanner
+    type: function
+
+#*****************************************************************************************************
+
+  - name: setBannerPosition
+    type: function
+
+    parameters:
+    - name: position
+      type: number
+
+#*****************************************************************************************************
+
   - name: TYPE_IS_READY
     type: number
 
@@ -105,6 +138,9 @@
     type: number
 
   - name: TYPE_DID_FINISH
+    type: number
+
+  - name: TYPE_BANNER
     type: number
 
 
@@ -142,3 +178,50 @@
 
 
 #*****************************************************************************************************
+
+  - name: BANNER_POSITION_TOP_LEFT
+    type: number
+
+  - name: BANNER_POSITION_TOP_CENTER
+    type: number
+
+  - name: BANNER_POSITION_TOP_RIGHT
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_LEFT
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_CENTER
+    type: number
+
+  - name: BANNER_POSITION_BOTTOM_RIGHT
+    type: number
+
+  - name: BANNER_POSITION_CENTER
+    type: number
+
+  - name: BANNER_POSITION_NONE
+    type: number
+
+#*****************************************************************************************************
+    
+  - name: BANNER_EVENT_DID_LOAD
+    type: number
+
+  - name: BANNER_EVENT_DID_UNLOAD
+    type: number
+
+  - name: BANNER_EVENT_DID_SHOW
+    type: number
+
+  - name: BANNER_EVENT_DID_HIDE
+    type: number
+
+  - name: BANNER_EVENT_DID_CLICK
+    type: number
+
+  - name: BANNER_EVENT_DID_ERROR
+    type: number
+
+#*****************************************************************************************************
+      

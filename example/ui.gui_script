@@ -28,8 +28,8 @@ local function print_placement_state(placement)
   end
 end
 
-local function btn_ready(self, placementId)
-  gui.set_color(gui.get_node(placementId.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
+local function btn_ready(self, button_name)
+  gui.set_color(gui.get_node(button_name.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
 end
 
 local function unity_ads_callback(self, msg_type, message)
@@ -70,6 +70,30 @@ local function unity_ads_callback(self, msg_type, message)
       print("kUnityAdsFinishStateSkipped")
     elseif message.state == unityads.FINISH_STATE_COMPLETED then
       print("kUnityAdsFinishStateCompleted")
+    end
+  elseif msg_type == unityads.TYPE_BANNER then
+    if message.event == unityads.BANNER_EVENT_DID_CLICK then
+      print("BANNER_EVENT_DID_CLICK", message.placementId)
+    elseif message.event == unityads.BANNER_EVENT_DID_ERROR then
+      print("BANNER_EVENT_DID_ERROR: ", message.message)
+    elseif message.event == unityads.BANNER_EVENT_DID_HIDE then
+      print("BANNER_EVENT_DID_HIDE", message.placementId)
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
+      self.is_show_banner = false
+    elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
+      print("BANNER_EVENT_DID_LOAD", message.placementId)
+      btn_ready(self, "show_banner")
+      self.is_loaded_banner = true
+      gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
+    elseif message.event == unityads.BANNER_EVENT_DID_SHOW then
+      print("BANNER_EVENT_DID_SHOW", message.placementId)
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
+      self.is_show_banner = true
+    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
+      print("BANNER_EVENT_DID_UNLOAD", message.placementId)
+      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
+      self.is_loaded_banner = nil
+      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
     end
   end
 end
@@ -141,40 +165,94 @@ local function remove_callback(self)
   end
 end
 
-function on_input(self, action_id, action)
-  self.input_default = dirtylarry:input("input", action_id, action, gui.KEYBOARD_TYPE_DEFAULT, "AppId")
-  dirtylarry:button("init", action_id, action, function ()
-    if self.input_default == "Empty" then
-    self.input_default = gameIDs[sys_name]
+local function loadbanner(self)
+  if unityads then
+    if not self.is_loaded_banner then
+      unityads.loadBanner("banner")
+    else
+      unityads.unloadBanner()
+    end
   end
-  init_unity_ads(self, self.input_default)
-end)
-
-dirtylarry:button(REWARDED, action_id, action, function ()
-  print_placement_state(REWARDED)
-  show_ad(self, REWARDED)
-end)
-
-dirtylarry:button(VIDEO, action_id, action, function ()
-  print_placement_state(VIDEO)
-  show_ad(self, VIDEO)
-end)
-
-dirtylarry:button("default", action_id, action, function ()
-  show_ad(self)
-end)
-
-dirtylarry:button("set_callback", action_id, action, function ()
-  set_callback(self)
-end)
-
-dirtylarry:button("remove_callback", action_id, action, function ()
-  remove_callback(self)
-end)
-
-if action_id == BACK_KEY and action.released then
-  print("Time to exit!")
-  msg.post("@system:", "exit", {code = 0})
 end
+
+local function showbanner(self)
+  if unityads then
+    if not self.is_show_banner then
+      unityads.showBanner()
+    else
+      unityads.hideBanner()
+    end
+  end
+end
+
+local function change_banner_pos(self)
+  if unityads then
+    local banners = {
+      "BANNER_POSITION_TOP_LEFT",
+      "BANNER_POSITION_TOP_CENTER",
+      "BANNER_POSITION_TOP_RIGHT",
+      "BANNER_POSITION_BOTTOM_LEFT",
+      "BANNER_POSITION_BOTTOM_CENTER",
+      "BANNER_POSITION_BOTTOM_RIGHT",
+      "BANNER_POSITION_CENTER",
+      "BANNER_POSITION_NONE"
+    }
+    if not self.banner_pos_num then
+      self.banner_pos_num = 2
+    else
+      self.banner_pos_num = self.banner_pos_num + 1
+      if self.banner_pos_num > #banners then
+        self.banner_pos_num = 1
+      end
+    end
+    unityads.setBannerPosition(unityads[banners[self.banner_pos_num]])
+    gui.set_text(gui.get_node("baner_pos"), banners[self.banner_pos_num])
+  end
+end
+
+function on_input(self, action_id, action)
+  
+  dirtylarry:button("init", action_id, action, function ()
+    init_unity_ads(self, gameIDs[sys_name])
+  end)
+
+  dirtylarry:button(REWARDED, action_id, action, function ()
+    print_placement_state(REWARDED)
+    show_ad(self, REWARDED)
+  end)
+
+  dirtylarry:button(VIDEO, action_id, action, function ()
+    print_placement_state(VIDEO)
+    show_ad(self, VIDEO)
+  end)
+
+  dirtylarry:button("default", action_id, action, function ()
+    show_ad(self)
+  end)
+
+  dirtylarry:button("set_callback", action_id, action, function ()
+    set_callback(self)
+  end)
+
+  dirtylarry:button("remove_callback", action_id, action, function ()
+    remove_callback(self)
+  end)
+
+  dirtylarry:button("banner", action_id, action, function ()
+    loadbanner(self)
+  end)
+
+  dirtylarry:button("show_banner", action_id, action, function ()
+    showbanner(self)
+  end)
+
+  dirtylarry:button("banner_pos", action_id, action, function ()
+    change_banner_pos(self)
+  end)
+
+  if action_id == BACK_KEY and action.released then
+    print("Time to exit!")
+    msg.post("@system:", "exit", {code = 0})
+  end
 
 end
