@@ -1,14 +1,18 @@
 package com.agulev.defunityads;
 
 import android.app.Activity;
-import android.view.ViewGroup;
+import android.graphics.PixelFormat;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.view.Gravity;
 
-import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.IUnityAdsListener;
-
-import com.unity3d.services.banners.UnityBanners;
+import com.unity3d.ads.UnityAds;
 import com.unity3d.services.banners.IUnityBannerListener;
+import com.unity3d.services.banners.UnityBanners;
 import com.unity3d.services.banners.view.BannerPosition;
 
 public class DefUnityAds {
@@ -32,7 +36,11 @@ public class DefUnityAds {
     //-----
 
     private Activity activity;
+    private LinearLayout layout;
+    private WindowManager.LayoutParams windowParams;
     private BannerPosition m_bannerPosition = BannerPosition.BOTTOM_CENTER;
+
+    private boolean isShown = false;
 
     public DefUnityAds(Activity appActivity) {
         activity = appActivity;
@@ -97,7 +105,26 @@ public class DefUnityAds {
     }
 
     public void unloadBanner() {
+        _hideBanner();
         UnityBanners.destroy();
+    }
+
+    private void _hideBanner() {
+        if (!isShown) {
+            return;
+        }
+
+        isShown = false;
+        activity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                wm.removeView(layout);
+            }
+
+        });
+
     }
 
     public void showBanner() {
@@ -109,25 +136,19 @@ public class DefUnityAds {
 
             @Override
             public void run() {
-                ((ViewGroup)activity.findViewById(android.R.id.content).getParent()).addView(bannerView);
+                WindowManager wm = activity.getWindowManager();
+                windowParams.gravity = m_bannerPosition.getGravity();
+                wm.addView(layout, windowParams);
             }
-        });    
-
+        });
     }
 
     public void hideBanner() {
         if (bannerView == null) {
             return;
         }
-            
-        activity.runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
-                ((ViewGroup)activity.findViewById(android.R.id.content).getParent()).removeView(bannerView);
-            }
-        });
-
+        _hideBanner();
     }
 
     private class DefUnityAdsListener implements IUnityAdsListener {
@@ -157,17 +178,38 @@ public class DefUnityAds {
         @Override
         public void onUnityBannerLoaded(String placementId, View view) {
             bannerView = view;
+
+            layout = new LinearLayout(activity);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            MarginLayoutParams params = new MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.setMargins(0, 0, 0, 0);
+
+            layout.addView(bannerView, params);
+
+            windowParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT);
+
             DefUnityAds.onUnityBannerLoaded(placementId);
         }
 
-        @Override
+        @Override 
         public void onUnityBannerUnloaded(String placementId) {
+            layout = null;
             bannerView = null;
+            windowParams = null;
             DefUnityAds.onUnityBannerUnloaded(placementId);
         }
 
         @Override
         public void onUnityBannerShow(String placementId) {
+            isShown = true;
             DefUnityAds.onUnityBannerShow(placementId);
         }
 
