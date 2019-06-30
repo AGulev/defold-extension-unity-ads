@@ -128,7 +128,7 @@ public class DefUnityAds {
     }
 
     public void showBanner() {
-        if (bannerView == null) {
+        if (isShown || bannerView == null) {
             return;
         }
 
@@ -187,14 +187,12 @@ public class DefUnityAds {
 
             layout.addView(bannerView, params);
 
-            windowParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT);
+            windowParams = new WindowManager.LayoutParams();
+            windowParams.x = WindowManager.LayoutParams.WRAP_CONTENT;
+            windowParams.y = WindowManager.LayoutParams.WRAP_CONTENT;
+            windowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
 
             DefUnityAds.onUnityBannerLoaded(placementId);
         }
@@ -204,6 +202,7 @@ public class DefUnityAds {
             layout = null;
             bannerView = null;
             windowParams = null;
+            isShown = false;
             DefUnityAds.onUnityBannerUnloaded(placementId);
         }
 
