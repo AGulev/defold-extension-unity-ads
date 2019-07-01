@@ -28,4 +28,5 @@ bundle_identifier = com.agulev.test
 
 [android]
 package = com.agulev.test
+immersive_mode = 1
 

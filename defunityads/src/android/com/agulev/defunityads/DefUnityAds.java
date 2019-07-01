@@ -8,6 +8,7 @@ import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.view.Gravity;
+import android.os.Build;
 
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
@@ -192,7 +193,7 @@ public class DefUnityAds {
             windowParams.y = WindowManager.LayoutParams.WRAP_CONTENT;
             windowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
             windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+            windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
             DefUnityAds.onUnityBannerLoaded(placementId);
         }
