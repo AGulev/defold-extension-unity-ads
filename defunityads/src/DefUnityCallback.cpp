@@ -2,9 +2,9 @@
 #include "private_DefUnityCallback.h"
 #include "utils/LuaUtils.h"
 
-DefUnityAdsListener     defUtoLua;
-dmArray<CallbackData>   m_callbacksQueue;
-dmMutex::HMutex         m_mutex;
+static DefUnityAdsListener     defUtoLua;
+static dmArray<CallbackData>   m_callbacksQueue;
+static dmMutex::HMutex         m_mutex;
 
 static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
 {
