@@ -19,4 +19,17 @@
    *;
 }
 
+-keep class com.agulev.defunityads.** {
+	*;
+}
+
 -dontwarn com.google.ar.core.**
+
+-keep public class android.net.http.SslError
+-keep public class android.webkit.WebViewClient
+
+-dontwarn android.webkit.WebView
+-dontwarn android.net.http.SslError
+-dontwarn android.webkit.WebViewClient
+
+-dontwarn android.telephony.**
