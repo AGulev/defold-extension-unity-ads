@@ -1,6 +1,7 @@
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 #include "private_DefUnityCallback.h"
 #include "utils/LuaUtils.h"
+#include <stdlib.h>
 
 static DefUnityAdsListener     defUtoLua;
 static dmArray<CallbackData>   m_callbacksQueue;
