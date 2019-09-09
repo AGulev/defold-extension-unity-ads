@@ -1,14 +1,7 @@
 name: "DefUnityAds"
 
 platforms:
-  arm64-ios:
+  ios:
     context:
-        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
-
-  armv7-ios:
-    context:
-        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
-
-  x86_64-ios:
-    context:
+        weakFrameworks: ["AdSupport"]
         frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
