@@ -127,7 +127,7 @@ void DefUnityCallback_callback_updates(){
     if(data->value_1)
       free(data->value_1);
     data->value_1 = 0;
-    m_callbacksQueue.EraseSwap(i--);
   }
+  m_callbacksQueue.SetSize(0);
 }
 #endif
