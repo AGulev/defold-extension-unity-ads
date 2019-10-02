@@ -140,7 +140,7 @@ int DefUnityAds_getPlacementState(char* placementId) {
 }
 
 void DefUnityAds_setBannerPosition(int position) {
-  [UnityAdsBanner setBannerPosition:position];
+  [UnityAdsBanner setBannerPosition:(UnityAdsBannerPosition)position];
 }
 
 void DefUnityAds_loadBanner(char* placementId) {
