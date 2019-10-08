@@ -168,8 +168,10 @@ end
 local function loadbanner(self)
   if unityads then
     if not self.is_loaded_banner then
+      print("Load Banner!")
       unityads.loadBanner("banner")
     else
+      print("Unload Banner!")
       unityads.unloadBanner()
     end
   end
@@ -178,8 +180,10 @@ end
 local function showbanner(self)
   if unityads then
     if not self.is_show_banner then
+      print("Show Banner!")
       unityads.showBanner()
     else
+      print("Hide Banner!")
       unityads.hideBanner()
     end
   end
