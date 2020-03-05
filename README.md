@@ -5,7 +5,7 @@ _“This plugin is not endorsed or sponsored by Unity Technologies. This is an i
 # DefVideoAds (plugin for Unity ADS)
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
-Extension supported IOS and Android.
+Extension supported IOS (minimum iOS version is 9.0) and Android.
 
 ## Installation
 

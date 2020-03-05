@@ -10,6 +10,7 @@ local BACK_KEY = hash("back")
 
 local REWARDED = "rewardedVideo"
 local VIDEO = "video"
+local BANNER = "banner"
 
 local function print_placement_state(placement)
   if unityads then
@@ -106,9 +107,11 @@ function init(self)
     print("isInitialized:", unityads.isInitialized())
     print("isSupported:", unityads.isSupported())
     print("isReady(video):", unityads.isReady(VIDEO))
+    print("isReady(banner):", unityads.isReady(BANNER))
     print("isReady(rewardedVideo):", unityads.isReady(REWARDED))
     print("isReady():", unityads.isReady())
     print_placement_state(VIDEO)
+    print_placement_state(BANNER)
     print_placement_state(REWARDED)
     print_placement_state()
     unityads.setDebugMode(true)

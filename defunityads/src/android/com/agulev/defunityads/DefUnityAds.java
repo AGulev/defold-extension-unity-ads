@@ -23,15 +23,23 @@ public class DefUnityAds {
     private View bannerView;
 
     public static native void onUnityAdsReady(String placementId);
+
     public static native void onUnityAdsStart(String placementId);
+
     public static native void onUnityAdsError(int error, String message);
+
     public static native void onUnityAdsFinish(String placementId, int result);
 
     public static native void onUnityBannerLoaded(String placementId);
+
     public static native void onUnityBannerUnloaded(String placementId);
+
     public static native void onUnityBannerShow(String placementId);
+
     public static native void onUnityBannerClick(String placementId);
+
     public static native void onUnityBannerHide(String placementId);
+
     public static native void onUnityBannerError(String message);
 
     //-----
@@ -198,7 +206,7 @@ public class DefUnityAds {
             DefUnityAds.onUnityBannerLoaded(placementId);
         }
 
-        @Override 
+        @Override
         public void onUnityBannerUnloaded(String placementId) {
             layout = null;
             bannerView = null;

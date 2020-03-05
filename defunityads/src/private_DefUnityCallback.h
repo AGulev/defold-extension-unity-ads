@@ -60,7 +60,6 @@ struct CallbackData
 };
 
 void DefUnityCallback_set_callback(lua_State* L, int pos);
-void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
 void DefUnityCallback_callback_updates();
 void DefUnityCallback_initialize();
 void DefUnityCallback_finalize();

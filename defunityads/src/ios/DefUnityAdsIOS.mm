@@ -2,7 +2,6 @@
 #include "../private_DefUnityAds.h"
 #include "../private_DefUnityCallback.h"
 
-#include <AVFoundation/AVFoundation.h>
 #include <UIKit/UIKit.h>
 #include <UnityAds/UnityAds.h>
 
@@ -38,27 +37,33 @@ UIView *bannerView;
 @implementation DefUnityAdsBannerDelegate
 
 -(void) unityAdsBannerDidClick: (NSString *) placementId {
+  dmLogInfo("unityAdsBannerDidClick");
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_CLICK);
 }
 
 -(void) unityAdsBannerDidError: (NSString *) message {
+  dmLogInfo("unityAdsBannerDidError");
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)[message UTF8String], (char*)"event", (int)BANNER_EVENT_DID_ERROR);
 }
 
 -(void) unityAdsBannerDidHide: (NSString *) placementId {
+  dmLogInfo("unityAdsBannerDidHide");
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_HIDE);
 }
 
 -(void) unityAdsBannerDidShow: (NSString *) placementId {
+  dmLogInfo("unityAdsBannerDidShow");
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_SHOW);
 }
 
 -(void) unityAdsBannerDidLoad: (NSString *) placementId view: (UIView *) view {
+  dmLogInfo("unityAdsBannerDidLoad");
   bannerView = view;
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_LOAD);
 }
 
 -(void) unityAdsBannerDidUnload: (NSString *) placementId {
+  dmLogInfo("unityAdsBannerDidUnload");
   bannerView = nil;
   DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_UNLOAD);
 }
