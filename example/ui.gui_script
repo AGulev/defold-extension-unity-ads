@@ -167,6 +167,7 @@ local function loadbanner(self)
       unityads.loadBanner("banner")
     else
       self.is_loaded_banner = nil
+      self.is_show_banner = false
       print("Unload Banner!")
       gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
       gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
@@ -204,7 +205,7 @@ local function change_banner_pos(self)
       "BANNER_POSITION_CENTER"
     }
     if not self.banner_pos_num then
-      self.banner_pos_num = 2
+      self.banner_pos_num = 3
     else
       self.banner_pos_num = self.banner_pos_num + 1
       if self.banner_pos_num > #banners then
