@@ -18,17 +18,17 @@ enum DefUnityBannerPosition
   BANNER_POSITION_BOTTOM_LEFT,
   BANNER_POSITION_BOTTOM_CENTER,
   BANNER_POSITION_BOTTOM_RIGHT,
-  BANNER_POSITION_CENTER,
-  BANNER_POSITION_NONE
+  BANNER_POSITION_CENTER
 };
 
 void DefUnityAds_InitExtension();
+void DefUnityAds_FinalizeExtension();
 
 void DefUnityAds_Initialize(const char*game_id, bool is_debug);
 void DefUnityAds_Show(char* placementId);
 void DefUnityAds_setDebugMode(bool is_debug);
-void DefUnityAds_setBannerPosition(int position);
-void DefUnityAds_loadBanner(char* placementId);
+void DefUnityAds_setBannerPosition(DefUnityBannerPosition position);
+void DefUnityAds_loadBanner(char* placementId, int width, int height);
 void DefUnityAds_unloadBanner();
 void DefUnityAds_showBanner();
 void DefUnityAds_hideBanner();

@@ -87,16 +87,21 @@ static int setDebugMode(lua_State* L) {
 
 static int setBannerPosition(lua_State* L) {
   int position_lua = luaL_checknumber(L, 1);
-  DefUnityAds_setBannerPosition(position_lua);
+  DefUnityAds_setBannerPosition((DefUnityBannerPosition)position_lua);
   return 0;
 }
 
 static int loadBanner(lua_State* L) {
-  char *placementId_lua = "";
-  if (lua_type(L, 1) != LUA_TNONE) {
-    placementId_lua = (char*)luaL_checkstring(L, 1);
+  char *placementId_lua = (char*)luaL_checkstring(L, 1);
+  int width_lua = 320;
+  int height_lua = 50;
+  if (lua_type(L, 2) != LUA_TNONE) {
+    width_lua = luaL_checknumber(L, 2);
   }
-  DefUnityAds_loadBanner(placementId_lua);
+  if (lua_type(L, 3) != LUA_TNONE) {
+    height_lua = luaL_checknumber(L, 3);
+  }
+  DefUnityAds_loadBanner(placementId_lua, width_lua, height_lua);
   return 0;
 }
 
@@ -178,14 +183,11 @@ static void LuaInit(lua_State* L)
   SETCONSTANT(BANNER_POSITION_BOTTOM_CENTER)
   SETCONSTANT(BANNER_POSITION_BOTTOM_RIGHT)
   SETCONSTANT(BANNER_POSITION_CENTER)
-  SETCONSTANT(BANNER_POSITION_NONE)
 
   SETCONSTANT(BANNER_EVENT_DID_LOAD)
-  SETCONSTANT(BANNER_EVENT_DID_UNLOAD)
-  SETCONSTANT(BANNER_EVENT_DID_SHOW)
-  SETCONSTANT(BANNER_EVENT_DID_HIDE)
   SETCONSTANT(BANNER_EVENT_DID_CLICK)
   SETCONSTANT(BANNER_EVENT_DID_ERROR)
+  SETCONSTANT(BANNER_EVENT_DID_LEAVE_APP)
 
 #undef SETCONSTANT
   lua_pop(L, 1);
@@ -207,6 +209,7 @@ dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 
 dmExtension::Result AppFinalizeUnityAds(dmExtension::AppParams* params)
 {
+  DefUnityAds_FinalizeExtension();
   return dmExtension::RESULT_OK;
 }
 

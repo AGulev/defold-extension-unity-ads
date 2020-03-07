@@ -77,24 +77,13 @@ local function unity_ads_callback(self, msg_type, message)
       print("BANNER_EVENT_DID_CLICK", message.placementId)
     elseif message.event == unityads.BANNER_EVENT_DID_ERROR then
       print("BANNER_EVENT_DID_ERROR: ", message.message)
-    elseif message.event == unityads.BANNER_EVENT_DID_HIDE then
-      print("BANNER_EVENT_DID_HIDE", message.placementId)
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
-      self.is_show_banner = false
     elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
       print("BANNER_EVENT_DID_LOAD", message.placementId)
       btn_ready(self, "show_banner")
       self.is_loaded_banner = true
       gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
-    elseif message.event == unityads.BANNER_EVENT_DID_SHOW then
-      print("BANNER_EVENT_DID_SHOW", message.placementId)
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
-      self.is_show_banner = true
-    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
-      print("BANNER_EVENT_DID_UNLOAD", message.placementId)
-      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
-      self.is_loaded_banner = nil
-      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
+    elseif message.event == unityads.BANNER_EVENT_DID_LEAVE_APP then
+      print("BANNER_EVENT_DID_LEAVE_APP", message.placementId)
     end
   end
 end
@@ -140,6 +129,9 @@ local function init_unity_ads(self, appId)
       if unityads.isReady(VIDEO) then
         btn_ready(self, VIDEO)
       end
+      if unityads.isReady(BANNER) then
+        btn_ready(self, BANNER)
+      end
     end
   end
 end
@@ -174,7 +166,11 @@ local function loadbanner(self)
       print("Load Banner!")
       unityads.loadBanner("banner")
     else
+      self.is_loaded_banner = nil
       print("Unload Banner!")
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
+      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
+      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
       unityads.unloadBanner()
     end
   end
@@ -183,9 +179,13 @@ end
 local function showbanner(self)
   if unityads then
     if not self.is_show_banner then
+      self.is_show_banner = true
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
       print("Show Banner!")
       unityads.showBanner()
     else
+      self.is_show_banner = false
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
       print("Hide Banner!")
       unityads.hideBanner()
     end
@@ -201,8 +201,7 @@ local function change_banner_pos(self)
       "BANNER_POSITION_BOTTOM_LEFT",
       "BANNER_POSITION_BOTTOM_CENTER",
       "BANNER_POSITION_BOTTOM_RIGHT",
-      "BANNER_POSITION_CENTER",
-      "BANNER_POSITION_NONE"
+      "BANNER_POSITION_CENTER"
     }
     if not self.banner_pos_num then
       self.banner_pos_num = 2
