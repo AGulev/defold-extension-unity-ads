@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClic
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError
-  (JNIEnv *, jclass, jstring);
+(JNIEnv *, jclass, jint, jstring);
 
 /*
 * Class:     com_agulev_defunityads_DefUnityAds
@@ -70,7 +70,7 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerErro
 * Signature: (Ljava/lang/String;)V
 */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerDidLeaveApp
-  (JNIEnv *, jclass, jstring);
+(JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
 }

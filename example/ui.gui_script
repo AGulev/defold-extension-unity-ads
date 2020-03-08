@@ -75,8 +75,6 @@ local function unity_ads_callback(self, msg_type, message)
   elseif msg_type == unityads.TYPE_BANNER then
     if message.event == unityads.BANNER_EVENT_DID_CLICK then
       print("BANNER_EVENT_DID_CLICK", message.placementId)
-    elseif message.event == unityads.BANNER_EVENT_DID_ERROR then
-      print("BANNER_EVENT_DID_ERROR: ", message.message)
     elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
       print("BANNER_EVENT_DID_LOAD", message.placementId)
       btn_ready(self, "show_banner")
@@ -84,6 +82,17 @@ local function unity_ads_callback(self, msg_type, message)
       gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
     elseif message.event == unityads.BANNER_EVENT_DID_LEAVE_APP then
       print("BANNER_EVENT_DID_LEAVE_APP", message.placementId)
+    end
+  elseif msg_type == unityads.TYPE_BANNER_ERROR then
+    print(message.message)
+    if message.error == unityads.BANNER_ERROR_UNKNOWN then
+      print("UADSBannerErrorCodeUnknown")
+    elseif message.error == unityads.BANNER_ERROR_NATIVE then
+      print("UADSBannerErrorCodeNativeError")
+    elseif message.error == unityads.BANNER_ERROR_WEBVIEW then
+      print("UADSBannerErrorCodeWebViewError")
+    elseif message.error == unityads.BANNER_ERROR_NOFILL then
+      print("UADSBannerErrorCodeNoFillError")
     end
   end
 end

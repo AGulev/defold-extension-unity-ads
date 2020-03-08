@@ -27,7 +27,7 @@ public class DefUnityAds {
 
     public static native void onUnityBannerLoaded(String placementId);
     public static native void onUnityBannerClick(String placementId);
-    public static native void onUnityBannerError(String message);
+    public static native void onUnityBannerError(int error, String message);
     public static native void onUnityBannerDidLeaveApp(String placementId);
 
     //-----
@@ -229,7 +229,7 @@ public class DefUnityAds {
 
         @Override
         public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
-            DefUnityAds.onUnityBannerError(errorInfo.errorMessage);
+            DefUnityAds.onUnityBannerError(errorInfo.errorCode.ordinal(), errorInfo.errorMessage);
         }
 
         @Override

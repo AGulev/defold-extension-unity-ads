@@ -48,10 +48,10 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClic
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
-JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError(JNIEnv *env, jclass jcls, jstring jstr)
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_ERROR);
+  DefUnityCallback_add_to_queue((int)TYPE_BANNER_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 

@@ -124,7 +124,7 @@ static bool isBannerVisible;
 }
 
 - (void)bannerViewDidError:(UADSBannerView *)bannerView error:(UADSBannerError *)error{
-    DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"message", (char*)[[error localizedDescription] UTF8String], (char*)"event", (int)BANNER_EVENT_DID_ERROR);
+    DefUnityCallback_add_to_queue((int)TYPE_BANNER_ERROR,(char*)"message", (char*)[[error localizedDescription] UTF8String], (char*)"error", (int)error.code);
 }
 @end
 
@@ -232,7 +232,6 @@ void DefUnityAds_InitExtension() {
 }
 
 void DefUnityAds_FinalizeExtension() {
-    
     if (constraints){
         [uiViewController.view removeConstraints:constraints];
         [constraints release];
