@@ -10,6 +10,7 @@ local BACK_KEY = hash("back")
 
 local REWARDED = "rewardedVideo"
 local VIDEO = "video"
+local BANNER = "banner"
 
 local function print_placement_state(placement)
   if unityads then
@@ -74,26 +75,24 @@ local function unity_ads_callback(self, msg_type, message)
   elseif msg_type == unityads.TYPE_BANNER then
     if message.event == unityads.BANNER_EVENT_DID_CLICK then
       print("BANNER_EVENT_DID_CLICK", message.placementId)
-    elseif message.event == unityads.BANNER_EVENT_DID_ERROR then
-      print("BANNER_EVENT_DID_ERROR: ", message.message)
-    elseif message.event == unityads.BANNER_EVENT_DID_HIDE then
-      print("BANNER_EVENT_DID_HIDE", message.placementId)
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
-      self.is_show_banner = false
     elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
       print("BANNER_EVENT_DID_LOAD", message.placementId)
       btn_ready(self, "show_banner")
       self.is_loaded_banner = true
       gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
-    elseif message.event == unityads.BANNER_EVENT_DID_SHOW then
-      print("BANNER_EVENT_DID_SHOW", message.placementId)
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
-      self.is_show_banner = true
-    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
-      print("BANNER_EVENT_DID_UNLOAD", message.placementId)
-      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
-      self.is_loaded_banner = nil
-      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
+    elseif message.event == unityads.BANNER_EVENT_DID_LEAVE_APP then
+      print("BANNER_EVENT_DID_LEAVE_APP", message.placementId)
+    end
+  elseif msg_type == unityads.TYPE_BANNER_ERROR then
+    print(message.message)
+    if message.error == unityads.BANNER_ERROR_UNKNOWN then
+      print("UADSBannerErrorCodeUnknown")
+    elseif message.error == unityads.BANNER_ERROR_NATIVE then
+      print("UADSBannerErrorCodeNativeError")
+    elseif message.error == unityads.BANNER_ERROR_WEBVIEW then
+      print("UADSBannerErrorCodeWebViewError")
+    elseif message.error == unityads.BANNER_ERROR_NOFILL then
+      print("UADSBannerErrorCodeNoFillError")
     end
   end
 end
@@ -106,9 +105,11 @@ function init(self)
     print("isInitialized:", unityads.isInitialized())
     print("isSupported:", unityads.isSupported())
     print("isReady(video):", unityads.isReady(VIDEO))
+    print("isReady(banner):", unityads.isReady(BANNER))
     print("isReady(rewardedVideo):", unityads.isReady(REWARDED))
     print("isReady():", unityads.isReady())
     print_placement_state(VIDEO)
+    print_placement_state(BANNER)
     print_placement_state(REWARDED)
     print_placement_state()
     unityads.setDebugMode(true)
@@ -136,6 +137,9 @@ local function init_unity_ads(self, appId)
       end
       if unityads.isReady(VIDEO) then
         btn_ready(self, VIDEO)
+      end
+      if unityads.isReady(BANNER) then
+        btn_ready(self, BANNER)
       end
     end
   end
@@ -171,7 +175,12 @@ local function loadbanner(self)
       print("Load Banner!")
       unityads.loadBanner("banner")
     else
+      self.is_loaded_banner = nil
+      self.is_show_banner = false
       print("Unload Banner!")
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
+      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
+      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
       unityads.unloadBanner()
     end
   end
@@ -180,9 +189,13 @@ end
 local function showbanner(self)
   if unityads then
     if not self.is_show_banner then
+      self.is_show_banner = true
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
       print("Show Banner!")
       unityads.showBanner()
     else
+      self.is_show_banner = false
+      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
       print("Hide Banner!")
       unityads.hideBanner()
     end
@@ -198,11 +211,10 @@ local function change_banner_pos(self)
       "BANNER_POSITION_BOTTOM_LEFT",
       "BANNER_POSITION_BOTTOM_CENTER",
       "BANNER_POSITION_BOTTOM_RIGHT",
-      "BANNER_POSITION_CENTER",
-      "BANNER_POSITION_NONE"
+      "BANNER_POSITION_CENTER"
     }
     if not self.banner_pos_num then
-      self.banner_pos_num = 2
+      self.banner_pos_num = 3
     else
       self.banner_pos_num = self.banner_pos_num + 1
       if self.banner_pos_num > #banners then

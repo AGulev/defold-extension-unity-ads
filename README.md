@@ -5,7 +5,7 @@ _“This plugin is not endorsed or sponsored by Unity Technologies. This is an i
 # DefVideoAds (plugin for Unity ADS)
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
-Extension supported IOS and Android.
+Extension supported IOS (minimum iOS version is 9.0) and Android.
 
 ## Installation
 
@@ -24,6 +24,7 @@ See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/examp
 
 
 ## LUA Api
+Please, read [Android API docs](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiAndroid.html) and [iOS API docs](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiIos.html)
 ### Methods
 #### unityads.initialize(gameID, callback)
 #### unityads.initialize(gameID, callback, testMode)
@@ -108,8 +109,10 @@ unityads.show() -- show default ad
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
 #### unityads.loadBanner(placementId)
+#### unityads.loadBanner(placementId, banner_width, banner_height)
 ```lua
-unityads.loadBanner("banner") -- load banner
+unityads.loadBanner("banner") -- load banner, by defaulf width = 320, height = 50
+unityads.loadBanner("banner", 320, 50) -- load banner
 ```
 #### unityads.unloadBanner()
 ```lua
@@ -135,7 +138,6 @@ unityads.BANNER_POSITION_BOTTOM_LEFT
 unityads.BANNER_POSITION_BOTTOM_CENTER
 unityads.BANNER_POSITION_BOTTOM_RIGHT
 unityads.BANNER_POSITION_CENTER
-unityads.BANNER_POSITION_NONE
 ```
 
 ### Constants
@@ -152,6 +154,7 @@ unityads.TYPE_DID_START
 unityads.TYPE_DID_ERROR
 unityads.TYPE_DID_FINISH
 unityads.TYPE_BANNER
+unityads.TYPE_BANNER_ERROR
 ```
 ##### unityads.TYPE_IS_READY
 ```lua
@@ -173,7 +176,7 @@ end
 ```lua
 local function defunityads_callback(self, msg_type, message)
   if msg_type == unityads.TYPE_DID_ERROR then
-    pprint(message) -- message = {state = ERROR_*, message = "string"}
+    pprint(message) -- message = {error = ERROR_*, message = "string"}
   end
 end
 ```
@@ -189,18 +192,24 @@ end
 ```lua
 local function defunityads_callback(self, msg_type, message)
   if msg_type == unityads.TYPE_BANNER then
-      if message.event == BANNER_EVENT_DID_ERROR then
-        pprint(message) -- message = {event = BANNER_EVENT_DID_ERROR, error = "string"}
-      else
+      if message.event == BANNER_EVENT_DID_LOAD then
         pprint(message) -- message = {event = BANNER_EVENT_*, placementId = "string"}
       end
+  end
+end
+```
+##### unityads.TYPE_BANNER_ERROR
+```lua
+local function defunityads_callback(self, msg_type, message)
+  if msg_type == unityads.TYPE_BANNER_ERROR then
+      pprint(message) -- message = {error = BANNER_ERROR_*, message = "string"}
   end
 end
 ```
 #### Error types
 [Original doc about error types](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_errors)
 ```lua
---possible message.error :
+--possible message.error for unityads.TYPE_DID_ERROR:
 unityads.ERROR_NOT_INITIALIZED --kUnityAdsErrorNotInitialized
 unityads.ERROR_INITIALIZED_FAILED --kUnityAdsErrorInitializedFailed
 unityads.ERROR_INVALID_ARGUMENT --kUnityAdsErrorInvalidArgument
@@ -218,6 +227,25 @@ local function defunityads_callback(self, msg_type, message)
     if message.error == unityads.ERROR_NOT_INITIALIZED then
       ...
     elseif message.error == unityads.ERROR_INITIALIZED_FAILED then
+    ...
+  end
+end
+```
+#### Banner error types
+[Original doc about error types](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiAndroid.html#bannerview)
+```lua
+--possible message.error for unityads.TYPE_BANNER_ERROR:
+unityads.BANNER_ERROR_UNKNOWN --
+unityads.BANNER_ERROR_NATIVE
+unityads.BANNER_ERROR_WEBVIEW
+unityads.BANNER_ERROR_NOFILL
+```
+```lua
+local function defunityads_callback(self, msg_type, message)
+  if msg_type == unityads.TYPE_BANNER_ERROR then
+    if message.error == unityads.BANNER_ERROR_UNKNOWN then
+      ...
+    elseif message.error == unityads.BANNER_ERROR_NATIVE then
     ...
   end
 end
@@ -244,18 +272,15 @@ end
 ```lua
 --possible banner events:
 unityads.BANNER_EVENT_DID_LOAD
-unityads.BANNER_EVENT_DID_UNLOAD
-unityads.BANNER_EVENT_DID_SHOW
-unityads.BANNER_EVENT_DID_HIDE
 unityads.BANNER_EVENT_DID_CLICK
-unityads.BANNER_EVENT_DID_ERROR
+unityads.BANNER_EVENT_DID_LEAVE_APP
 ```
 ```lua
 local function defunityads_callback(self, msg_type, message)
   if msg_type == unityads.TYPE_BANNER then
     if message.event == unityads.BANNER_EVENT_DID_LOAD then
       ...
-    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
+    elseif message.event == unityads.BANNER_EVENT_DID_CLICK then
     ...
   end
 end

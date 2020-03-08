@@ -1509,7 +1509,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "BANNER_POSITION_BOTTOM_CENTER"
+  text: "BANNER_POSITION_TOP_CENTER"
   font: "larryfont"
   id: "baner_pos"
   xanchor: XANCHOR_NONE

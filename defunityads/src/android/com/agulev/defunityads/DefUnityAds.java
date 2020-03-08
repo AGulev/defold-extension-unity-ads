@@ -12,15 +12,13 @@ import android.os.Build;
 
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
-import com.unity3d.services.banners.IUnityBannerListener;
-import com.unity3d.services.banners.UnityBanners;
+
 import com.unity3d.services.banners.view.BannerPosition;
+import com.unity3d.services.banners.BannerView;
+import com.unity3d.services.banners.UnityBannerSize;
+import com.unity3d.services.banners.BannerErrorInfo;
 
 public class DefUnityAds {
-
-    private DefUnityAdsListener defUnityAdsListener;
-    private DefUnityBannerListener defUnityAdsBannerListener;
-    private View bannerView;
 
     public static native void onUnityAdsReady(String placementId);
     public static native void onUnityAdsStart(String placementId);
@@ -28,29 +26,21 @@ public class DefUnityAds {
     public static native void onUnityAdsFinish(String placementId, int result);
 
     public static native void onUnityBannerLoaded(String placementId);
-    public static native void onUnityBannerUnloaded(String placementId);
-    public static native void onUnityBannerShow(String placementId);
     public static native void onUnityBannerClick(String placementId);
-    public static native void onUnityBannerHide(String placementId);
-    public static native void onUnityBannerError(String message);
+    public static native void onUnityBannerError(int error, String message);
+    public static native void onUnityBannerDidLeaveApp(String placementId);
 
     //-----
 
+    private DefUnityAdsListener defUnityAdsListener;
     private Activity activity;
-    private LinearLayout layout;
-    private WindowManager.LayoutParams windowParams;
-    private BannerPosition m_bannerPosition = BannerPosition.BOTTOM_CENTER;
-
-    private boolean isShown = false;
 
     public DefUnityAds(Activity appActivity) {
         activity = appActivity;
         defUnityAdsListener = new DefUnityAdsListener();
-        defUnityAdsBannerListener = new DefUnityBannerListener();
     }
 
     public void initialize(String gameId, boolean testMode) {
-        UnityBanners.setBannerListener(defUnityAdsBannerListener);
         UnityAds.initialize(activity, gameId, defUnityAdsListener, testMode);
     }
 
@@ -96,62 +86,6 @@ public class DefUnityAds {
         return UnityAds.getPlacementState(placementId).ordinal();
     }
 
-    public void setBannerPosition(String position) {
-        m_bannerPosition = BannerPosition.fromString(position);
-    }
-
-    public void loadBanner(String placementId) {
-        UnityBanners.setBannerPosition(m_bannerPosition);
-        UnityBanners.loadBanner(activity, placementId);
-    }
-
-    public void unloadBanner() {
-        _hideBanner();
-        UnityBanners.destroy();
-    }
-
-    private void _hideBanner() {
-        if (!isShown) {
-            return;
-        }
-
-        isShown = false;
-        activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                WindowManager wm = activity.getWindowManager();
-                wm.removeView(layout);
-            }
-
-        });
-
-    }
-
-    public void showBanner() {
-        if (isShown || bannerView == null) {
-            return;
-        }
-
-        activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                WindowManager wm = activity.getWindowManager();
-                windowParams.gravity = m_bannerPosition.getGravity();
-                wm.addView(layout, windowParams);
-            }
-        });
-    }
-
-    public void hideBanner() {
-        if (bannerView == null) {
-            return;
-        }
-
-        _hideBanner();
-    }
-
     private class DefUnityAdsListener implements IUnityAdsListener {
         @Override
         public void onUnityAdsReady(final String placementId) {
@@ -174,11 +108,106 @@ public class DefUnityAds {
         }
     }
 
-    private class DefUnityBannerListener implements IUnityBannerListener {
+    //Banners:
+
+    private BannerView bannerView;
+    private LinearLayout layout;
+    private WindowManager.LayoutParams windowParams;
+    private BannerPosition m_bannerPosition = BannerPosition.TOP_CENTER;
+
+    private boolean isShown = false;
+
+    private void ApplyBannerPosition() {
+
+    }
+
+    public void setBannerPosition(String position) {
+        m_bannerPosition = BannerPosition.fromString(position);
+        if (isShown) {
+            _hideBanner();
+            showBanner();
+        }
+    }
+
+    public void loadBanner(String placementId, int width, int height) {
+        if (bannerView == null) {
+            BannerView banner = new BannerView(activity, placementId, new UnityBannerSize(width, height));
+            banner.setListener(new DefUnityBannerListener());
+            banner.load();
+        }
+    }
+
+    private void _unloadBanner() {
+        bannerView.destroy();
+        layout = null;
+        bannerView = null;
+        windowParams = null;
+        isShown = false;
+    }
+
+    public void unloadBanner() {
+        if (bannerView == null) {
+            return;
+        }
+        if (!isShown) {
+            _unloadBanner();
+        } else {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WindowManager wm = activity.getWindowManager();
+                    wm.removeView(layout);
+                    _unloadBanner();
+                }
+
+            });
+        }
+    }
+
+    private void _hideBanner() {
+        if (!isShown) {
+            return;
+        }
+
+        isShown = false;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                wm.removeView(layout);
+            }
+
+        });
+    }
+
+    public void showBanner() {
+        if (isShown || bannerView == null) {
+            return;
+        }
+        isShown = true;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                windowParams.gravity = m_bannerPosition.getGravity();
+                wm.addView(layout, windowParams);
+            }
+        });
+    }
+
+    public void hideBanner() {
+        if (bannerView == null) {
+            return;
+        }
+
+        _hideBanner();
+    }
+
+    private class DefUnityBannerListener implements BannerView.IListener {
 
         @Override
-        public void onUnityBannerLoaded(String placementId, View view) {
-            bannerView = view;
+        public void onBannerLoaded(BannerView bannerAdView) {
+            bannerView = bannerAdView;
 
             layout = new LinearLayout(activity);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -195,38 +224,22 @@ public class DefUnityAds {
             windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
             windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-            DefUnityAds.onUnityBannerLoaded(placementId);
-        }
-
-        @Override 
-        public void onUnityBannerUnloaded(String placementId) {
-            layout = null;
-            bannerView = null;
-            windowParams = null;
-            isShown = false;
-            DefUnityAds.onUnityBannerUnloaded(placementId);
+            DefUnityAds.onUnityBannerLoaded(bannerAdView.getPlacementId());
         }
 
         @Override
-        public void onUnityBannerShow(String placementId) {
-            isShown = true;
-            DefUnityAds.onUnityBannerShow(placementId);
+        public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
+            DefUnityAds.onUnityBannerError(errorInfo.errorCode.ordinal(), errorInfo.errorMessage);
         }
 
         @Override
-        public void onUnityBannerClick(String placementId) {
-            DefUnityAds.onUnityBannerClick(placementId);
+        public void onBannerClick(BannerView bannerAdView) {
+            DefUnityAds.onUnityBannerClick(bannerAdView.getPlacementId());
         }
 
         @Override
-        public void onUnityBannerHide(String placementId) {
-            DefUnityAds.onUnityBannerHide(placementId);
-        }
-
-        @Override
-        public void onUnityBannerError(String message) {
-            DefUnityAds.onUnityBannerError(message);
+        public void onBannerLeftApplication(BannerView bannerAdView) {
+            DefUnityAds.onUnityBannerDidLeaveApp(bannerAdView.getPlacementId());
         }
     }
-
 }

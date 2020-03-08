@@ -8,7 +8,8 @@ enum DefUnityAdsCallbackType
   TYPE_DID_START,
   TYPE_DID_ERROR,
   TYPE_DID_FINISH,
-  TYPE_BANNER
+  TYPE_BANNER,
+  TYPE_BANNER_ERROR
 };
 
 enum DefUnityAdsFinishState
@@ -35,11 +36,16 @@ enum DefUnityAdsError
 enum DefUnityAdsBannerEvent
 {
   BANNER_EVENT_DID_LOAD,
-  BANNER_EVENT_DID_UNLOAD,
-  BANNER_EVENT_DID_SHOW,
-  BANNER_EVENT_DID_HIDE,
   BANNER_EVENT_DID_CLICK,
-  BANNER_EVENT_DID_ERROR
+  BANNER_EVENT_DID_LEAVE_APP
+};
+
+enum DefUnityAdsBannerError
+{
+  BANNER_ERROR_UNKNOWN,
+  BANNER_ERROR_NATIVE,
+  BANNER_ERROR_WEBVIEW,
+  BANNER_ERROR_NOFILL
 };
 
 struct DefUnityAdsListener {
@@ -60,7 +66,6 @@ struct CallbackData
 };
 
 void DefUnityCallback_set_callback(lua_State* L, int pos);
-void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2);
 void DefUnityCallback_callback_updates();
 void DefUnityCallback_initialize();
 void DefUnityCallback_finalize();
