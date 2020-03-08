@@ -107,9 +107,11 @@ unityads.getVersion() -- Returns the Unity Ads SDK version as a string.
 unityads.show() -- show default ad
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
+#### unityads.loadBanner(placementId, banner_width, banner_height)
 #### unityads.loadBanner(placementId)
 ```lua
-unityads.loadBanner("banner") -- load banner
+unityads.loadBanner("banner") -- load banner, by defaulf width = 320, height = 50
+unityads.loadBanner("banner", 320, 50) -- load banner
 ```
 #### unityads.unloadBanner()
 ```lua
@@ -135,7 +137,6 @@ unityads.BANNER_POSITION_BOTTOM_LEFT
 unityads.BANNER_POSITION_BOTTOM_CENTER
 unityads.BANNER_POSITION_BOTTOM_RIGHT
 unityads.BANNER_POSITION_CENTER
-unityads.BANNER_POSITION_NONE
 ```
 
 ### Constants
@@ -244,18 +245,16 @@ end
 ```lua
 --possible banner events:
 unityads.BANNER_EVENT_DID_LOAD
-unityads.BANNER_EVENT_DID_UNLOAD
-unityads.BANNER_EVENT_DID_SHOW
-unityads.BANNER_EVENT_DID_HIDE
 unityads.BANNER_EVENT_DID_CLICK
 unityads.BANNER_EVENT_DID_ERROR
+unityads.BANNER_EVENT_DID_LEAVE_APP
 ```
 ```lua
 local function defunityads_callback(self, msg_type, message)
   if msg_type == unityads.TYPE_BANNER then
     if message.event == unityads.BANNER_EVENT_DID_LOAD then
       ...
-    elseif message.event == unityads.BANNER_EVENT_DID_UNLOAD then
+    elseif message.event == unityads.BANNER_EVENT_DID_CLICK then
     ...
   end
 end
