@@ -7,28 +7,28 @@
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsReady(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_IS_READY,(char*)"placementId", (char*)ch, NULL, 0);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_IS_READY,(char*)"placementId", (char*)ch, NULL, 0);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsStart(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_DID_START,(char*)"placementId", (char*)ch, NULL, 0);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_START,(char*)"placementId", (char*)ch, NULL, 0);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_DID_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(JNIEnv *env, jclass jcls, jstring jstr, jint type)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", (char*)ch, (char*)"state", (int)type);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_FINISH,(char*)"placementId", (char*)ch, (char*)"state", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
@@ -37,32 +37,34 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsFinish(
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerLoaded(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_LOAD);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_LOAD);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerClick(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_CLICK);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_CLICK);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerDidLeaveApp(JNIEnv *env, jclass jcls, jstring jstr)
 {
   const char* ch = env->GetStringUTFChars(jstr, 0);
-  DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)BANNER_EVENT_DID_LEAVE_APP);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)ch, (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_LEAVE_APP);
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
 //--------------------------------------------
+
+namespace dmUnityAds {
 
 struct DefUnityAdsClass
 {
@@ -86,7 +88,7 @@ struct DefUnityAdsClass
 
 DefUnityAdsClass g_duads;
 
-void DefUnityAds_InitExtension() {
+void InitExtension() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   ClassLoader class_loader = ClassLoader(env);
@@ -111,7 +113,7 @@ void DefUnityAds_InitExtension() {
   g_duads.m_DUADS_JNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, dmGraphics::GetNativeAndroidActivity()));
 }
 
-void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
+void initialize(const char*game_id, bool is_debug) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -120,11 +122,11 @@ void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
   env->DeleteLocalRef(appid);
 }
 
-void DefUnityAds_FinalizeExtension() {
-  DefUnityAds_unloadBanner();
+void FinalizeExtension() {
+  unloadBanner();
 }
 
-void DefUnityAds_Show(char* placementId) {
+void show(char* placementId) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -133,14 +135,14 @@ void DefUnityAds_Show(char* placementId) {
   env->DeleteLocalRef(jplacementId);
 }
 
-void DefUnityAds_setDebugMode(bool is_debug) {
+void setDebugMode(bool is_debug) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setDebugMode, is_debug ? JNI_TRUE : JNI_FALSE);
 }
 
-bool DefUnityAds_isReady(char* placementId) {
+bool isReady(char* placementId) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -151,7 +153,7 @@ bool DefUnityAds_isReady(char* placementId) {
   return JNI_TRUE == return_value;
 }
 
-bool DefUnityAds_isSupported() {
+bool isSupported() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -160,7 +162,7 @@ bool DefUnityAds_isSupported() {
   return JNI_TRUE == return_value;
 }
 
-bool DefUnityAds_isInitialized() {
+bool isInitialized() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -169,7 +171,7 @@ bool DefUnityAds_isInitialized() {
   return JNI_TRUE == return_value;
 }
 
-bool DefUnityAds_getDebugMode() {
+bool getDebugMode() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -178,7 +180,7 @@ bool DefUnityAds_getDebugMode() {
   return JNI_TRUE == return_value;
 }
 
-char const* DefUnityAds_getVersion() {
+char const* getVersion() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -190,7 +192,7 @@ char const* DefUnityAds_getVersion() {
   return new_char;
 }
 
-int DefUnityAds_getPlacementState(char* placementId) {
+int getPlacementState(char* placementId) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -204,7 +206,7 @@ int DefUnityAds_getPlacementState(char* placementId) {
 static const char *positions[] = { "topleft", "topcenter", 
   "topright", "bottomleft", "bottomcenter", "bottomright", "center"};
 
-void DefUnityAds_setBannerPosition(DefUnityBannerPosition position) {
+void setBannerPosition(DefUnityBannerPosition position) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -213,7 +215,7 @@ void DefUnityAds_setBannerPosition(DefUnityBannerPosition position) {
   env->DeleteLocalRef(jposition);
 }
 
-void DefUnityAds_loadBanner(char* placementId, int width, int height) {
+void loadBanner(char* placementId, int width, int height) {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -222,25 +224,27 @@ void DefUnityAds_loadBanner(char* placementId, int width, int height) {
   env->DeleteLocalRef(jplacementId);
 }
 
-void DefUnityAds_unloadBanner() {
+void unloadBanner() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_unloadBanner);
 }
 
-void DefUnityAds_showBanner() {
+void showBanner() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_showBanner);
 }
 
-void DefUnityAds_hideBanner() {
+void hideBanner() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_hideBanner);
 }
+
+} //namespaces
 
 #endif

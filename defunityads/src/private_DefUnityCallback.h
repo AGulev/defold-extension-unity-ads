@@ -2,6 +2,8 @@
 
 #include <dmsdk/sdk.h>
 
+namespace dmUnityAds {
+
 enum DefUnityAdsCallbackType
 {
   TYPE_IS_READY,
@@ -65,9 +67,11 @@ struct CallbackData
   int value_2;
 };
 
-void DefUnityCallback_set_callback(lua_State* L, int pos);
-void DefUnityCallback_callback_updates();
-void DefUnityCallback_initialize();
-void DefUnityCallback_finalize();
+void SetLuaCallback(lua_State* L, int pos);
+void CallbackUpdate();
+void Initialize();
+void Finalize();
 
-void DefUnityCallback_add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2);
+void AddToQueue(int type, char*key_1, char*value_1, char*key_2, int value_2);
+
+} //namespace

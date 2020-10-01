@@ -1,6 +1,8 @@
 #pragma once
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 
+namespace dmUnityAds {
+  
 enum DefUnityAdsPlacementState
 {
   PLACEMENT_STATE_READY,
@@ -21,24 +23,26 @@ enum DefUnityBannerPosition
   BANNER_POSITION_CENTER
 };
 
-void DefUnityAds_InitExtension();
-void DefUnityAds_FinalizeExtension();
+void InitExtension();
+void FinalizeExtension();
 
-void DefUnityAds_Initialize(const char*game_id, bool is_debug);
-void DefUnityAds_Show(char* placementId);
-void DefUnityAds_setDebugMode(bool is_debug);
-void DefUnityAds_setBannerPosition(DefUnityBannerPosition position);
-void DefUnityAds_loadBanner(char* placementId, int width, int height);
-void DefUnityAds_unloadBanner();
-void DefUnityAds_showBanner();
-void DefUnityAds_hideBanner();
+void initialize(const char*game_id, bool is_debug);
+void show(char* placementId);
+void setDebugMode(bool is_debug);
+void setBannerPosition(DefUnityBannerPosition position);
+void loadBanner(char* placementId, int width, int height);
+void unloadBanner();
+void showBanner();
+void hideBanner();
 
-bool DefUnityAds_isReady(char* placementId);
-bool DefUnityAds_isSupported();
-bool DefUnityAds_isInitialized();
-bool DefUnityAds_getDebugMode();
+bool isReady(char* placementId);
+bool isSupported();
+bool isInitialized();
+bool getDebugMode();
 
-char const* DefUnityAds_getVersion();
-int DefUnityAds_getPlacementState(char* placementId);
+char const* getVersion();
+int getPlacementState(char* placementId);
+
+} //namespace
 
 #endif
