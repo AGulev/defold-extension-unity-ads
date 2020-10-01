@@ -5,32 +5,59 @@
 #include <UIKit/UIKit.h>
 #include <UnityAds/UnityAds.h>
 
-static UIViewController *uiViewController;
-
 @interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>
 @end
 
 @implementation DefUnityAdsDelegate
 
 -(void)unityAdsReady:(NSString *)placementId {
-    DefUnityCallback_add_to_queue((int)TYPE_IS_READY,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_IS_READY,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
 }
 
 -(void)unityAdsDidStart:(NSString *)placementId {
-    DefUnityCallback_add_to_queue((int)TYPE_DID_START,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_START,(char*)"placementId", (char*)[placementId UTF8String], NULL, 0);
 }
 
 -(void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    DefUnityCallback_add_to_queue((int)TYPE_DID_ERROR,(char*)"message", (char*)[message UTF8String], (char*)"error", (int)error);
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_ERROR,(char*)"message", (char*)[message UTF8String], (char*)"error", (int)error);
 }
 
 -(void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-    DefUnityCallback_add_to_queue((int)TYPE_DID_FINISH,(char*)"placementId", (char*)[placementId UTF8String], (char*)"state", (int)state);
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_DID_FINISH,(char*)"placementId", (char*)[placementId UTF8String], (char*)"state", (int)state);
 }
 
 @end
 
-void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
+//Banner:
+static UADSBannerView *gBannerView;
+
+@interface DefUnityAdsBannerDelegate: NSObject<UADSBannerViewDelegate>
+@end
+
+@implementation DefUnityAdsBannerDelegate
+- (void)bannerViewDidLoad:(UADSBannerView *)bannerView {
+    gBannerView = bannerView;
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_LOAD);
+}
+
+- (void)bannerViewDidClick:(UADSBannerView *)bannerView {
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_CLICK);
+}
+
+- (void)bannerViewDidLeaveApplication:(UADSBannerView *)bannerView {
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_LEAVE_APP);
+}
+
+- (void)bannerViewDidError:(UADSBannerView *)bannerView error:(UADSBannerError *)error{
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER_ERROR,(char*)"message", (char*)[[error localizedDescription] UTF8String], (char*)"error", (int)error.code);
+}
+@end
+
+namespace dmUnityAds {
+
+static UIViewController *uiViewController;
+    
+void initialize(const char*game_id, bool is_debug) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
     DefUnityAdsDelegate* unityAds = [[DefUnityAdsDelegate alloc] init];
     [UnityAds initialize:gameId testMode:is_debug ? YES : NO];
@@ -40,7 +67,7 @@ void DefUnityAds_Initialize(const char*game_id, bool is_debug) {
     uiViewController = window.rootViewController;
 }
 
-void DefUnityAds_Show(char* placementId) {
+void show(char* placementId) {
     if ((placementId != NULL) && (placementId[0] == '\0')) {
         [UnityAds show:uiViewController];
     }
@@ -50,12 +77,12 @@ void DefUnityAds_Show(char* placementId) {
     }
 }
 
-void DefUnityAds_setDebugMode(bool is_debug) {
+void setDebugMode(bool is_debug) {
     BOOL enableDebugMode = is_debug ? YES : NO;
     [UnityAds setDebugMode:enableDebugMode];
 }
 
-bool DefUnityAds_isReady(char* placementId) {
+bool isReady(char* placementId) {
     BOOL status;
     if ((placementId != NULL) && (placementId[0] == '\0')) {
         status = [UnityAds isReady];
@@ -67,28 +94,28 @@ bool DefUnityAds_isReady(char* placementId) {
     return status == YES;
 }
 
-bool DefUnityAds_isSupported() {
+bool isSupported() {
     BOOL status = [UnityAds isSupported];
     return status == YES;
 }
 
-bool DefUnityAds_isInitialized() {
+bool isInitialized() {
     BOOL status = [UnityAds isInitialized];
     return status == YES;
 }
 
-bool DefUnityAds_getDebugMode() {
+bool getDebugMode() {
     BOOL status = [UnityAds getDebugMode];
     return status == YES;
 }
 
-char const* DefUnityAds_getVersion() {
+char const* getVersion() {
     NSString *version = [UnityAds getVersion];
     const char *version_lua = [version UTF8String];
     return version_lua;
 }
 
-int DefUnityAds_getPlacementState(char* placementId) {
+int getPlacementState(char* placementId) {
     UnityAdsPlacementState state;
     if ((placementId != NULL) && (placementId[0] == '\0')) {
         state =[UnityAds getPlacementState];
@@ -101,32 +128,9 @@ int DefUnityAds_getPlacementState(char* placementId) {
 }
 
 //Banner:
-static UADSBannerView *gBannerView;
 static NSMutableArray *constraints;
 static DefUnityBannerPosition currentPosition;
 static bool isBannerVisible;
-
-@interface DefUnityAdsBannerDelegate: NSObject<UADSBannerViewDelegate>
-@end
-
-@implementation DefUnityAdsBannerDelegate
-- (void)bannerViewDidLoad:(UADSBannerView *)bannerView {
-    gBannerView = bannerView;
-    DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_LOAD);
-}
-
-- (void)bannerViewDidClick:(UADSBannerView *)bannerView {
-    DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_CLICK);
-}
-
-- (void)bannerViewDidLeaveApplication:(UADSBannerView *)bannerView {
-    DefUnityCallback_add_to_queue((int)TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)BANNER_EVENT_DID_LEAVE_APP);
-}
-
-- (void)bannerViewDidError:(UADSBannerView *)bannerView error:(UADSBannerError *)error{
-    DefUnityCallback_add_to_queue((int)TYPE_BANNER_ERROR,(char*)"message", (char*)[[error localizedDescription] UTF8String], (char*)"error", (int)error.code);
-}
-@end
 
 static void ApplyBannerPosition() {
     if (gBannerView){
@@ -186,7 +190,7 @@ static void ApplyBannerPosition() {
     }
 }
 
-void DefUnityAds_loadBanner(char* placementId, int width, int height) {
+void loadBanner(char* placementId, int width, int height) {
     if (!gBannerView){
         NSString* placementId_s = [NSString stringWithUTF8String:placementId];
         UADSBannerView *localBannerView = [[UADSBannerView alloc] initWithPlacementId: placementId_s size: CGSizeMake(width, height)];
@@ -195,15 +199,15 @@ void DefUnityAds_loadBanner(char* placementId, int width, int height) {
     }
 }
 
-void DefUnityAds_unloadBanner() {
-    DefUnityAds_hideBanner();
+void unloadBanner() {
+    hideBanner();
     if (gBannerView){
         [gBannerView release];
         gBannerView = nil;
     }
 }
 
-void DefUnityAds_showBanner() {
+void showBanner() {
     if (gBannerView){
         isBannerVisible = true;
         gBannerView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -212,36 +216,38 @@ void DefUnityAds_showBanner() {
     }
 }
 
-void DefUnityAds_hideBanner() {
+void hideBanner() {
     if (gBannerView) {
         isBannerVisible = false;
         [gBannerView removeFromSuperview];
     }
 }
 
-void DefUnityAds_setBannerPosition(DefUnityBannerPosition bannerPosition) {
+void setBannerPosition(DefUnityBannerPosition bannerPosition) {
     currentPosition = bannerPosition;
     if (isBannerVisible) {
         ApplyBannerPosition();
     }
 }
 
-void DefUnityAds_InitExtension() {
+void InitExtension() {
     isBannerVisible = false;
-    DefUnityAds_setBannerPosition(BANNER_POSITION_TOP_CENTER);
+    setBannerPosition(BANNER_POSITION_TOP_CENTER);
 }
 
-void DefUnityAds_FinalizeExtension() {
+void FinalizeExtension() {
     if (constraints){
         [uiViewController.view removeConstraints:constraints];
         [constraints release];
         constraints = nil;
     }
     if (gBannerView) {
-        DefUnityAds_hideBanner();
+        hideBanner();
         [gBannerView release];
         gBannerView = nil;
     }
 }
+
+} //namespace
 
 #endif

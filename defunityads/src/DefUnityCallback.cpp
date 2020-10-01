@@ -3,6 +3,8 @@
 #include "utils/LuaUtils.h"
 #include <stdlib.h>
 
+namespace dmUnityAds {
+  
 static DefUnityAdsListener     defUtoLua;
 static dmArray<CallbackData>   m_callbacksQueue;
 static dmMutex::HMutex         m_mutex;
@@ -35,7 +37,7 @@ static void UnregisterCallback(DefUnityAdsListener* cbk)
   }
 }
 
-static void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
+static void InvokeCallback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
 {
   if(cbk->m_Callback == LUA_NOREF)
   {
@@ -77,16 +79,16 @@ static void DefUnityCallback_invoke_callback(int type, char*key_1, char*value_1,
   assert(top == lua_gettop(L));
 }
 
-void DefUnityCallback_initialize(){
+void Initialize(){
   m_mutex = dmMutex::New();
 }
 
-void DefUnityCallback_finalize(){
+void Finalize(){
   dmMutex::Delete(m_mutex);
   UnregisterCallback(&defUtoLua);
 }
 
-void DefUnityCallback_set_callback(lua_State* L, int pos){
+void SetLuaCallback(lua_State* L, int pos){
   int type = lua_type(L, pos);
   if (type == LUA_TNONE || type == LUA_TNIL) {
     UnregisterCallback(&defUtoLua);
@@ -96,7 +98,7 @@ void DefUnityCallback_set_callback(lua_State* L, int pos){
   }
 }
 
-void DefUnityCallback_add_to_queue(int type, char*key_1, char*value_1, char*key_2, int value_2){
+void AddToQueue(int type, char*key_1, char*value_1, char*key_2, int value_2){
   DM_MUTEX_SCOPED_LOCK(m_mutex);
   
   CallbackData data;
@@ -113,7 +115,7 @@ void DefUnityCallback_add_to_queue(int type, char*key_1, char*value_1, char*key_
   m_callbacksQueue.Push(data);
 }
 
-void DefUnityCallback_callback_updates(){
+void CallbackUpdate(){
   if (m_callbacksQueue.Empty()) {
     return;
   }
@@ -123,11 +125,14 @@ void DefUnityCallback_callback_updates(){
   for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
   {
     CallbackData* data = &m_callbacksQueue[i];
-    DefUnityCallback_invoke_callback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
+    InvokeCallback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
     if(data->value_1)
       free(data->value_1);
     data->value_1 = 0;
   }
   m_callbacksQueue.SetSize(0);
 }
+
+} //namespace
+
 #endif
