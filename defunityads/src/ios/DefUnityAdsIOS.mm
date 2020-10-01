@@ -29,14 +29,14 @@
 @end
 
 //Banner:
-static UADSBannerView *gBannerView;
+static UADSBannerView *gDefVideoAdsBannerView;
 
 @interface DefUnityAdsBannerDelegate: NSObject<UADSBannerViewDelegate>
 @end
 
 @implementation DefUnityAdsBannerDelegate
 - (void)bannerViewDidLoad:(UADSBannerView *)bannerView {
-    gBannerView = bannerView;
+    gDefVideoAdsBannerView = bannerView;
     dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_BANNER,(char*)"placementId", (char*)[bannerView.placementId UTF8String], (char*)"event", (int)dmUnityAds::BANNER_EVENT_DID_LOAD);
 }
 
@@ -133,7 +133,7 @@ static DefUnityBannerPosition currentPosition;
 static bool isBannerVisible;
 
 static void ApplyBannerPosition() {
-    if (gBannerView){
+    if (gDefVideoAdsBannerView){
         if (constraints){
             [uiViewController.view removeConstraints:constraints];
             [constraints release];
@@ -145,15 +145,15 @@ static void ApplyBannerPosition() {
             case BANNER_POSITION_CENTER:
             case BANNER_POSITION_BOTTOM_CENTER:
             case BANNER_POSITION_TOP_CENTER:
-                [constraints addObject:[NSLayoutConstraint constraintWithItem:gBannerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:gDefVideoAdsBannerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
                 break;
             case BANNER_POSITION_BOTTOM_LEFT:
             case BANNER_POSITION_TOP_LEFT:
-                [constraints addObject:[NSLayoutConstraint constraintWithItem:gBannerView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:gDefVideoAdsBannerView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
                 break;
             case BANNER_POSITION_BOTTOM_RIGHT:
             case BANNER_POSITION_TOP_RIGHT:
-                [constraints addObject:[NSLayoutConstraint constraintWithItem:gBannerView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:gDefVideoAdsBannerView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
                 break;
             case kUnityAdsBannerPositionNone:
                 break;
@@ -161,17 +161,17 @@ static void ApplyBannerPosition() {
         // position vertically
         switch (currentPosition) {
             case BANNER_POSITION_CENTER:
-                [constraints addObject:[NSLayoutConstraint constraintWithItem:gBannerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:gDefVideoAdsBannerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:uiViewController.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
                 break;
             case BANNER_POSITION_BOTTOM_CENTER:
             case BANNER_POSITION_BOTTOM_LEFT:
             case BANNER_POSITION_BOTTOM_RIGHT:
                 if (@available(iOS 11.0, *)) {
                     // we can use the safeAreaLayoutGuide
-                    [constraints addObject:[gBannerView.bottomAnchor constraintEqualToAnchor:uiViewController.view.safeAreaLayoutGuide.bottomAnchor]];
+                    [constraints addObject:[gDefVideoAdsBannerView.bottomAnchor constraintEqualToAnchor:uiViewController.view.safeAreaLayoutGuide.bottomAnchor]];
                 } else {
                     // fall back to anchors
-                    [constraints addObject:[gBannerView.bottomAnchor constraintEqualToAnchor:uiViewController.view.bottomAnchor]];
+                    [constraints addObject:[gDefVideoAdsBannerView.bottomAnchor constraintEqualToAnchor:uiViewController.view.bottomAnchor]];
                 }
                 break;
             case BANNER_POSITION_TOP_CENTER:
@@ -179,10 +179,10 @@ static void ApplyBannerPosition() {
             case BANNER_POSITION_TOP_RIGHT:
                 if (@available(iOS 11.0, *)) {
                     // we can use the safeAreaLayoutGuide
-                    [constraints addObject:[gBannerView.topAnchor constraintEqualToAnchor:uiViewController.view.safeAreaLayoutGuide.topAnchor]];
+                    [constraints addObject:[gDefVideoAdsBannerView.topAnchor constraintEqualToAnchor:uiViewController.view.safeAreaLayoutGuide.topAnchor]];
                 } else {
                     // fall back to anchors
-                    [constraints addObject:[gBannerView.topAnchor constraintEqualToAnchor:uiViewController.view.topAnchor]];
+                    [constraints addObject:[gDefVideoAdsBannerView.topAnchor constraintEqualToAnchor:uiViewController.view.topAnchor]];
                 }
                 break;
         }
@@ -191,7 +191,7 @@ static void ApplyBannerPosition() {
 }
 
 void loadBanner(char* placementId, int width, int height) {
-    if (!gBannerView){
+    if (!gDefVideoAdsBannerView){
         NSString* placementId_s = [NSString stringWithUTF8String:placementId];
         UADSBannerView *localBannerView = [[UADSBannerView alloc] initWithPlacementId: placementId_s size: CGSizeMake(width, height)];
         localBannerView.delegate = [[DefUnityAdsBannerDelegate alloc] init];
@@ -201,25 +201,25 @@ void loadBanner(char* placementId, int width, int height) {
 
 void unloadBanner() {
     hideBanner();
-    if (gBannerView){
-        [gBannerView release];
-        gBannerView = nil;
+    if (gDefVideoAdsBannerView){
+        [gDefVideoAdsBannerView release];
+        gDefVideoAdsBannerView = nil;
     }
 }
 
 void showBanner() {
-    if (gBannerView){
+    if (gDefVideoAdsBannerView){
         isBannerVisible = true;
-        gBannerView.translatesAutoresizingMaskIntoConstraints = NO;
-        [uiViewController.view addSubview:gBannerView];
+        gDefVideoAdsBannerView.translatesAutoresizingMaskIntoConstraints = NO;
+        [uiViewController.view addSubview:gDefVideoAdsBannerView];
         ApplyBannerPosition();
     }
 }
 
 void hideBanner() {
-    if (gBannerView) {
+    if (gDefVideoAdsBannerView) {
         isBannerVisible = false;
-        [gBannerView removeFromSuperview];
+        [gDefVideoAdsBannerView removeFromSuperview];
     }
 }
 
@@ -241,10 +241,10 @@ void FinalizeExtension() {
         [constraints release];
         constraints = nil;
     }
-    if (gBannerView) {
+    if (gDefVideoAdsBannerView) {
         hideBanner();
-        [gBannerView release];
-        gBannerView = nil;
+        [gDefVideoAdsBannerView release];
+        gDefVideoAdsBannerView = nil;
     }
 }
 
