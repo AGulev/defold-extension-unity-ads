@@ -62,6 +62,20 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerDidL
   env->ReleaseStringUTFChars(jstr, ch);
 }
 
+//----
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitializationError(JNIEnv *env, jclass jcls, jint type, jstring jstr)
+{
+  const char* ch = env->GetStringUTFChars(jstr, 0);
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_INIT_ERROR,(char*)"message", (char*)ch, (char*)"error", (int)type);
+  env->ReleaseStringUTFChars(jstr, ch);
+}
+
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitialized(JNIEnv *env, jclass jcls)
+{
+  dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_INITIALIZED, NULL, NULL, NULL, 0);
+}
+
 //--------------------------------------------
 
 namespace dmUnityAds {

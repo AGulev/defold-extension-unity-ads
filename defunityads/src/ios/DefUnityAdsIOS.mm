@@ -28,6 +28,23 @@
 
 @end
 
+//Initialization
+
+@interface DefUnityAdsInitializationDelegate : NSObject<UnityAdsInitializationDelegate>
+@end
+
+@implementation DefUnityAdsInitializationDelegate
+
+-(void)initializationComplete {
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_INITIALIZED, NULL, NULL, NULL, 0);
+}
+
+-(void)initializationFailed:(UnityAdsInitializationError)error withMessage:(NSString *)message {
+    dmUnityAds::AddToQueue((int)dmUnityAds::TYPE_INIT_ERROR,(char*)"message", (char*)[message UTF8String], (char*)"error", (int)error);
+}
+
+@end
+
 //Banner:
 static UADSBannerView *gDefVideoAdsBannerView;
 
@@ -60,7 +77,8 @@ static UIViewController *uiViewController;
 void initialize(const char*game_id, bool is_debug) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
     DefUnityAdsDelegate* unityAds = [[DefUnityAdsDelegate alloc] init];
-    [UnityAds initialize:gameId testMode:is_debug ? YES : NO];
+    DefUnityAdsInitializationDelegate* unityAdsInit = [[DefUnityAdsInitializationDelegate alloc] init];
+    [UnityAds initialize:gameId testMode:is_debug ? YES : NO initializationDelegate:unityAdsInit];
     [UnityAds addDelegate:unityAds];
     
     UIWindow* window = dmGraphics::GetNativeiOSUIWindow();

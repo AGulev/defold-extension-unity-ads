@@ -2,8 +2,8 @@ local dirtylarry = require "dirtylarry/dirtylarry"
 
 local sys_name = sys.get_sys_info().system_name
 local gameIDs = {
-  ["Android"] = "1401815",
-  ["iPhone OS"] = "1425385"
+    ["Android"] = "1401815",
+    ["iPhone OS"] = "1425385"
 }
 
 local BACK_KEY = hash("back")
@@ -12,263 +12,302 @@ local REWARDED = "rewardedVideo"
 local VIDEO = "video"
 local BANNER = "banner"
 
-local function print_placement_state(placement)
-  if unityads then
-    local state = placement and unityads.getPlacementState(placement) or unityads.getPlacementState()
-    if state == unityads.PLACEMENT_STATE_READY then
-      print("PLACEMENT_STATE_READY ", placement)
-    elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
-      print("PLACEMENT_STATE_NOT_AVAILABLE ", placement)
-    elseif state == unityads.PLACEMENT_STATE_DISABLED then
-      print("PLACEMENT_STATE_DISABLED ", placement)
-    elseif state == unityads.PLACEMENT_STATE_WAITING then
-      print("PLACEMENT_STATE_WAITING ", placement)
-    elseif state == unityads.PLACEMENT_STATE_NO_FILL then
-      print("PLACEMENT_STATE_NO_FILL ", placement)
+--log logic
+local gprint = print
+local log = {}
+local text = ""
+_G.print = function(...)
+    gprint(...)
+    local args = {...}
+    local num = #log+1
+    log[num] = "--"
+    for k, v in pairs(args) do
+        log[num] = log[num] .. tostring(v) .. " "
     end
-  end
+    log[num] = log[num] .. "\n"
+    text = ""
+    if num > 7 then
+        table.remove(log, 1)
+    end
+    for k, v in pairs(log) do
+        text = text .. v
+    end
+end
+
+function update()
+    gui.set_text(gui.get_node("console"), text)
+end
+-- end log logic
+
+local function print_placement_state(placement)
+    if unityads then
+        local state = placement and unityads.getPlacementState(placement) or unityads.getPlacementState()
+        if state == unityads.PLACEMENT_STATE_READY then
+            print("PLACEMENT_STATE_READY ", placement)
+        elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
+            print("PLACEMENT_STATE_NOT_AVAILABLE ", placement)
+        elseif state == unityads.PLACEMENT_STATE_DISABLED then
+            print("PLACEMENT_STATE_DISABLED ", placement)
+        elseif state == unityads.PLACEMENT_STATE_WAITING then
+            print("PLACEMENT_STATE_WAITING ", placement)
+        elseif state == unityads.PLACEMENT_STATE_NO_FILL then
+            print("PLACEMENT_STATE_NO_FILL ", placement)
+        end
+    end
 end
 
 local function btn_ready(self, button_name)
-  gui.set_color(gui.get_node(button_name.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
+    gui.set_color(gui.get_node(button_name.."/larrylabel"), vmath.vector4(1, 1, 1, 1))
 end
 
 local function unity_ads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_IS_READY then
-    print(message.placementId, " is ready")
-    btn_ready(self, message.placementId)
-  elseif msg_type == unityads.TYPE_DID_START then
-    print(message.placementId, " started")
-  elseif msg_type == unityads.TYPE_DID_ERROR then
-    print(message.message)
-    -- errors info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_errors
-    if message.error == unityads.ERROR_NOT_INITIALIZED then
-      print("kUnityAdsErrorNotInitialized")
-    elseif message.error == unityads.ERROR_INITIALIZED_FAILED then
-      print("kUnityAdsErrorInitializedFailed")
-    elseif message.error == unityads.ERROR_INVALID_ARGUMENT then
-      print("kUnityAdsErrorInvalidArgument")
-    elseif message.error == unityads.ERROR_VIDEO_PLAYER then
-      print("kUnityAdsErrorVideoPlayerError")
-    elseif message.error == unityads.ERROR_INIT_SANITY_CHECK_FAIL then
-      print("kUnityAdsErrorInitSanityCheckFail")
-    elseif message.error == unityads.ERROR_AD_BLOCKER_DETECTED then
-      print("kUnityAdsErrorAdBlockerDetected")
-    elseif message.error == unityads.ERROR_FILE_IO then
-      print("kUnityAdsErrorFileIoError")
-    elseif message.error == unityads.ERROR_DEVICE_ID then
-      print("kUnityAdsErrorDeviceIdError")
-    elseif message.error == unityads.ERROR_SHOW then
-      print("kUnityAdsErrorShowError")
-    elseif message.error == unityads.ERROR_INTERNAL then
-      print("kUnityAdsErrorInternalError")
+    if msg_type == unityads.TYPE_IS_READY then
+        print(message.placementId, " is ready")
+        btn_ready(self, message.placementId)
+    elseif msg_type == unityads.TYPE_DID_START then
+        print(message.placementId, " started")
+    elseif msg_type == unityads.TYPE_DID_ERROR then
+        print(message.message)
+        -- errors info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_errors
+        if message.error == unityads.ERROR_NOT_INITIALIZED then
+            print("kUnityAdsErrorNotInitialized")
+        elseif message.error == unityads.ERROR_INITIALIZED_FAILED then
+            print("kUnityAdsErrorInitializedFailed")
+        elseif message.error == unityads.ERROR_INVALID_ARGUMENT then
+            print("kUnityAdsErrorInvalidArgument")
+        elseif message.error == unityads.ERROR_VIDEO_PLAYER then
+            print("kUnityAdsErrorVideoPlayerError")
+        elseif message.error == unityads.ERROR_INIT_SANITY_CHECK_FAIL then
+            print("kUnityAdsErrorInitSanityCheckFail")
+        elseif message.error == unityads.ERROR_AD_BLOCKER_DETECTED then
+            print("kUnityAdsErrorAdBlockerDetected")
+        elseif message.error == unityads.ERROR_FILE_IO then
+            print("kUnityAdsErrorFileIoError")
+        elseif message.error == unityads.ERROR_DEVICE_ID then
+            print("kUnityAdsErrorDeviceIdError")
+        elseif message.error == unityads.ERROR_SHOW then
+            print("kUnityAdsErrorShowError")
+        elseif message.error == unityads.ERROR_INTERNAL then
+            print("kUnityAdsErrorInternalError")
+        end
+    elseif msg_type == unityads.TYPE_DID_FINISH then
+        --all finish states info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_finishstates
+        if message.state == unityads.FINISH_STATE_ERROR then
+            print("kUnityAdsFinishStateError")
+        elseif message.state == unityads.FINISH_STATE_SKIPPED then
+            print("kUnityAdsFinishStateSkipped")
+        elseif message.state == unityads.FINISH_STATE_COMPLETED then
+            print("kUnityAdsFinishStateCompleted")
+        end
+    elseif msg_type == unityads.TYPE_BANNER then
+        if message.event == unityads.BANNER_EVENT_DID_CLICK then
+            print("BANNER_EVENT_DID_CLICK", message.placementId)
+        elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
+            print("BANNER_EVENT_DID_LOAD", message.placementId)
+            btn_ready(self, "show_banner")
+            self.is_loaded_banner = true
+            gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
+        elseif message.event == unityads.BANNER_EVENT_DID_LEAVE_APP then
+            print("BANNER_EVENT_DID_LEAVE_APP", message.placementId)
+        end
+    elseif msg_type == unityads.TYPE_BANNER_ERROR then
+        print(message.message)
+        if message.error == unityads.BANNER_ERROR_UNKNOWN then
+            print("UADSBannerErrorCodeUnknown")
+        elseif message.error == unityads.BANNER_ERROR_NATIVE then
+            print("UADSBannerErrorCodeNativeError")
+        elseif message.error == unityads.BANNER_ERROR_WEBVIEW then
+            print("UADSBannerErrorCodeWebViewError")
+        elseif message.error == unityads.BANNER_ERROR_NOFILL then
+            print("UADSBannerErrorCodeNoFillError")
+        end
+    elseif msg_type == unityads.TYPE_INITIALIZED then
+        print("TYPE_INITIALIZED")
+    elseif msg_type == unityads.TYPE_INIT_ERROR then
+        print("TYPE_INIT_ERROR")
+        print(message.message)
+        if message.error == unityads.INIT_ERROR_AD_BLOCKER_DETECTED then
+            print("INIT_ERROR_AD_BLOCKER_DETECTED ")
+        elseif message.error == unityads.INIT_ERROR_INTERNAL_ERROR then
+            print("INIT_ERROR_INTERNAL_ERROR")
+        elseif message.error == unityads.INIT_ERROR_INVALID_ARGUMENT then
+            print("INIT_ERROR_INVALID_ARGUMENT")
+        end
     end
-  elseif msg_type == unityads.TYPE_DID_FINISH then
-    --all finish states info https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_finishstates
-    if message.state == unityads.FINISH_STATE_ERROR then
-      print("kUnityAdsFinishStateError")
-    elseif message.state == unityads.FINISH_STATE_SKIPPED then
-      print("kUnityAdsFinishStateSkipped")
-    elseif message.state == unityads.FINISH_STATE_COMPLETED then
-      print("kUnityAdsFinishStateCompleted")
-    end
-  elseif msg_type == unityads.TYPE_BANNER then
-    if message.event == unityads.BANNER_EVENT_DID_CLICK then
-      print("BANNER_EVENT_DID_CLICK", message.placementId)
-    elseif message.event == unityads.BANNER_EVENT_DID_LOAD then
-      print("BANNER_EVENT_DID_LOAD", message.placementId)
-      btn_ready(self, "show_banner")
-      self.is_loaded_banner = true
-      gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
-    elseif message.event == unityads.BANNER_EVENT_DID_LEAVE_APP then
-      print("BANNER_EVENT_DID_LEAVE_APP", message.placementId)
-    end
-  elseif msg_type == unityads.TYPE_BANNER_ERROR then
-    print(message.message)
-    if message.error == unityads.BANNER_ERROR_UNKNOWN then
-      print("UADSBannerErrorCodeUnknown")
-    elseif message.error == unityads.BANNER_ERROR_NATIVE then
-      print("UADSBannerErrorCodeNativeError")
-    elseif message.error == unityads.BANNER_ERROR_WEBVIEW then
-      print("UADSBannerErrorCodeWebViewError")
-    elseif message.error == unityads.BANNER_ERROR_NOFILL then
-      print("UADSBannerErrorCodeNoFillError")
-    end
-  end
 end
 
 function init(self)
-  msg.post(".", "acquire_input_focus")
-  if unityads then
-    print("VERSION IS: ", unityads.getVersion())
-    print("DEBUG MODE IS:", unityads.getDebugMode())
-    print("isInitialized:", unityads.isInitialized())
-    print("isSupported:", unityads.isSupported())
-    print("isReady(video):", unityads.isReady(VIDEO))
-    print("isReady(banner):", unityads.isReady(BANNER))
-    print("isReady(rewardedVideo):", unityads.isReady(REWARDED))
-    print("isReady():", unityads.isReady())
-    print_placement_state(VIDEO)
-    print_placement_state(BANNER)
-    print_placement_state(REWARDED)
-    print_placement_state()
-    unityads.setDebugMode(true)
-    unityads.setCallback(unity_ads_callback)
-  end
+    msg.post(".", "acquire_input_focus")
+    if unityads then
+        print("VERSION IS: ", unityads.getVersion())
+        print("DEBUG MODE IS:", unityads.getDebugMode())
+        print("isInitialized:", unityads.isInitialized())
+        print("isSupported:", unityads.isSupported())
+        print("isReady(video):", unityads.isReady(VIDEO))
+        print("isReady(banner):", unityads.isReady(BANNER))
+        print("isReady(rewardedVideo):", unityads.isReady(REWARDED))
+        print("isReady():", unityads.isReady())
+        print_placement_state(VIDEO)
+        print_placement_state(BANNER)
+        print_placement_state(REWARDED)
+        print_placement_state()
+        unityads.setDebugMode(true)
+        unityads.setCallback(unity_ads_callback)
+    end
 end
 
 function final(self)
-  print("Final! Remove Callback!")
-  if unityads then
-    unityads.setCallback()
-  end
+    print("Final! Remove Callback!")
+    if unityads then
+        unityads.setCallback()
+    end
 end
 
 local function init_unity_ads(self, appId)
-  if unityads and appId then
-    if not unityads.isInitialized() then
-      print("Init SDK with id", appId)
-      unityads.initialize(appId, unity_ads_callback, true)
-    else
-      print("UnityADS already inited. Just set callback one more time")
-      unityads.setCallback(unity_ads_callback)
-      if unityads.isReady(REWARDED) then
-        btn_ready(self, REWARDED)
-      end
-      if unityads.isReady(VIDEO) then
-        btn_ready(self, VIDEO)
-      end
-      if unityads.isReady(BANNER) then
-        btn_ready(self, BANNER)
-      end
+    if unityads and appId then
+        if not unityads.isInitialized() then
+            print("Init SDK with id", appId)
+            unityads.initialize(appId, unity_ads_callback, true)
+        else
+            print("UnityADS already inited. Just set callback one more time")
+            unityads.setCallback(unity_ads_callback)
+            if unityads.isReady(REWARDED) then
+                btn_ready(self, REWARDED)
+            end
+            if unityads.isReady(VIDEO) then
+                btn_ready(self, VIDEO)
+            end
+            if unityads.isReady(BANNER) then
+                btn_ready(self, BANNER)
+            end
+        end
     end
-  end
 end
 
 local function show_ad(self, placementId)
-  if unityads then
-    if placementId then
-      unityads.show(placementId)
-    else
-      unityads.show()
+    if unityads then
+        if placementId then
+            unityads.show(placementId)
+        else
+            unityads.show()
+        end
     end
-  end
 end
 
 local function set_callback(self)
-  if unityads then
-    print("Set Callback!")
-    unityads.setCallback(unity_ads_callback)
-  end
+    if unityads then
+        print("Set Callback!")
+        unityads.setCallback(unity_ads_callback)
+    end
 end
 
 local function remove_callback(self)
-  if unityads then
-    print("Remove Callback!")
-    unityads.setCallback(nil) -- same as unityads.setCallback()
-  end
+    if unityads then
+        print("Remove Callback!")
+        unityads.setCallback(nil) -- same as unityads.setCallback()
+    end
 end
 
 local function loadbanner(self)
-  if unityads then
-    if not self.is_loaded_banner then
-      print("Load Banner!")
-      unityads.loadBanner("banner")
-    else
-      self.is_loaded_banner = nil
-      self.is_show_banner = false
-      print("Unload Banner!")
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
-      gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
-      gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
-      unityads.unloadBanner()
+    if unityads then
+        if not self.is_loaded_banner then
+            print("Load Banner!")
+            unityads.loadBanner("banner")
+        else
+            self.is_loaded_banner = nil
+            self.is_show_banner = false
+            print("Unload Banner!")
+            gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
+            gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
+            gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
+            unityads.unloadBanner()
+        end
     end
-  end
 end
 
 local function showbanner(self)
-  if unityads then
-    if not self.is_show_banner then
-      self.is_show_banner = true
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
-      print("Show Banner!")
-      unityads.showBanner()
-    else
-      self.is_show_banner = false
-      gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
-      print("Hide Banner!")
-      unityads.hideBanner()
+    if unityads then
+        if not self.is_show_banner then
+            self.is_show_banner = true
+            gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
+            print("Show Banner!")
+            unityads.showBanner()
+        else
+            self.is_show_banner = false
+            gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
+            print("Hide Banner!")
+            unityads.hideBanner()
+        end
     end
-  end
 end
 
 local function change_banner_pos(self)
-  if unityads then
-    local banners = {
-      "BANNER_POSITION_TOP_LEFT",
-      "BANNER_POSITION_TOP_CENTER",
-      "BANNER_POSITION_TOP_RIGHT",
-      "BANNER_POSITION_BOTTOM_LEFT",
-      "BANNER_POSITION_BOTTOM_CENTER",
-      "BANNER_POSITION_BOTTOM_RIGHT",
-      "BANNER_POSITION_CENTER"
-    }
-    if not self.banner_pos_num then
-      self.banner_pos_num = 3
-    else
-      self.banner_pos_num = self.banner_pos_num + 1
-      if self.banner_pos_num > #banners then
-        self.banner_pos_num = 1
-      end
+    if unityads then
+        local banners = {
+            "BANNER_POSITION_TOP_LEFT",
+            "BANNER_POSITION_TOP_CENTER",
+            "BANNER_POSITION_TOP_RIGHT",
+            "BANNER_POSITION_BOTTOM_LEFT",
+            "BANNER_POSITION_BOTTOM_CENTER",
+            "BANNER_POSITION_BOTTOM_RIGHT",
+            "BANNER_POSITION_CENTER"
+        }
+        if not self.banner_pos_num then
+            self.banner_pos_num = 3
+        else
+            self.banner_pos_num = self.banner_pos_num + 1
+            if self.banner_pos_num > #banners then
+                self.banner_pos_num = 1
+            end
+        end
+        unityads.setBannerPosition(unityads[banners[self.banner_pos_num]])
+        gui.set_text(gui.get_node("baner_pos"), banners[self.banner_pos_num])
     end
-    unityads.setBannerPosition(unityads[banners[self.banner_pos_num]])
-    gui.set_text(gui.get_node("baner_pos"), banners[self.banner_pos_num])
-  end
 end
 
 function on_input(self, action_id, action)
-  
-  dirtylarry:button("init", action_id, action, function ()
-    init_unity_ads(self, gameIDs[sys_name])
-  end)
+    
+    dirtylarry:button("init", action_id, action, function ()
+        init_unity_ads(self, gameIDs[sys_name])
+    end)
 
-  dirtylarry:button(REWARDED, action_id, action, function ()
-    print_placement_state(REWARDED)
-    show_ad(self, REWARDED)
-  end)
+    dirtylarry:button(REWARDED, action_id, action, function ()
+        print_placement_state(REWARDED)
+        show_ad(self, REWARDED)
+    end)
 
-  dirtylarry:button(VIDEO, action_id, action, function ()
-    print_placement_state(VIDEO)
-    show_ad(self, VIDEO)
-  end)
+    dirtylarry:button(VIDEO, action_id, action, function ()
+        print_placement_state(VIDEO)
+        show_ad(self, VIDEO)
+    end)
 
-  dirtylarry:button("default", action_id, action, function ()
-    show_ad(self)
-  end)
+    dirtylarry:button("default", action_id, action, function ()
+        show_ad(self)
+    end)
 
-  dirtylarry:button("set_callback", action_id, action, function ()
-    set_callback(self)
-  end)
+    dirtylarry:button("set_callback", action_id, action, function ()
+        set_callback(self)
+    end)
 
-  dirtylarry:button("remove_callback", action_id, action, function ()
-    remove_callback(self)
-  end)
+    dirtylarry:button("remove_callback", action_id, action, function ()
+        remove_callback(self)
+    end)
 
-  dirtylarry:button("banner", action_id, action, function ()
-    loadbanner(self)
-  end)
+    dirtylarry:button("banner", action_id, action, function ()
+        loadbanner(self)
+    end)
 
-  dirtylarry:button("show_banner", action_id, action, function ()
-    showbanner(self)
-  end)
+    dirtylarry:button("show_banner", action_id, action, function ()
+        showbanner(self)
+    end)
 
-  dirtylarry:button("banner_pos", action_id, action, function ()
-    change_banner_pos(self)
-  end)
+    dirtylarry:button("banner_pos", action_id, action, function ()
+        change_banner_pos(self)
+    end)
 
-  if action_id == BACK_KEY and action.released then
-    print("Time to exit!")
-    msg.post("@system:", "exit", {code = 0})
-  end
+    if action_id == BACK_KEY and action.released then
+        print("Time to exit!")
+        msg.post("@system:", "exit", {code = 0})
+    end
 
 end
