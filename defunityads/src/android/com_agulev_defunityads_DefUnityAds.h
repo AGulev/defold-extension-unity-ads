@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitial
 /*
 * Class:     com_agulev_defunityads_DefUnityAds
 * Method:    onUnityAdsInitialized
-* Signature: (ILjava/lang/String;)V
+* Signature: ()V
 */
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitialized
 (JNIEnv *, jclass);

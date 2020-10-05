@@ -154,6 +154,7 @@ unityads.TYPE_DID_START
 unityads.TYPE_DID_ERROR
 unityads.TYPE_DID_FINISH
 unityads.TYPE_BANNER
+unityads.TYPE_BANNER_ERROR
 unityads.TYPE_INITIALIZED
 unityads.TYPE_INIT_ERROR
 ```
