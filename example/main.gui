@@ -16,7 +16,7 @@ background_color {
 nodes {
   position {
     x: 226.0
-    y: 576.0
+    y: 654.0
     z: 0.0
     w: 1.0
   }
@@ -176,8 +176,8 @@ nodes {
 }
 nodes {
   position {
-    x: 320.0
-    y: 456.0
+    x: 229.0
+    y: 545.0
     z: 0.0
     w: 1.0
   }
@@ -339,8 +339,8 @@ nodes {
 }
 nodes {
   position {
-    x: 320.0
-    y: 336.0
+    x: 229.0
+    y: 425.0
     z: 0.0
     w: 1.0
   }
@@ -500,8 +500,8 @@ nodes {
 }
 nodes {
   position {
-    x: 320.0
-    y: 216.0
+    x: 227.0
+    y: 313.0
     z: 0.0
     w: 1.0
   }
@@ -662,8 +662,8 @@ nodes {
 }
 nodes {
   position {
-    x: 661.0
-    y: 576.0
+    x: 229.0
+    y: 203.0
     z: 0.0
     w: 1.0
   }
@@ -825,8 +825,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1073.0
-    y: 576.0
+    x: 229.0
+    y: 94.0
     z: 0.0
     w: 1.0
   }
@@ -988,8 +988,8 @@ nodes {
 }
 nodes {
   position {
-    x: 920.0
-    y: 252.0
+    x: 651.0
+    y: 464.0
     z: 0.0
     w: 1.0
   }
@@ -1151,8 +1151,8 @@ nodes {
 }
 nodes {
   position {
-    x: 920.0
-    y: 130.0
+    x: 1066.0
+    y: 463.0
     z: 0.0
     w: 1.0
   }
@@ -1315,7 +1315,7 @@ nodes {
 nodes {
   position {
     x: 920.0
-    y: 370.0
+    y: 582.0
     z: 0.0
     w: 1.0
   }
@@ -1479,7 +1479,7 @@ nodes {
 nodes {
   position {
     x: 918.0
-    y: 470.0
+    y: 682.0
     z: 0.0
     w: 1.0
   }
@@ -1529,6 +1529,68 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: false
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 462.0
+    y: 406.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 800.0
+    y: 400.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: ""
+  font: "larryfont"
+  id: "console"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_NW
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: true
   layer: ""
   inherit_alpha: true
   alpha: 1.0

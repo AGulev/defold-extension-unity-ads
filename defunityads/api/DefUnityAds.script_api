@@ -143,6 +143,12 @@
   - name: TYPE_BANNER
     type: number
 
+  - name: TYPE_INITIALIZED
+    type: number
+
+  - name: TYPE_INIT_ERROR
+    type: number
+
 
 #*****************************************************************************************************
 
@@ -176,6 +182,16 @@
   - name: ERROR_INTERNAL
     type: number
 
+#*****************************************************************************************************
+
+  - name: INIT_ERROR_INTERNAL_ERROR
+    type: number
+
+  - name: INIT_ERROR_INVALID_ARGUMENT
+    type: number
+
+  - name: INIT_ERROR_AD_BLOCKER_DETECTED
+    type: number
 
 #*****************************************************************************************************
 

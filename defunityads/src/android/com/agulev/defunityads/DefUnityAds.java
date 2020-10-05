@@ -1,6 +1,7 @@
 package com.agulev.defunityads;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.os.Build;
 
 import com.unity3d.ads.IUnityAdsListener;
+import com.unity3d.ads.IUnityAdsInitializationListener;
 import com.unity3d.ads.UnityAds;
 
 import com.unity3d.services.banners.view.BannerPosition;
@@ -30,18 +32,24 @@ public class DefUnityAds {
     public static native void onUnityBannerError(int error, String message);
     public static native void onUnityBannerDidLeaveApp(String placementId);
 
+    public static native void onUnityAdsInitializationError(int error, String message);
+    public static native void onUnityAdsInitialized();
+
     //-----
 
     private DefUnityAdsListener defUnityAdsListener;
+    private DefUnityAdsInitializationListener defUnityAdsInitListener;
     private Activity activity;
 
     public DefUnityAds(Activity appActivity) {
         activity = appActivity;
         defUnityAdsListener = new DefUnityAdsListener();
+        defUnityAdsInitListener = new DefUnityAdsInitializationListener();
     }
 
     public void initialize(String gameId, boolean testMode) {
-        UnityAds.initialize(activity, gameId, defUnityAdsListener, testMode);
+        UnityAds.initialize(activity, gameId, testMode, false, defUnityAdsInitListener);
+        UnityAds.setListener(defUnityAdsListener);
     }
 
     public void show(String placementId) {
@@ -105,6 +113,18 @@ public class DefUnityAds {
         @Override
         public void onUnityAdsFinish(String placementId, UnityAds.FinishState result) {
             DefUnityAds.onUnityAdsFinish(placementId, result.ordinal());
+        }
+    }
+
+    private class DefUnityAdsInitializationListener implements IUnityAdsInitializationListener {
+        @Override
+        public void onInitializationComplete() {
+            DefUnityAds.onUnityAdsInitialized();
+        }
+
+        @Override
+        public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+            DefUnityAds.onUnityAdsInitializationError(error.ordinal(), message);
         }
     }
 

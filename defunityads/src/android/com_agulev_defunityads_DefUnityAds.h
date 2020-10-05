@@ -72,6 +72,22 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerErro
 JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityBannerDidLeaveApp
 (JNIEnv *, jclass, jstring);
 
+/*
+* Class:     com_agulev_defunityads_DefUnityAds
+* Method:    onUnityAdsInitializationError
+* Signature: (ILjava/lang/String;)V
+*/
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitializationError
+(JNIEnv *, jclass, jint, jstring);
+
+/*
+* Class:     com_agulev_defunityads_DefUnityAds
+* Method:    onUnityAdsInitialized
+* Signature: ()V
+*/
+JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAds_onUnityAdsInitialized
+(JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

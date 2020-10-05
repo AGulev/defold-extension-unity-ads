@@ -11,7 +11,9 @@ enum DefUnityAdsCallbackType
   TYPE_DID_ERROR,
   TYPE_DID_FINISH,
   TYPE_BANNER,
-  TYPE_BANNER_ERROR
+  TYPE_BANNER_ERROR,
+  TYPE_INITIALIZED,
+  TYPE_INIT_ERROR
 };
 
 enum DefUnityAdsFinishState
@@ -33,6 +35,13 @@ enum DefUnityAdsError
   ERROR_DEVICE_ID,
   ERROR_SHOW,
   ERROR_INTERNAL
+};
+
+enum DefUnityInitializeAdsError
+{
+  INIT_ERROR_INTERNAL_ERROR,
+  INIT_ERROR_INVALID_ARGUMENT,
+  INIT_ERROR_AD_BLOCKER_DETECTED,
 };
 
 enum DefUnityAdsBannerEvent

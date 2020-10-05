@@ -155,6 +155,8 @@ unityads.TYPE_DID_ERROR
 unityads.TYPE_DID_FINISH
 unityads.TYPE_BANNER
 unityads.TYPE_BANNER_ERROR
+unityads.TYPE_INITIALIZED
+unityads.TYPE_INIT_ERROR
 ```
 ##### unityads.TYPE_IS_READY
 ```lua
@@ -250,6 +252,25 @@ local function defunityads_callback(self, msg_type, message)
   end
 end
 ```
+
+#### Initialization error types
+```lua
+--possible message.error for unityads.TYPE_INIT_ERROR:
+unityads.INIT_ERROR_INTERNAL_ERROR -- initialization failed due to environment or internal services
+unityads.INIT_ERROR_INVALID_ARGUMENT -- initialization failed due to invalid argument(e.g. game ID)
+unityads.INIT_ERROR_AD_BLOCKER_DETECTED -- initialization failed due to url being blocked
+```
+```lua
+local function defunityads_callback(self, msg_type, message)
+  if msg_type == unityads.TYPE_INIT_ERROR then
+    if message.error == unityads.INIT_ERROR_INTERNAL_ERROR then
+      ...
+    elseif message.error == unityads.INIT_ERROR_INVALID_ARGUMENT then
+    ...
+  end
+end
+```
+
 #### Finish states
 [Original doc about finish states](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_finishstates)
 ```lua
