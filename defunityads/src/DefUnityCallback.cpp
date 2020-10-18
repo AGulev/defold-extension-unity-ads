@@ -4,86 +4,58 @@
 #include <stdlib.h>
 
 namespace dmUnityAds {
-    
-static DefUnityAdsListener     defUtoLua;
-static dmArray<CallbackData>   m_callbacksQueue;
-static dmMutex::HMutex         m_mutex;
 
-static void RegisterCallback(lua_State* L, int index, DefUnityAdsListener* cbk)
+static dmScript::LuaCallbackInfo* defUtoLua = 0x0;
+static dmArray<CallbackData> m_callbacksQueue;
+static dmMutex::HMutex m_mutex;
+
+static void DestroyCallback()
 {
-    if(cbk->m_Callback != LUA_NOREF)
-    {
-        dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Callback);
-        dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Self);
-    }
-
-    cbk->m_L = dmScript::GetMainThread(L);
-
-    luaL_checktype(L, index, LUA_TFUNCTION);
-    lua_pushvalue(L, index);
-    cbk->m_Callback = dmScript::Ref(L, LUA_REGISTRYINDEX);
-
-    dmScript::GetInstance(L);
-    cbk->m_Self = dmScript::Ref(L, LUA_REGISTRYINDEX);
-}
-
-static void UnregisterCallback(DefUnityAdsListener* cbk)
-{
-    if(cbk->m_Callback != LUA_NOREF)
-    {
-        dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Callback);
-        dmScript::Unref(cbk->m_L, LUA_REGISTRYINDEX, cbk->m_Self);
-        cbk->m_Callback = LUA_NOREF;
+    if (defUtoLua != 0x0) {
+        dmScript::DestroyCallback(defUtoLua);
+        defUtoLua = 0x0;
     }
 }
 
-static void InvokeCallback(int type, char*key_1, char*value_1, char*key_2, int value_2, DefUnityAdsListener* cbk)
+static void InvokeCallback(int type, char*key_1, char*value_1, char*key_2, int value_2)
 {
-    if(cbk->m_Callback == LUA_NOREF)
-    {
-        dmLogInfo("DefUnityAds callback do not exist.");
+    if (!dmScript::IsCallbackValid(defUtoLua)) {
+        dmLogError("DefUnityAds callback is invalid. Set new callback unsing `unityads.setCallback()` funciton.");
         return;
     }
 
-    lua_State* L = cbk->m_L;
+    lua_State* L = dmScript::GetCallbackLuaContext(defUtoLua);
     int top = lua_gettop(L);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, cbk->m_Callback);
-    lua_rawgeti(L, LUA_REGISTRYINDEX, cbk->m_Self);
-    lua_pushvalue(L, -1);
-    dmScript::SetInstance(L);
 
-    if (!dmScript::IsInstanceValid(L)) {
-        UnregisterCallback(&defUtoLua);
-        dmLogError("Could not run DefUnityAds callback because the instance has been deleted.");
-        lua_pop(L, 2);
+    if (!dmScript::SetupCallback(defUtoLua)) {
+        return;
     }
-    else {
-        lua_pushnumber(L, type);
-        int count_table_elements = 0;
-        if (key_1 != NULL) {
-            count_table_elements = 1;
-        }
+
+    lua_pushnumber(L, type);
+    int count_table_elements = 0;
+    if (key_1 != NULL) {
+        count_table_elements = 1;
+    }
+    if (key_2 != NULL) {
+        count_table_elements = 2;
+    }
+    if (count_table_elements > 0) {
+        lua_createtable(L, 0, count_table_elements);
+        luaL_push_pair_str_str(L, key_1, value_1);
         if (key_2 != NULL) {
-            count_table_elements = 2;
-        }
-        if (count_table_elements > 0) {
-            lua_createtable(L, 0, count_table_elements);
-            luaL_push_pair_str_str(L, key_1, value_1);
-            if (key_2 != NULL) {
-                luaL_push_pair_str_num(L, key_2, value_2);
-            }
-        }
-
-        int number_of_arguments = 3;
-        if (count_table_elements == 0) {
-            number_of_arguments -= 1;
-        }
-        int ret = lua_pcall(L, number_of_arguments, 0, 0);
-        if(ret != 0) {
-            dmLogError("Error running callback: %s", lua_tostring(L, -1));
-            lua_pop(L, 1);
+            luaL_push_pair_str_num(L, key_2, value_2);
         }
     }
+
+    int number_of_arguments = 3;
+    if (count_table_elements == 0) {
+        number_of_arguments -= 1;
+    }
+
+    int ret = dmScript::PCall(L, number_of_arguments, 0);
+    (void)ret;
+    dmScript::TeardownCallback(defUtoLua);
+
     assert(top == lua_gettop(L));
 }
 
@@ -93,22 +65,22 @@ void Initialize(){
 
 void Finalize(){
     dmMutex::Delete(m_mutex);
-    UnregisterCallback(&defUtoLua);
+    DestroyCallback();
 }
 
 void SetLuaCallback(lua_State* L, int pos){
     int type = lua_type(L, pos);
     if (type == LUA_TNONE || type == LUA_TNIL) {
-        UnregisterCallback(&defUtoLua);
+        DestroyCallback();
     }
-    else{
-        RegisterCallback(L, pos, &defUtoLua);
+    else {
+        defUtoLua = dmScript::CreateCallback(L, pos);
     }
 }
 
 void AddToQueue(int type, char*key_1, char*value_1, char*key_2, int value_2){
     DM_MUTEX_SCOPED_LOCK(m_mutex);
-    
+
     CallbackData data;
     data.msg_type = type;
     data.key_1 = key_1;
@@ -133,7 +105,7 @@ void CallbackUpdate(){
     for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
     {
         CallbackData* data = &m_callbacksQueue[i];
-        InvokeCallback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2, &defUtoLua);
+        InvokeCallback(data->msg_type, data->key_1, data->value_1, data->key_2, data->value_2);
         if(data->value_1)
             free(data->value_1);
         data->value_1 = 0;
