@@ -10,3 +10,5 @@ builtins
 .internal
 /bob.jar
 /bundle.sh
+/debug.keystore
+/debug.keystore.pass.txt
