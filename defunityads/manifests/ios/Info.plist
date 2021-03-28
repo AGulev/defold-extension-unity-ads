@@ -2,8 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
+        {{#unityads.tracking_usage_description}}
+        <key>NSUserTrackingUsageDescription</key>
+        <string>{{unityads.tracking_usage_description}}</string>
+        {{/unityads.tracking_usage_description}}
+        {{^unityads.tracking_usage_description}}
         <key>NSUserTrackingUsageDescription</key>
         <string>Your data will be used to provide you a better and personalized ad experience.</string>
+        {{/unityads.tracking_usage_description}}
+        
         <key>SKAdNetworkItems</key>
         <array>
             <dict>

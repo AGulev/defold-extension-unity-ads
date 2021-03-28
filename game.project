@@ -29,3 +29,6 @@ bundle_identifier = com.agulev.test
 package = com.agulev.test
 immersive_mode = 1
 
+[unityads]
+tracking_usage_description = Your data will be used to provide you a better and personalized ad experience.
+
