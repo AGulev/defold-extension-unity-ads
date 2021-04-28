@@ -4,4 +4,4 @@ platforms:
   ios:
     context:
         weakFrameworks: ["AdSupport"]
-        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
+        frameworks: ["AVFoundation", "CoreMedia", "UIKit", "AppTrackingTransparency"]
