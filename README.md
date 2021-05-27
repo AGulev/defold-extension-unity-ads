@@ -16,6 +16,11 @@ Open your game.project file and in the dependencies field under project add:
 
 or point to the ZIP file of a [specific release](https://github.com/AGulev/DefVideoAds/releases).
 
+`Minimum SDK version` in `game.project->Android` should be 19 or above.
+
+<img width="791" alt="image" src="https://user-images.githubusercontent.com/2209596/119895871-8ed2f680-bf3e-11eb-90bc-cf3159a76d0a.png">
+
+
 ## Example
 
 See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.

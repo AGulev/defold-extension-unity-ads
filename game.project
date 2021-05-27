@@ -1,7 +1,7 @@
 [project]
 title = DefVideoAds
 version = 1.0
-dependencies = https://github.com/andsve/dirtylarry/archive/master.zip
+dependencies#0 = https://github.com/andsve/dirtylarry/archive/master.zip
 
 [bootstrap]
 main_collection = /example/main.collectionc
@@ -28,6 +28,7 @@ bundle_identifier = com.agulev.test
 [android]
 package = com.agulev.test
 immersive_mode = 1
+minimum_sdk_version = 19
 
 [unityads]
 tracking_usage_description = Your data will be used to provide you a better and personalized ad experience.
