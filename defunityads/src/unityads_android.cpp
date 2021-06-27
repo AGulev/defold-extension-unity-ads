@@ -15,6 +15,44 @@ JNIEXPORT void JNICALL Java_com_agulev_defunityads_DefUnityAdsJNI_unityadsAddToQ
 
 namespace dmUnityAds {
 
+static void CallVoidMethod(jobject instance, jmethodID method)
+{
+  ThreadAttacher attacher;
+  JNIEnv *env = attacher.env;
+
+  env->CallVoidMethod(instance, method);
+}
+
+static bool CallBoolMethod(jobject instance, jmethodID method)
+{
+  ThreadAttacher attacher;
+  JNIEnv *env = attacher.env;
+
+  jboolean return_value = (jboolean)env->CallBooleanMethod(instance, method);
+  return JNI_TRUE == return_value;
+}
+
+static void CallVoidMethodChar(jobject instance, jmethodID method, const char* cstr)
+{
+  ThreadAttacher attacher;
+  JNIEnv *env = attacher.env;
+
+  jstring jstr = env->NewStringUTF(cstr);
+  env->CallVoidMethod(instance, method, jstr);
+  env->DeleteLocalRef(jstr);
+}
+
+static bool CallBoolMethodChar(jobject instance, jmethodID method, const char* cstr)
+{
+  ThreadAttacher attacher;
+  JNIEnv *env = attacher.env;
+
+  jstring jstr = env->NewStringUTF(cstr);
+  jboolean return_value = (jboolean)env->CallBooleanMethod(instance, method, jstr);
+  env->DeleteLocalRef(jstr);
+  return JNI_TRUE == return_value;
+}
+
 struct DefUnityAdsClass
 {
   jobject                 m_DUADS_JNI;
@@ -34,11 +72,13 @@ struct DefUnityAdsClass
   jmethodID               m_unloadBanner;
   jmethodID               m_showBanner;
   jmethodID               m_hideBanner;
+  jmethodID               m_requestIDFA;
 };
 
 DefUnityAdsClass g_duads;
 
-void Initialize_Ext() {
+void Initialize_Ext()
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   ClassLoader class_loader = ClassLoader(env);
@@ -59,12 +99,14 @@ void Initialize_Ext() {
   g_duads.m_unloadBanner = env->GetMethodID(cls, "unloadBanner", "()V");
   g_duads.m_showBanner = env->GetMethodID(cls, "showBanner", "()V");
   g_duads.m_hideBanner = env->GetMethodID(cls, "hideBanner", "()V");
+  g_duads.m_requestIDFA = env->GetMethodID(cls, "requestIDFA", "()V");
 
   jmethodID jni_constructor = env->GetMethodID(cls, "<init>", "(Landroid/app/Activity;)V");
   g_duads.m_DUADS_JNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, dmGraphics::GetNativeAndroidActivity()));
 }
 
-void Initialize(const char*game_id, bool isDebug, bool enablePerPlacementLoad) {
+void Initialize(const char*game_id, bool isDebug, bool enablePerPlacementLoad)
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -74,74 +116,51 @@ void Initialize(const char*game_id, bool isDebug, bool enablePerPlacementLoad) {
   env->DeleteLocalRef(appid);
 }
 
-void Finalize_Ext() {
+void Finalize_Ext()
+{
   UnloadBanner();
 }
 
-void Show(char* placementId) {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-
-  jstring jplacementId = env->NewStringUTF(placementId);
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_show, jplacementId);
-  env->DeleteLocalRef(jplacementId);
+void Show(char* placementId)
+{
+  CallVoidMethodChar(g_duads.m_DUADS_JNI, g_duads.m_show, placementId);
 }
 
-void Load(char* placementId) {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-
-  jstring jplacementId = env->NewStringUTF(placementId);
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_load, jplacementId);
-  env->DeleteLocalRef(jplacementId);
+void Load(char* placementId)
+{
+  CallVoidMethodChar(g_duads.m_DUADS_JNI, g_duads.m_show, placementId);
 }
 
-void SetDebugMode(bool is_debug) {
+void SetDebugMode(bool is_debug)
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
   env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setDebugMode, is_debug ? JNI_TRUE : JNI_FALSE);
 }
 
-bool IsReady(char* placementId) {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-  
-  jstring jplacementId = env->NewStringUTF(placementId);
-  jboolean return_value = (jboolean)env->CallBooleanMethod(g_duads.m_DUADS_JNI, g_duads.m_isReady, jplacementId);
-  env->DeleteLocalRef(jplacementId);
-
-  return JNI_TRUE == return_value;
+bool IsReady(char* placementId)
+{
+  return CallBoolMethodChar(g_duads.m_DUADS_JNI, g_duads.m_isReady, placementId);
 }
 
-bool IsSupported() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-  
-  jboolean return_value = (jboolean)env->CallBooleanMethod(g_duads.m_DUADS_JNI, g_duads.m_isSupported);
-
-  return JNI_TRUE == return_value;
+bool IsSupported()
+{
+  return CallBoolMethod(g_duads.m_DUADS_JNI, g_duads.m_isSupported);
 }
 
-bool IsInitialized() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-  
-  jboolean return_value = (jboolean)env->CallBooleanMethod(g_duads.m_DUADS_JNI, g_duads.m_isInitialized);
-
-  return JNI_TRUE == return_value;
+bool IsInitialized()
+{
+  return CallBoolMethod(g_duads.m_DUADS_JNI, g_duads.m_isInitialized);
 }
 
-bool GetDebugMode() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-  
-  jboolean return_value = (jboolean)env->CallBooleanMethod(g_duads.m_DUADS_JNI, g_duads.m_getDebugMode);
-
-  return JNI_TRUE == return_value;
+bool GetDebugMode()
+{
+  return CallBoolMethod(g_duads.m_DUADS_JNI, g_duads.m_getDebugMode);
 }
 
-char const* GetVersion() {
+char const* GetVersion()
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   
@@ -153,7 +172,8 @@ char const* GetVersion() {
   return new_char;
 }
 
-int GetPlacementState(char* placementId) {
+int GetPlacementState(char* placementId)
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -161,13 +181,14 @@ int GetPlacementState(char* placementId) {
   jint return_value = (jint)env->CallIntMethod(g_duads.m_DUADS_JNI, g_duads.m_getPlacementState, jplacementId);
   env->DeleteLocalRef(jplacementId);
 
-  return JNI_TRUE == return_value;
+  return return_value;
 }
 
 static const char *positions[] = { "topleft", "topcenter", 
   "topright", "bottomleft", "bottomcenter", "bottomright", "center"};
 
-void SetBannerPosition(DefUnityBannerPosition position) {
+void SetBannerPosition(DefUnityBannerPosition position)
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -176,7 +197,8 @@ void SetBannerPosition(DefUnityBannerPosition position) {
   env->DeleteLocalRef(jposition);
 }
 
-void LoadBanner(char* placementId, int width, int height) {
+void LoadBanner(char* placementId, int width, int height)
+{
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
 
@@ -185,25 +207,24 @@ void LoadBanner(char* placementId, int width, int height) {
   env->DeleteLocalRef(jplacementId);
 }
 
-void UnloadBanner() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_unloadBanner);
+void UnloadBanner()
+{
+  CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_unloadBanner);
 }
 
-void ShowBanner() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
-
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_showBanner);
+void ShowBanner()
+{
+  CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_showBanner);
 }
 
-void HideBanner() {
-  ThreadAttacher attacher;
-  JNIEnv *env = attacher.env;
+void HideBanner()
+{
+  CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_hideBanner);
+}
 
-  env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_hideBanner);
+void RequestIDFA()
+{
+  CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_requestIDFA);
 }
 
 } //namespaces

@@ -48,6 +48,7 @@ public class DefUnityAdsJNI {
     private static final int EVENT_LOADED =               6;
     private static final int EVENT_LEFT_APPLICATION =     7;
     private static final int EVENT_SKIPPED =              8;
+    private static final int EVENT_NOT_SUPPORTED =        9;
 
     private static final int ERROR_INTERNAL =             1;
     private static final int ERROR_INVALID_ARGUMENT =     2;
@@ -276,6 +277,10 @@ public class DefUnityAdsJNI {
             return UnityAds.getPlacementState().ordinal();
         }
         return UnityAds.getPlacementState(placementId).ordinal();
+    }
+
+    public void requestIDFA() {
+        sendSimpleMessage(MSG_IDFA, EVENT_NOT_SUPPORTED);
     }
 
 //Banners:

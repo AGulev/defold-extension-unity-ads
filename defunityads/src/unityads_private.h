@@ -35,6 +35,7 @@ void LoadBanner(char* placementId, int width, int height);
 void UnloadBanner();
 void ShowBanner();
 void HideBanner();
+void RequestIDFA();
 
 bool IsReady(char* placementId);
 bool IsSupported();

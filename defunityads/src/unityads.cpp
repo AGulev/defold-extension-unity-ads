@@ -12,7 +12,9 @@
 
 namespace dmUnityAds {
   
-  static int Lua_Initialize(lua_State* L) {
+static int Lua_Initialize(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   const char *gameId_lua = luaL_checkstring(L, 1);
   bool enableDebugMode_lua = false;
   bool enablePerPlacementLoad_lua = false;
@@ -27,12 +29,16 @@ namespace dmUnityAds {
   return 0;
 }
 
-static int Lua_SetCallback(lua_State* L) {
+static int Lua_SetCallback(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   SetLuaCallback(L, 1);
   return 0;
 }
 
-static int Lua_Show(lua_State* L) {
+static int Lua_Show(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
@@ -41,7 +47,9 @@ static int Lua_Show(lua_State* L) {
   return 0;
 }
 
-static int Lua_Load(lua_State* L) {
+static int Lua_Load(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
@@ -50,7 +58,9 @@ static int Lua_Load(lua_State* L) {
   return 0;
 }
 
-static int Lua_IsReady(lua_State* L) {
+static int Lua_IsReady(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
@@ -60,31 +70,41 @@ static int Lua_IsReady(lua_State* L) {
   return 1;
 }
 
-static int Lua_IsInitialized(lua_State* L) {
+static int Lua_IsInitialized(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   bool status = IsInitialized();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int Lua_IsSupported(lua_State* L) {
+static int Lua_IsSupported(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   bool status = IsSupported();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int Lua_GetDebugMode(lua_State* L) {
+static int Lua_GetDebugMode(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   bool status = GetDebugMode();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int Lua_GetVersion(lua_State* L) {
+static int Lua_GetVersion(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   const char *version = GetVersion();
   lua_pushstring(L, version);
   return 1;
 }
 
-static int Lua_GetPlacementState(lua_State* L) {
+static int Lua_GetPlacementState(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 1);
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
@@ -94,19 +114,25 @@ static int Lua_GetPlacementState(lua_State* L) {
   return 1;
 }
 
-static int Lua_SetDebugMode(lua_State* L) {
+static int Lua_SetDebugMode(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   bool enableDebugMode_lua = luaL_checkbool(L, 1);
   SetDebugMode(enableDebugMode_lua);
   return 0;
 }
 
-static int Lua_SetBannerPosition(lua_State* L) {
+static int Lua_SetBannerPosition(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   int position_lua = luaL_checknumber(L, 1);
   SetBannerPosition((DefUnityBannerPosition)position_lua);
   return 0;
 }
 
-static int Lua_LoadBanner(lua_State* L) {
+static int Lua_LoadBanner(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   char *placementId_lua = (char*)luaL_checkstring(L, 1);
   int width_lua = 320;
   int height_lua = 50;
@@ -120,18 +146,31 @@ static int Lua_LoadBanner(lua_State* L) {
   return 0;
 }
 
-static int Lua_UnloadBanner(lua_State* L) {
+static int Lua_UnloadBanner(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   UnloadBanner();
   return 0;
 }
 
-static int Lua_ShowBanner(lua_State* L) {
+static int Lua_ShowBanner(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   ShowBanner();
   return 0;
 }
 
-static int Lua_HideBanner(lua_State* L) {
+static int Lua_HideBanner(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
   HideBanner();
+  return 0;
+}
+
+static int Lua_RequestIDFA(lua_State* L)
+{
+  DM_LUA_STACK_CHECK(L, 0);
+  RequestIDFA();
   return 0;
 }
 
@@ -153,6 +192,7 @@ static const luaL_reg Module_methods[] =
   {"unloadBanner", Lua_UnloadBanner},
   {"showBanner", Lua_ShowBanner},
   {"hideBanner", Lua_HideBanner},
+  {"request_idfa", Lua_RequestIDFA},
   {0, 0}
 };
 
@@ -165,7 +205,29 @@ static void LuaInit(lua_State* L)
   lua_pushnumber(L, (lua_Number) name); \
   lua_setfield(L, -2, #name); \
 
-  SETCONSTANT(PLACEMENT_STATE_READY)
+  SETCONSTANT(EVENT_COMPLETED)
+  SETCONSTANT(EVENT_SDK_ERROR)
+  SETCONSTANT(EVENT_JSON_ERROR)
+  SETCONSTANT(EVENT_CLICKED)
+  SETCONSTANT(EVENT_START)
+  SETCONSTANT(EVENT_LOADED)
+  SETCONSTANT(EVENT_LEFT_APPLICATION)
+  SETCONSTANT(EVENT_SKIPPED)
+  SETCONSTANT(EVENT_NOT_SUPPORTED)
+  
+  SETCONSTANT(ERROR_INTERNAL)
+  SETCONSTANT(ERROR_INVALID_ARGUMENT)
+  SETCONSTANT(ERROR_NOT_INITIALIZED)
+  SETCONSTANT(ERROR_NOT_READY)
+  SETCONSTANT(ERROR_VIDEO_PLAYER)
+  SETCONSTANT(ERROR_NO_CONNECTION)
+  SETCONSTANT(ERROR_ALREADY_SHOWING)
+  SETCONSTANT(ERROR_NO_FILL)
+  SETCONSTANT(ERROR_TIMEOUT)
+  SETCONSTANT(ERROR_UNKNOWN)
+  SETCONSTANT(ERROR_NATIVE)
+  SETCONSTANT(ERROR_WEBVIEW)
+  SETCONSTANT(ERROR_AD_BLOCKER_DETECTED)
 
   SETCONSTANT(PLACEMENT_STATE_READY)
   SETCONSTANT(PLACEMENT_STATE_NOT_AVAILABLE)

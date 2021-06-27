@@ -26,7 +26,8 @@ enum MessageEvent
     EVENT_START =                5,
     EVENT_LOADED =               6,
     EVENT_LEFT_APPLICATION =     7,
-    EVENT_SKIPPED =              8
+    EVENT_SKIPPED =              8,
+    EVENT_NOT_SUPPORTED =        9
 };
 
 enum Errors
