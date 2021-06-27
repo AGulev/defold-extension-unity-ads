@@ -42,7 +42,7 @@ void Initialize_Ext() {
   ThreadAttacher attacher;
   JNIEnv *env = attacher.env;
   ClassLoader class_loader = ClassLoader(env);
-  jclass cls = class_loader.load("com/agulev/defunityads/DefUnityAds");
+  jclass cls = class_loader.load("com/agulev/defunityads/DefUnityAdsJNI");
   
   g_duads.m_initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;ZZ)V");
   g_duads.m_show = env->GetMethodID(cls, "show", "(Ljava/lang/String;)V");
