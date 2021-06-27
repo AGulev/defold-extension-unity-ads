@@ -128,7 +128,7 @@ void Show(char* placementId)
 
 void Load(char* placementId)
 {
-  CallVoidMethodChar(g_duads.m_DUADS_JNI, g_duads.m_show, placementId);
+  CallVoidMethodChar(g_duads.m_DUADS_JNI, g_duads.m_load, placementId);
 }
 
 void SetDebugMode(bool is_debug)
