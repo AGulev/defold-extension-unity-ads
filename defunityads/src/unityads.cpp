@@ -39,10 +39,7 @@ static int Lua_SetCallback(lua_State* L)
 static int Lua_Show(lua_State* L)
 {
   DM_LUA_STACK_CHECK(L, 0);
-  char *placementId_lua = "";
-  if (lua_type(L, 1) != LUA_TNONE) {
-    placementId_lua = (char*)luaL_checkstring(L, 1);
-  }
+  char *placementId_lua = (char*)luaL_checkstring(L, 1);
   Show(placementId_lua);
   return 0;
 }
@@ -50,10 +47,7 @@ static int Lua_Show(lua_State* L)
 static int Lua_Load(lua_State* L)
 {
   DM_LUA_STACK_CHECK(L, 0);
-  char *placementId_lua = "";
-  if (lua_type(L, 1) != LUA_TNONE) {
-    placementId_lua = (char*)luaL_checkstring(L, 1);
-  }
+  char *placementId_lua = (char*)luaL_checkstring(L, 1);
   Load(placementId_lua);
   return 0;
 }
@@ -61,10 +55,7 @@ static int Lua_Load(lua_State* L)
 static int Lua_IsReady(lua_State* L)
 {
   DM_LUA_STACK_CHECK(L, 1);
-  char *placementId_lua = "";
-  if (lua_type(L, 1) != LUA_TNONE) {
-    placementId_lua = (char*)luaL_checkstring(L, 1);
-  }
+  char *placementId_lua = (char*)luaL_checkstring(L, 1);
   bool status = IsReady(placementId_lua);
   lua_pushboolean(L, status);
   return 1;
@@ -105,10 +96,7 @@ static int Lua_GetVersion(lua_State* L)
 static int Lua_GetPlacementState(lua_State* L)
 {
   DM_LUA_STACK_CHECK(L, 1);
-  char *placementId_lua = "";
-  if (lua_type(L, 1) != LUA_TNONE) {
-    placementId_lua = (char*)luaL_checkstring(L, 1);
-  }
+  char *placementId_lua = (char*)luaL_checkstring(L, 1);
   int state = GetPlacementState(placementId_lua);
   lua_pushnumber(L, state);
   return 1;
