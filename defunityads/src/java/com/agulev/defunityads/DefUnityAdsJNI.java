@@ -33,6 +33,7 @@ public class DefUnityAdsJNI {
 
     // duplicate of enums from unityads_callback_private.h:
     // CONSTANTS:
+
     private static final int MSG_INIT=                    1;
     private static final int MSG_SHOW =                   2;
     private static final int MSG_LOAD =                   3;
@@ -40,25 +41,27 @@ public class DefUnityAdsJNI {
     private static final int MSG_IDFA =                   5;
 
     private static final int EVENT_COMPLETED =            1;
-    private static final int EVENT_INTERNAL_ERROR =       2;
-    private static final int EVENT_INVALID_ARGUMENT =     3;
-    private static final int EVENT_AD_BLOCKER_DETECTED =  4;
-    private static final int EVENT_JSON_ERROR =           5;
-    private static final int EVENT_CLICKED =              6;
-    private static final int EVENT_START =                7;
-    private static final int EVENT_NOT_INITIALIZED =      8;
-    private static final int EVENT_NOT_READY =            9;
-    private static final int EVENT_VIDEO_PLAYER_ERROR =  10;
-    private static final int EVENT_NO_CONNECTION =       11;
-    private static final int EVENT_ALREADY_SHOWING =     12;
-    private static final int EVENT_NO_FILL =             13;
-    private static final int EVENT_TIMEOUT =             14;
-    private static final int EVENT_LOADED =              15;
-    private static final int EVENT_LEFT_APPLICATION =    16;
-    private static final int EVENT_UNKNOWN =             17;
-    private static final int EVENT_NATIVE_ERROR =        18;
-    private static final int EVENT_WEBVIEW_ERROR =       19;
-    private static final int EVENT_SKIPPED =             20;
+    private static final int EVENT_SDK_ERROR =            2;
+    private static final int EVENT_JSON_ERROR =           3;
+    private static final int EVENT_CLICKED =              4;
+    private static final int EVENT_START =                5;
+    private static final int EVENT_LOADED =               6;
+    private static final int EVENT_LEFT_APPLICATION =     7;
+    private static final int EVENT_SKIPPED =              8;
+
+    private static final int ERROR_INTERNAL =             1;
+    private static final int ERROR_INVALID_ARGUMENT =     2;
+    private static final int ERROR_NOT_INITIALIZED =      3;
+    private static final int ERROR_NOT_READY =            4;
+    private static final int ERROR_VIDEO_PLAYER =         5;
+    private static final int ERROR_NO_CONNECTION =        6;
+    private static final int ERROR_ALREADY_SHOWING =      7;
+    private static final int ERROR_NO_FILL =              8;
+    private static final int ERROR_TIMEOUT =              9;
+    private static final int ERROR_UNKNOWN =             10;
+    private static final int ERROR_NATIVE =              11;
+    private static final int ERROR_WEBVIEW =             12;
+    private static final int ERROR_AD_BLOCKER_DETECTED = 13;
 
 
     // END CONSTANTS
@@ -110,6 +113,20 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
+      private void sendSimpleMessage(int msg, int eventId, String key_2, int value_2, String key_3, String value_3) {
+      String message = null;
+      try {
+          JSONObject obj = new JSONObject();
+          obj.put("event", eventId);
+          obj.put(key_2, value_2);
+          obj.put(key_3, value_3);
+          message = obj.toString();
+      } catch (JSONException e) {
+          message = getJsonConversionErrorMessage(e.getLocalizedMessage());
+      }
+      unityadsAddToQueue(msg, message);
+    }
+
     public void initialize(String gameId, boolean testMode, boolean enablePerPlacementLoad) {
         UnityAds.initialize(activity, gameId, testMode, enablePerPlacementLoad, new IUnityAdsInitializationListener() {
             @Override
@@ -119,19 +136,19 @@ public class DefUnityAdsJNI {
 
             @Override
             public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-                int event = 1;
+                int code = 1;
                 switch (error) {
                     case INTERNAL_ERROR:
-                        event = EVENT_INTERNAL_ERROR;
+                        code = ERROR_INTERNAL;
                         break;
                     case INVALID_ARGUMENT:
-                        event = EVENT_INVALID_ARGUMENT;
+                        code = ERROR_INVALID_ARGUMENT;
                         break;
                     case AD_BLOCKER_DETECTED:
-                        event = EVENT_AD_BLOCKER_DETECTED;
+                        code = ERROR_AD_BLOCKER_DETECTED;
                         break;
                 }
-                sendSimpleMessage(MSG_INIT, event, "error", message);
+                sendSimpleMessage(MSG_INIT, EVENT_SDK_ERROR, "code", code,"error", message);
             }
         });
     }
@@ -141,31 +158,31 @@ public class DefUnityAdsJNI {
             @Override
             public 
             void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
-                int event = 1;
+                int code = 1;
                 switch (error) {
                     case NOT_INITIALIZED:
-                        event = EVENT_NOT_INITIALIZED;
+                        code = ERROR_NOT_INITIALIZED;
                         break;
                     case NOT_READY:
-                        event = EVENT_NOT_READY;
+                        code = ERROR_NOT_READY;
                         break;
                     case VIDEO_PLAYER_ERROR:
-                        event = EVENT_VIDEO_PLAYER_ERROR;
+                        code = ERROR_VIDEO_PLAYER;
                         break;
                     case INVALID_ARGUMENT:
-                        event = EVENT_INVALID_ARGUMENT;
+                        code = ERROR_INVALID_ARGUMENT;
                         break;
                     case NO_CONNECTION:
-                        event = EVENT_NO_CONNECTION;
+                        code = ERROR_NO_CONNECTION;
                         break;
                     case ALREADY_SHOWING:
-                        event = EVENT_ALREADY_SHOWING;
+                        code = ERROR_ALREADY_SHOWING;
                         break;
                     case INTERNAL_ERROR:
-                        event = EVENT_INTERNAL_ERROR;
+                        code = ERROR_INTERNAL;
                         break;
                 }
-                sendSimpleMessage(MSG_SHOW, event, "error", message);
+                sendSimpleMessage(MSG_SHOW, EVENT_SDK_ERROR, "code", code,"error", message);
             }
 
             @Override
@@ -204,25 +221,25 @@ public class DefUnityAdsJNI {
 
             @Override
             public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
-                int event = 1;
+                int code = 1;
                 switch (error) {
                     case INITIALIZE_FAILED:
-                        event = EVENT_NOT_INITIALIZED;
+                        code = ERROR_NOT_INITIALIZED;
                         break;
                     case INTERNAL_ERROR:
-                        event = EVENT_INTERNAL_ERROR;
+                        code = ERROR_INTERNAL;
                         break;
                     case INVALID_ARGUMENT:
-                        event = EVENT_INVALID_ARGUMENT;
+                        code = ERROR_INVALID_ARGUMENT;
                         break;
                     case NO_FILL:
-                        event = EVENT_NO_FILL;
+                        code = ERROR_NO_FILL;
                         break;
                     case TIMEOUT:
-                        event = EVENT_TIMEOUT;
+                        code = ERROR_TIMEOUT;
                         break;
                 }
-                sendSimpleMessage(MSG_SHOW, event, "error", message);
+                sendSimpleMessage(MSG_LOAD, EVENT_SDK_ERROR, "code", code,"error", message);
             }
         });
     }
@@ -310,22 +327,22 @@ public class DefUnityAdsJNI {
 
                 @Override
                 public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
-                    int event = 1;
+                    int code = 1;
                     switch (errorInfo.errorCode) {
                         case UNKNOWN:
-                            event = EVENT_UNKNOWN;
+                            code = ERROR_UNKNOWN;
                             break;
                         case NATIVE_ERROR:
-                            event = EVENT_NATIVE_ERROR;
+                            code = ERROR_NATIVE;
                             break;
                         case WEBVIEW_ERROR:
-                            event = EVENT_WEBVIEW_ERROR;
+                            code = ERROR_WEBVIEW;
                             break;
                         case NO_FILL:
-                            event = EVENT_NO_FILL;
+                            code = ERROR_NO_FILL;
                             break;
                         }
-                    sendSimpleMessage(MSG_BANNER, event, "error", errorInfo.errorMessage);
+                    sendSimpleMessage(MSG_BANNER, EVENT_SDK_ERROR, "code", code,"error", errorInfo.errorMessage);
                 }
 
                 @Override
