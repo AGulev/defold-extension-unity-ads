@@ -7,93 +7,106 @@
 
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 #include "utils/LuaUtils.h"
-#include "private_DefUnityCallback.h"
-#include "private_DefUnityAds.h"
+#include "unityads_callback_private.h"
+#include "unityads_private.h"
 
 namespace dmUnityAds {
   
-static int Initialize(lua_State* L) {
+  static int Lua_Initialize(lua_State* L) {
   const char *gameId_lua = luaL_checkstring(L, 1);
   bool enableDebugMode_lua = false;
+  bool enablePerPlacementLoad_lua = false;
   SetLuaCallback(L, 2);
   if (lua_type(L, 3) != LUA_TNONE) {
     enableDebugMode_lua = luaL_checkbool(L, 3);
   }
-  initialize(gameId_lua, enableDebugMode_lua);
+  if (lua_type(L, 4) != LUA_TNONE) {
+    enablePerPlacementLoad_lua = luaL_checkbool(L, 4);
+  }
+  Initialize(gameId_lua, enableDebugMode_lua, enablePerPlacementLoad_lua);
   return 0;
 }
 
-static int SetCallback(lua_State* L) {
+static int Lua_SetCallback(lua_State* L) {
   SetLuaCallback(L, 1);
   return 0;
 }
 
-static int Show(lua_State* L) {
+static int Lua_Show(lua_State* L) {
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
   }
-  show(placementId_lua);
+  Show(placementId_lua);
   return 0;
 }
 
-static int IsReady(lua_State* L) {
+static int Lua_Load(lua_State* L) {
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
   }
-  bool status = isReady(placementId_lua);
+  Load(placementId_lua);
+  return 0;
+}
+
+static int Lua_IsReady(lua_State* L) {
+  char *placementId_lua = "";
+  if (lua_type(L, 1) != LUA_TNONE) {
+    placementId_lua = (char*)luaL_checkstring(L, 1);
+  }
+  bool status = IsReady(placementId_lua);
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int IsInitialized(lua_State* L) {
-  bool status = isInitialized();
+static int Lua_IsInitialized(lua_State* L) {
+  bool status = IsInitialized();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int IsSupported(lua_State* L) {
-  bool status = isSupported();
+static int Lua_IsSupported(lua_State* L) {
+  bool status = IsSupported();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int GetDebugMode(lua_State* L) {
-  bool status = getDebugMode();
+static int Lua_GetDebugMode(lua_State* L) {
+  bool status = GetDebugMode();
   lua_pushboolean(L, status);
   return 1;
 }
 
-static int GetVersion(lua_State* L) {
-  const char *version = getVersion();
+static int Lua_GetVersion(lua_State* L) {
+  const char *version = GetVersion();
   lua_pushstring(L, version);
   return 1;
 }
 
-static int GetPlacementState(lua_State* L) {
+static int Lua_GetPlacementState(lua_State* L) {
   char *placementId_lua = "";
   if (lua_type(L, 1) != LUA_TNONE) {
     placementId_lua = (char*)luaL_checkstring(L, 1);
   }
-  int state = getPlacementState(placementId_lua);
+  int state = GetPlacementState(placementId_lua);
   lua_pushnumber(L, state);
   return 1;
 }
 
-static int SetDebugMode(lua_State* L) {
+static int Lua_SetDebugMode(lua_State* L) {
   bool enableDebugMode_lua = luaL_checkbool(L, 1);
-  setDebugMode(enableDebugMode_lua);
+  SetDebugMode(enableDebugMode_lua);
   return 0;
 }
 
-static int SetBannerPosition(lua_State* L) {
+static int Lua_SetBannerPosition(lua_State* L) {
   int position_lua = luaL_checknumber(L, 1);
-  setBannerPosition((DefUnityBannerPosition)position_lua);
+  SetBannerPosition((DefUnityBannerPosition)position_lua);
   return 0;
 }
 
-static int LoadBanner(lua_State* L) {
+static int Lua_LoadBanner(lua_State* L) {
   char *placementId_lua = (char*)luaL_checkstring(L, 1);
   int width_lua = 320;
   int height_lua = 50;
@@ -103,42 +116,43 @@ static int LoadBanner(lua_State* L) {
   if (lua_type(L, 3) != LUA_TNONE) {
     height_lua = luaL_checknumber(L, 3);
   }
-  loadBanner(placementId_lua, width_lua, height_lua);
+  LoadBanner(placementId_lua, width_lua, height_lua);
   return 0;
 }
 
-static int UnloadBanner(lua_State* L) {
-  unloadBanner();
+static int Lua_UnloadBanner(lua_State* L) {
+  UnloadBanner();
   return 0;
 }
 
-static int ShowBanner(lua_State* L) {
-  showBanner();
+static int Lua_ShowBanner(lua_State* L) {
+  ShowBanner();
   return 0;
 }
 
-static int HideBanner(lua_State* L) {
-  hideBanner();
+static int Lua_HideBanner(lua_State* L) {
+  HideBanner();
   return 0;
 }
 
 static const luaL_reg Module_methods[] =
 {
-  {"initialize", Initialize},
-  {"show", Show},
-  {"isReady", IsReady},
-  {"isSupported", IsSupported},
-  {"isInitialized", IsInitialized},
-  {"getDebugMode", GetDebugMode},
-  {"getVersion", GetVersion},
-  {"getPlacementState", GetPlacementState},
-  {"setDebugMode", SetDebugMode},
-  {"setCallback", SetCallback},
-  {"setBannerPosition", SetBannerPosition},
-  {"loadBanner", LoadBanner},
-  {"unloadBanner", UnloadBanner},
-  {"showBanner", ShowBanner},
-  {"hideBanner", HideBanner},
+  {"initialize", Lua_Initialize},
+  {"show", Lua_Show},
+  {"load", Lua_Load},
+  {"isReady", Lua_IsReady},
+  {"isSupported", Lua_IsSupported},
+  {"isInitialized", Lua_IsInitialized},
+  {"getDebugMode", Lua_GetDebugMode},
+  {"getVersion", Lua_GetVersion},
+  {"getPlacementState", Lua_GetPlacementState},
+  {"setDebugMode", Lua_SetDebugMode},
+  {"setCallback", Lua_SetCallback},
+  {"setBannerPosition", Lua_SetBannerPosition},
+  {"loadBanner", Lua_LoadBanner},
+  {"unloadBanner", Lua_UnloadBanner},
+  {"showBanner", Lua_ShowBanner},
+  {"hideBanner", Lua_HideBanner},
   {0, 0}
 };
 
@@ -217,26 +231,26 @@ dmExtension::Result AppInitializeUnityAds(dmExtension::AppParams* params)
 dmExtension::Result InitializeUnityAds(dmExtension::Params* params)
 {
   dmUnityAds::LuaInit(params->m_L);
-  dmUnityAds::InitExtension();
-  dmUnityAds::Initialize();
+  dmUnityAds::Initialize_Ext();
+  dmUnityAds::InitializeCallback();
   return dmExtension::RESULT_OK;
 }
 
 dmExtension::Result AppFinalizeUnityAds(dmExtension::AppParams* params)
 {
-  dmUnityAds::FinalizeExtension();
+  dmUnityAds::Finalize_Ext();
   return dmExtension::RESULT_OK;
 }
 
 dmExtension::Result FinalizeUnityAds(dmExtension::Params* params)
 {
-  dmUnityAds::Finalize();
+  dmUnityAds::FinalizeCallback();
   return dmExtension::RESULT_OK;
 }
 
 static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
 {
-  dmUnityAds::CallbackUpdate();
+  dmUnityAds::UpdateCallback();
   return dmExtension::RESULT_OK;
 }
 
