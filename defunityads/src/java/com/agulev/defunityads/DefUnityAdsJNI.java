@@ -14,6 +14,7 @@ import android.os.Build;
 import com.unity3d.ads.IUnityAdsInitializationListener;
 import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
 
 import com.unity3d.services.banners.view.BannerPosition;
@@ -128,7 +129,33 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
+
+    private class DefUnityAdsListener implements IUnityAdsListener {
+        @Override
+        public void onUnityAdsReady(final String placementId) {
+            sendSimpleMessage(MSG_LOAD, EVENT_LOADED, "placement_id", placementId);
+        }
+
+        @Override
+        public void onUnityAdsStart(String placementId) {
+            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
+        }
+
+        @Override
+        public void onUnityAdsError(UnityAds.UnityAdsError error, String message) {
+            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
+        }
+
+        @Override
+        public void onUnityAdsFinish(String placementId, UnityAds.FinishState result) {
+            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
+        }
+    }
+
     public void initialize(String gameId, boolean testMode, boolean enablePerPlacementLoad) {
+        if (!enablePerPlacementLoad) {
+            UnityAds.addListener(new DefUnityAdsListener());
+        }
         UnityAds.initialize(activity, gameId, testMode, enablePerPlacementLoad, new IUnityAdsInitializationListener() {
             @Override
             public void onInitializationComplete() {
