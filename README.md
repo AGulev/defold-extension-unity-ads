@@ -123,13 +123,11 @@ local version = unityads.get_version() -- Returns the Unity Ads SDK version as a
 ```
 
 #### unityads.show(placement_id)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#show)
 ```lua
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
 
 #### unityads.load(placement_id)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#show)
 ```lua
 unityads.load("rewardedVideo") -- load rewardedVideo
 ```
@@ -137,8 +135,8 @@ unityads.load("rewardedVideo") -- load rewardedVideo
 #### unityads.load_banner(placement_id)
 #### unityads.load_banner(placement_id, banner_width, banner_height)
 ```lua
-unityads.loadBanner("banner") -- load banner, by defaulf width = 320, height = 50
-unityads.loadBanner("banner", 320, 50) -- load banner
+unityads.load_banner("banner") -- load banner, by defaulf width = 320, height = 50
+unityads.load_banner("banner", 320, 50) -- load banner
 ```
 
 #### unityads.unload_banner()
