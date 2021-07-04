@@ -93,59 +93,110 @@ end
 
 local function unity_ads_callback(self, message_id, message)
     print(log_helper.get_msg_log(message_id, message))
+    -- message = {event = int, ...}
     if message_id == unityads.MSG_INIT then
         if message.event == unityads.EVENT_COMPLETED then
+            -- message = {placement_id = "string", ...}
         elseif message.event == unityads.EVENT_SDK_ERROR then
+            -- message = {code = int, error = "error message string"}
             if message.code == unityads.ERROR_INTERNAL then
+                -- initialization failed due to environment or internal services
             elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+                -- initialization failed due to invalid argument(e.g. game ID)
             elseif message.code == unityads.ERROR_AD_BLOCKER_DETECTED then
+                -- initialization failed due to url being blocked
             end
         elseif message.event == unityads.EVENT_JSON_ERROR then
+            -- message = {error = "error message string"}
         end
     elseif message_id == unityads.MSG_SHOW then
         if message.event == unityads.EVENT_COMPLETED then
+            -- message = {placement_id = "string"}
+            -- An event that indicates that the ad was played entirely.
         elseif message.event == unityads.EVENT_SKIPPED then
+            -- message = {placement_id = "string"}
+            -- An event that indicates that the user skipped the ad.
         elseif message.event == unityads.EVENT_START then
+            -- message = {placement_id = "string"}
+            -- UnityAds has started to show ad with a specific placement.
         elseif message.event == unityads.EVENT_CLICKED then
+            -- message = {placement_id = "string"}
+            -- UnityAds has received a click while showing ad with a specific placement.
         elseif message.event == unityads.EVENT_SDK_ERROR then
+            -- message = {code = int, error = "error message string"}
             if message.code == unityads.ERROR_NOT_INITIALIZED then
+                -- show failed due to SDK not initialized.
             elseif message.code == unityads.ERROR_NOT_READY then
+                --show failed due to placement not being ready.
             elseif message.code == unityads.ERROR_VIDEO_PLAYER then
+                -- show failed due to video player.
             elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+                -- show failed due to invalid arguments.
             elseif message.code == unityads.ERROR_NO_CONNECTION then
+                -- show failed due to internet connection.
             elseif message.code == unityads.ERROR_ALREADY_SHOWING then
+                -- show failed due to ad is already being showen.
             elseif message.code == unityads.ERROR_INTERNAL then
+                -- show failed due to environment or internal services.
             end
         elseif message.event == unityads.EVENT_JSON_ERROR then
+            -- message = {error = "error message string"}
         end
     elseif message_id == unityads.MSG_LOAD then
         if message.event == unityads.EVENT_LOADED then
+            -- message = {placement_id = "string"}
+            -- Load request has successfully filled the specified placementId with an ad that is ready to show.
         elseif message.event == unityads.EVENT_SDK_ERROR then
+            -- message = {code = int, error = "error message string"}
             if message.code == unityads.ERROR_NOT_INITIALIZED then
+                -- Error related to SDK not initialized
             elseif message.code == unityads.ERROR_INTERNAL then
+                -- Error related to environment or internal services
             elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+                -- Error related to invalid arguments
             elseif message.code == unityads.ERROR_NO_FILL then
+                -- Error related to there being no ads available
             elseif message.code == unityads.ERROR_TIMEOUT then
+                -- Error related to there being no ads available
             end
         elseif message.event == unityads.EVENT_JSON_ERROR then
+            -- message = {error = "error message string"}
         end
     elseif message_id == unityads.MSG_BANNER then
         if message.event == unityads.EVENT_LOADED then
+            -- message = {placement_id = "string"}
+            -- Banner is loaded and ready to be placed in the view hierarchy.
             self.is_loaded_banner = true
             gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
         elseif message.event == unityads.EVENT_LEFT_APPLICATION then
+            -- message = {placement_id = "string"}
+            -- Banner links outside the application.
         elseif message.event == unityads.EVENT_CLICKED then
+            -- message = {placement_id = "string"}
+            -- Banner is clicked.
         elseif message.event == unityads.EVENT_SDK_ERROR then
+            -- message = {code = int, error = "error message string"}
             if message.code == unityads.ERROR_UNKNOWN then
+                -- Unknown error 
             elseif message.code == unityads.ERROR_NATIVE then
+                -- Error related to native
             elseif message.code == unityads.ERROR_WEBVIEW then
+                -- Error related to webview
             elseif message.code == unityads.ERROR_NO_FILL then
+                -- Error related to there being no ads available
             end
         elseif message.event == unityads.EVENT_JSON_ERROR then
+            -- message = {error = "error message string"}
         end
     elseif message_id == unityads.MSG_IDFA then
         if message.event == unityads.EVENT_NOT_SUPPORTED then
+            -- IDFA isn't supported
+        elseif message.event == unityads.EVENT_STATUS_AUTORIZED then
+        elseif message.event == unityads.EVENT_STATUS_DENIED then
+        elseif message.event == unityads.EVENT_STATUS_NOT_DETERMINED then
+        elseif message.event == unityads.EVENT_STATUS_RESTRICTED then
         elseif message.event == unityads.EVENT_JSON_ERROR then
+            -- message = {error = "error message string"}
         end
     end
     update_ui(self)

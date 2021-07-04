@@ -25,116 +25,136 @@ or point to the ZIP file of a [specific release](https://github.com/AGulev/DefVi
 
 See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/example) for understand how to use extension. Especially [ui.gui_script](https://github.com/AGulev/DefVideoAds/blob/master/example/ui.gui_script) file.
 
-![Example screenshot](https://user-images.githubusercontent.com/2209596/60367270-1b40ab80-99ee-11e9-87e8-7dc9f8108615.gif)
+![Example](https://user-images.githubusercontent.com/2209596/124395653-8ae88000-dd05-11eb-99e3-ed09bfadc850.gif)
+
 
 
 ## LUA Api
-Please, read [Android API docs](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiAndroid.html) and [iOS API docs](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiIos.html)
+Please, read [Android API docs](https://unityads.unity3d.com/help/android/api-android#iunityadsshowlistener) and [iOS API docs](https://unityads.unity3d.com/help/ios/api-ios#unityadsloaddelegate)
 ### Methods
-#### unityads.initialize(gameID, callback)
-#### unityads.initialize(gameID, callback, testMode)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#initialize)
+
+#### unityads.request_idfa()
 ```lua
-local function defunityads_callback(self, msg_type, message)
+unityads.request_idfa() -- iOS only method that shows IDFA request popup. On Android it always fire callback with MSG_IDFA/EVENT_NOT_SUPPORTED
+-- should be called before initialization
+```
+
+#### unityads.initialize(game_id, callback)
+#### unityads.initialize(game_id, callback, test_mode)
+#### unityads.initialize(game_id, callback, test_mode, enable_per_placement_load)
+
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#initialize) [Android](https://unityads.unity3d.com/help/android/api-android#initialize)
+```lua
+local function defunityads_callback(self, message_id, message)
 ...
 end
 ...
-unityads.initialize("1401815", defunityads_callback) -- testMode is optional parameter
-unityads.initialize("1401815", defunityads_callback, true) -- testMode is optional parameter
+unityads.initialize("1401815", defunityads_callback) -- `test_mode` is optional parameter
+unityads.initialize("1401815", defunityads_callback, true) -- `test_mode` is optional parameter
+unityads.initialize("1401815", defunityads_callback, true, true) -- `enable_per_placement_load` is optional parameter.
+-- When `enable_per_placement_load` set to true, this parameter allows you to load content for a specific Placement prior to displaying it using `load(placement_id)` method
+```
+
+#### unityads.set_callback(callback)
+
+```lua
+unityads.set_callback(defunityads_callback) -- set callback
+unityads.set_callback(nil) -- remove callback
+unityads.set_callback() -- remove callback
 ```
 
 
-#### unityads.setCallback(callback)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_android_api_reference#unityadssetlistener)
+#### unityads.set_debug_mode(is_debug)
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#setdebugmode) [Android](https://unityads.unity3d.com/help/android/api-android#setdebugmode)
 ```lua
-unityads.setCallback(defunityads_callback) -- set callback
-unityads.setCallback(nil) -- remove callback
-unityads.setCallback() -- remove callback
+unityads.set_debug_mode(true) -- set debug mode
+unityads.set_debug_mode(false) -- set debug mode
 ```
 
-
-#### unityads.setDebugMode(isDebug)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#setdebugmode)
+#### unityads.get_debug_mode()
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#setdebugmode) [Android](https://unityads.unity3d.com/help/android/api-android#setdebugmode)
 ```lua
-unityads.setDebugMode(true) -- set debug mod
+local is_debig_mode = unityads.getDebugMode() -- Returns true if current mod is debug
 ```
 
-#### unityads.getDebugMode()
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getdebugmode)
+#### unityads.get_placement_state()
+#### unityads.get_placement_state(placement_id)
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#unityadsplacementstate) [Android](https://unityads.unity3d.com/help/android/api-android#placementstate)
 ```lua
-unityads.getDebugMode() -- Returns true if current mod is debug
-```
-
-#### unityads.getPlacementState()
-#### unityads.getPlacementState(placementId)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getplacementstate)
 ```lua
-unityads.getPlacementState() -- Returns a default ad state
-unityads.getPlacementState("rewardedVideo") -- Returns rewardedVideo ad state
+local state = unityads.get_placement_state("rewardedVideo") -- Returns `rewardedVideo` ad state
 
 --possible states:
-unityads.PLACEMENT_STATE_READY
-unityads.PLACEMENT_STATE_NOT_AVAILABLE
-unityads.PLACEMENT_STATE_DISABLED
-unityads.PLACEMENT_STATE_WAITING
-unityads.PLACEMENT_STATE_NO_FILL
+unityads.PLACEMENT_STATE_READY -- The Placement is ready to show ads.
+unityads.PLACEMENT_STATE_NOT_AVAILABLE -- The Placement is not available.
+unityads.PLACEMENT_STATE_DISABLED -- The Placement was disabled.
+unityads.PLACEMENT_STATE_WAITING --  The Placement is waiting to be ready.
+unityads.PLACEMENT_STATE_NO_FILL -- The Placement has no advertisements to show.
 ```
 
-#### unityads.isReady()
-#### unityads.isReady(placementId)
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#isready)
+#### unityads.is_ready()
+#### unityads.is_ready(placement_id)
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#isready) [Android](https://unityads.unity3d.com/help/android/api-android#isready)
 ```lua
-unityads.isReady() -- Returns true if default ad is ready
-unityads.isReady("rewardedVideo") -- Returns true if rewardedVideo is ready
+local is_ready = unityads.is_ready("rewardedVideo") -- Returns `true` if rewardedVideo is ready
 ```
 
-#### unityads.isInitialized()
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#isinitialized)
+#### unityads.is_initialized()
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#initialize) [Android](https://unityads.unity3d.com/help/android/api-android#initialize)
 ```lua
-unityads.isInitialized() -- Returns true if Unity ADS initialized
+local is_initialized = unityads.is_initialized() -- Returns `true` if Unity ADS initialized
 ```
 
-#### unityads.isSupported()
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#issupported)
+#### unityads.is_supported()
+Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#initialize) [Android](https://unityads.unity3d.com/help/android/api-android#initialize)
 ```lua
-unityads.isSupported() -- Returns true if Unity Ads is supported by the current device
+local is_supported = unityads.is_supported() -- Returns `true` if Unity Ads is supported by the current device
 ```
 
-#### unityads.getVersion()
-[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#getversion)
+#### unityads.get_version()
 ```lua
-unityads.getVersion() -- Returns the Unity Ads SDK version as a string.
+local version = unityads.get_version() -- Returns the Unity Ads SDK version as a string.
 ```
 
-#### unityads.show()
-#### unityads.show(placementId)
+#### unityads.show(placement_id)
 [original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#show)
 ```lua
-unityads.show() -- show default ad
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
-#### unityads.loadBanner(placementId)
-#### unityads.loadBanner(placementId, banner_width, banner_height)
+
+#### unityads.load(placement_id)
+[original doc](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_reference#show)
+```lua
+unityads.load("rewardedVideo") -- load rewardedVideo
+```
+
+#### unityads.load_banner(placement_id)
+#### unityads.load_banner(placement_id, banner_width, banner_height)
 ```lua
 unityads.loadBanner("banner") -- load banner, by defaulf width = 320, height = 50
 unityads.loadBanner("banner", 320, 50) -- load banner
 ```
-#### unityads.unloadBanner()
+
+#### unityads.unload_banner()
 ```lua
-unityads.unloadBanner() -- unload banner
+unityads.unload_banner() -- unload banner
 ```
-#### unityads.showBanner()
+
+#### unityads.show_banner()
 ```lua
-unityads.showBanner() -- show loaded banner
+unityads.show_banner() -- show banner
 ```
-#### unityads.hideBanner()
+
+#### unityads.hide_banner()
 ```lua
-unityads.hideBanner() -- hide banner
+unityads.hide_banner() -- hide banner
 ```
-#### unityads.setBannerPosition(position)
+
+#### unityads.set_banner_position(position)
 ```lua
-unityads.setBannerPosition(position) -- set position of the banner
+unityads.set_banner_position(position) -- set position of the banner
 -- default value is unityads.BANNER_POSITION_TOP_CENTER
+
 --possible positions:
 unityads.BANNER_POSITION_TOP_LEFT
 unityads.BANNER_POSITION_TOP_CENTER
@@ -147,167 +167,146 @@ unityads.BANNER_POSITION_CENTER
 
 ### Constants
 ```lua
-local function defunityads_callback(self, msg_type, message)
+local function defunityads_callback(self, message_id, message)
 ...
 end
 ```
 #### Message types
 ```lua
---possible msg_type :
-unityads.TYPE_IS_READY
-unityads.TYPE_DID_START
-unityads.TYPE_DID_ERROR
-unityads.TYPE_DID_FINISH
-unityads.TYPE_BANNER
-unityads.TYPE_BANNER_ERROR
-unityads.TYPE_INITIALIZED
-unityads.TYPE_INIT_ERROR
+--possible values for `message_id` :
+unityads.MSG_INIT
+unityads.MSG_SHOW
+unityads.MSG_LOAD
+unityads.MSG_BANNER
+unityads.MSG_IDFA
 ```
-##### unityads.TYPE_IS_READY
+##### unityads.MSG_INIT
 ```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_IS_READY then
-    pprint(message) -- message = {placementId = "string"}
+local function defunityads_callback(self, message_id, message)
+  if message_id == unityads.MSG_INIT then
+    if message.event == unityads.EVENT_COMPLETED then
+        -- message = {placement_id = "string", ...}
+    elseif message.event == unityads.EVENT_SDK_ERROR then
+        -- message = {code = int, error = "error message string"}
+        if message.code == unityads.ERROR_INTERNAL then
+            -- initialization failed due to environment or internal services
+        elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+            -- initialization failed due to invalid argument(e.g. game ID)
+        elseif message.code == unityads.ERROR_AD_BLOCKER_DETECTED then
+            -- initialization failed due to url being blocked
+        end
+    elseif message.event == unityads.EVENT_JSON_ERROR then
+        -- message = {error = "error message string"}
+    end
   end
 end
 ```
-##### unityads.TYPE_DID_START
+
+##### unityads.MSG_SHOW
 ```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_DID_START then
-    pprint(message) -- message = {placementId = "string"}
+local function defunityads_callback(self, message_id, message)
+  if message_id == unityads.MSG_SHOW then
+    if message.event == unityads.EVENT_COMPLETED then
+      -- message = {placement_id = "string"}
+      -- An event that indicates that the ad was played entirely.
+    elseif message.event == unityads.EVENT_SKIPPED then
+        -- message = {placement_id = "string"}
+        -- An event that indicates that the user skipped the ad.
+    elseif message.event == unityads.EVENT_START then
+        -- message = {placement_id = "string"}
+        -- UnityAds has started to show ad with a specific placement.
+    elseif message.event == unityads.EVENT_CLICKED then
+        -- message = {placement_id = "string"}
+        -- UnityAds has received a click while showing ad with a specific placement.
+    elseif message.event == unityads.EVENT_SDK_ERROR then
+        -- message = {code = int, error = "error message string"}
+        if message.code == unityads.ERROR_NOT_INITIALIZED then
+            -- show failed due to SDK not initialized.
+        elseif message.code == unityads.ERROR_NOT_READY then
+            --show failed due to placement not being ready.
+        elseif message.code == unityads.ERROR_VIDEO_PLAYER then
+            -- show failed due to video player.
+        elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+            -- show failed due to invalid arguments.
+        elseif message.code == unityads.ERROR_NO_CONNECTION then
+            -- show failed due to internet connection.
+        elseif message.code == unityads.ERROR_ALREADY_SHOWING then
+            -- show failed due to ad is already being showen.
+        elseif message.code == unityads.ERROR_INTERNAL then
+            -- show failed due to environment or internal services.
+        end
+    elseif message.event == unityads.EVENT_JSON_ERROR then
+        -- message = {error = "error message string"}
+    end
   end
 end
 ```
-##### unityads.TYPE_DID_ERROR
+
+##### unityads.MSG_LOAD
 ```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_DID_ERROR then
-    pprint(message) -- message = {error = ERROR_*, message = "string"}
-  end
-end
-```
-##### unityads.TYPE_DID_FINISH
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_DID_FINISH then
-    pprint(message) -- message = {state = FINISH_STATE_*, placementId = "string"}
-  end
-end
-```
-##### unityads.TYPE_BANNER
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_BANNER then
-      if message.event == BANNER_EVENT_DID_LOAD then
-        pprint(message) -- message = {event = BANNER_EVENT_*, placementId = "string"}
+local function defunityads_callback(self, message_id, message)
+  if message.event == unityads.EVENT_LOADED then
+      -- message = {placement_id = "string"}
+      -- Load request has successfully filled the specified placementId with an ad that is ready to show.
+  elseif message.event == unityads.EVENT_SDK_ERROR then
+      -- message = {code = int, error = "error message string"}
+      if message.code == unityads.ERROR_NOT_INITIALIZED then
+          -- Error related to SDK not initialized
+      elseif message.code == unityads.ERROR_INTERNAL then
+          -- Error related to environment or internal services
+      elseif message.code == unityads.ERROR_INVALID_ARGUMENT then
+          -- Error related to invalid arguments
+      elseif message.code == unityads.ERROR_NO_FILL then
+          -- Error related to there being no ads available
+      elseif message.code == unityads.ERROR_TIMEOUT then
+          -- Error related to there being no ads available
       end
-  end
-end
-```
-##### unityads.TYPE_BANNER_ERROR
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_BANNER_ERROR then
-      pprint(message) -- message = {error = BANNER_ERROR_*, message = "string"}
-  end
-end
-```
-#### Error types
-[Original doc about error types](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_errors)
-```lua
---possible message.error for unityads.TYPE_DID_ERROR:
-unityads.ERROR_NOT_INITIALIZED --kUnityAdsErrorNotInitialized
-unityads.ERROR_INITIALIZED_FAILED --kUnityAdsErrorInitializedFailed
-unityads.ERROR_INVALID_ARGUMENT --kUnityAdsErrorInvalidArgument
-unityads.ERROR_VIDEO_PLAYER --kUnityAdsErrorVideoPlayerError
-unityads.ERROR_INIT_SANITY_CHECK_FAIL --kUnityAdsErrorInitSanityCheckFail
-unityads.ERROR_AD_BLOCKER_DETECTED --kUnityAdsErrorAdBlockerDetected
-unityads.ERROR_FILE_IO --kUnityAdsErrorFileIoError
-unityads.ERROR_DEVICE_ID --kUnityAdsErrorDeviceIdError
-unityads.ERROR_SHOW --kUnityAdsErrorShowError
-unityads.ERROR_INTERNAL --kUnityAdsErrorInternalError
-```
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_DID_ERROR then
-    if message.error == unityads.ERROR_NOT_INITIALIZED then
-      ...
-    elseif message.error == unityads.ERROR_INITIALIZED_FAILED then
-    ...
-  end
-end
-```
-#### Banner error types
-[Original doc about error types](https://docs.unity3d.com/Packages/com.unity.ads@3.4/manual/MonetizationResourcesApiAndroid.html#bannerview)
-```lua
---possible message.error for unityads.TYPE_BANNER_ERROR:
-unityads.BANNER_ERROR_UNKNOWN --
-unityads.BANNER_ERROR_NATIVE
-unityads.BANNER_ERROR_WEBVIEW
-unityads.BANNER_ERROR_NOFILL
-```
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_BANNER_ERROR then
-    if message.error == unityads.BANNER_ERROR_UNKNOWN then
-      ...
-    elseif message.error == unityads.BANNER_ERROR_NATIVE then
-    ...
+  elseif message.event == unityads.EVENT_JSON_ERROR then
+      -- message = {error = "error message string"}
   end
 end
 ```
 
-#### Initialization error types
+##### unityads.MSG_BANNER
 ```lua
---possible message.error for unityads.TYPE_INIT_ERROR:
-unityads.INIT_ERROR_INTERNAL_ERROR -- initialization failed due to environment or internal services
-unityads.INIT_ERROR_INVALID_ARGUMENT -- initialization failed due to invalid argument(e.g. game ID)
-unityads.INIT_ERROR_AD_BLOCKER_DETECTED -- initialization failed due to url being blocked
-```
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_INIT_ERROR then
-    if message.error == unityads.INIT_ERROR_INTERNAL_ERROR then
-      ...
-    elseif message.error == unityads.INIT_ERROR_INVALID_ARGUMENT then
-    ...
+local function defunityads_callback(self, message_id, message)
+  if message.event == unityads.EVENT_LOADED then
+      -- message = {placement_id = "string"}
+      -- Banner is loaded and ready to be placed in the view hierarchy.
+  elseif message.event == unityads.EVENT_LEFT_APPLICATION then
+      -- message = {placement_id = "string"}
+      -- Banner links outside the application.
+  elseif message.event == unityads.EVENT_CLICKED then
+      -- message = {placement_id = "string"}
+      -- Banner is clicked.
+  elseif message.event == unityads.EVENT_SDK_ERROR then
+      -- message = {code = int, error = "error message string"}
+      if message.code == unityads.ERROR_UNKNOWN then
+          -- Unknown error 
+      elseif message.code == unityads.ERROR_NATIVE then
+          -- Error related to native
+      elseif message.code == unityads.ERROR_WEBVIEW then
+          -- Error related to webview
+      elseif message.code == unityads.ERROR_NO_FILL then
+          -- Error related to there being no ads available
+      end
+  elseif message.event == unityads.EVENT_JSON_ERROR then
+      -- message = {error = "error message string"}
   end
 end
 ```
 
-#### Finish states
-[Original doc about finish states](https://github.com/Unity-Technologies/unity-ads-ios/wiki/sdk_ios_api_finishstates)
+##### unityads.MSG_IDFA
 ```lua
---possible message.state :
-unityads.FINISH_STATE_ERROR --kUnityAdsFinishStateError
-unityads.FINISH_STATE_SKIPPED --kUnityAdsFinishStateSkipped
-unityads.FINISH_STATE_COMPLETED --kUnityAdsFinishStateCompleted
-```
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_DID_FINISH then
-    if message.state == unityads.FINISH_STATE_ERROR then
-      ...
-    elseif message.state == unityads.FINISH_STATE_SKIPPED then
-    ...
-  end
-end
-```
-#### Banner events
-```lua
---possible banner events:
-unityads.BANNER_EVENT_DID_LOAD
-unityads.BANNER_EVENT_DID_CLICK
-unityads.BANNER_EVENT_DID_LEAVE_APP
-```
-```lua
-local function defunityads_callback(self, msg_type, message)
-  if msg_type == unityads.TYPE_BANNER then
-    if message.event == unityads.BANNER_EVENT_DID_LOAD then
-      ...
-    elseif message.event == unityads.BANNER_EVENT_DID_CLICK then
-    ...
+local function defunityads_callback(self, message_id, message)
+  if message.event == unityads.EVENT_NOT_SUPPORTED then
+      -- IDFA isn't supported
+  elseif message.event == unityads.EVENT_STATUS_AUTORIZED then
+  elseif message.event == unityads.EVENT_STATUS_DENIED then
+  elseif message.event == unityads.EVENT_STATUS_NOT_DETERMINED then
+  elseif message.event == unityads.EVENT_STATUS_RESTRICTED then
+  elseif message.event == unityads.EVENT_JSON_ERROR then
+      -- message = {error = "error message string"}
   end
 end
 ```
