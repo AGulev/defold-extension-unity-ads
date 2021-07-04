@@ -66,6 +66,7 @@ local COLOR = {
 local function update_ui(self)
     local is_initialized = unityads.is_initialized()
     gui.set_enabled(gui.get_node("use_load_box"), not is_initialized)
+    gui.set_enabled(gui.get_node("idfa/larrybutton"), not is_initialized)
     gui.set_enabled(gui.get_node("type"), is_initialized)
     if self.ad_type then
         gui.set_enabled(gui.get_node("banner_group"), false)
@@ -272,6 +273,10 @@ function on_input(self, action_id, action)
         if prev_type ~= self.ad_type then
             update_ui(self)
         end
+    else
+        dirtylarry:button("idfa", action_id, action, function ()
+            unityads.request_idfa()
+        end)
     end
 
 
