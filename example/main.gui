@@ -15,7 +15,7 @@ background_color {
 }
 nodes {
   position {
-    x: 226.0
+    x: 171.0
     y: 654.0
     z: 0.0
     w: 1.0
@@ -72,7 +72,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 440.0
+    x: 300.0
     y: 88.0
     z: 0.0
     w: 1.0
@@ -105,7 +105,6 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 4
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
 }
@@ -142,7 +141,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "init UnityAds with id"
+  text: "Init"
   font: "larryfont"
   id: "init/larrylabel"
   xanchor: XANCHOR_NONE
@@ -176,8 +175,8 @@ nodes {
 }
 nodes {
   position {
-    x: 229.0
-    y: 545.0
+    x: 488.0
+    y: 654.0
     z: 0.0
     w: 1.0
   }
@@ -206,7 +205,7 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "default"
+  id: "idfa"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -233,26 +232,26 @@ nodes {
     w: 1.0
   }
   size {
-    x: 400.0
+    x: 300.0
     y: 88.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.9960785
+    x: 1.0
     y: 1.0
-    z: 0.9921569
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "button/button_normal"
-  id: "default/larrybutton"
+  id: "idfa/larrybutton"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "default"
+  parent: "idfa"
   layer: ""
   inherit_alpha: true
   slice9 {
@@ -266,8 +265,6 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 4
-  overridden_fields: 5
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
 }
@@ -297,16 +294,16 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.9921569
-    y: 0.9921569
+    x: 1.0
+    y: 1.0
     z: 1.0
     w: 1.0
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Show default"
+  text: "Request IDFA"
   font: "larryfont"
-  id: "default/larrylabel"
+  id: "idfa/larrylabel"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -324,14 +321,13 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "default/larrybutton"
+  parent: "idfa/larrybutton"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 5
   overridden_fields: 8
   template_node_child: true
   text_leading: 1.0
@@ -339,8 +335,62 @@ nodes {
 }
 nodes {
   position {
-    x: 229.0
-    y: 425.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "use_load_box"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 63.0
+    y: 543.0
     z: 0.0
     w: 1.0
   }
@@ -369,7 +419,166 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "video"
+  id: "use_load"
+  parent: "use_load_box"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/dirtylarry/checkbox_label.gui"
+  template_node_child: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 64.0
+    y: 68.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "checkbox/checkbox_normal"
+  id: "use_load/larrycheckbox"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "use_load"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 46.0
+    y: 3.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 50.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Use load"
+  font: "larryfont"
+  id: "use_load/larrylabel"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "use_load"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 1050.0
+    y: 497.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "show_video"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -410,12 +619,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "button/button_normal"
-  id: "video/larrybutton"
+  id: "show_video/larrybutton"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "video"
+  parent: "show_video"
   layer: ""
   inherit_alpha: true
   slice9 {
@@ -465,9 +674,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Show video"
+  text: "Show"
   font: "larryfont"
-  id: "video/larrylabel"
+  id: "show_video/larrylabel"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -485,7 +694,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "video/larrybutton"
+  parent: "show_video/larrybutton"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -500,8 +709,8 @@ nodes {
 }
 nodes {
   position {
-    x: 227.0
-    y: 313.0
+    x: 636.0
+    y: 502.0
     z: 0.0
     w: 1.0
   }
@@ -530,7 +739,7 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "rewardedVideo"
+  id: "load_video"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -557,7 +766,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 400.0
+    x: 300.0
     y: 88.0
     z: 0.0
     w: 1.0
@@ -571,12 +780,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "button/button_normal"
-  id: "rewardedVideo/larrybutton"
+  id: "load_video/larrybutton"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "rewardedVideo"
+  parent: "load_video"
   layer: ""
   inherit_alpha: true
   slice9 {
@@ -590,7 +799,6 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 4
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
 }
@@ -627,9 +835,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Show Rewarded video"
+  text: "Load"
   font: "larryfont"
-  id: "rewardedVideo/larrylabel"
+  id: "load_video/larrylabel"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -647,7 +855,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "rewardedVideo/larrybutton"
+  parent: "load_video/larrybutton"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -662,8 +870,8 @@ nodes {
 }
 nodes {
   position {
-    x: 229.0
-    y: 203.0
+    x: 169.0
+    y: 169.0
     z: 0.0
     w: 1.0
   }
@@ -719,7 +927,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 400.0
+    x: 300.0
     y: 88.0
     z: 0.0
     w: 1.0
@@ -752,7 +960,6 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 4
   overridden_fields: 5
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
@@ -825,8 +1032,8 @@ nodes {
 }
 nodes {
   position {
-    x: 229.0
-    y: 94.0
+    x: 169.0
+    y: 60.0
     z: 0.0
     w: 1.0
   }
@@ -882,7 +1089,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 400.0
+    x: 300.0
     y: 88.0
     z: 0.0
     w: 1.0
@@ -915,7 +1122,6 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
-  overridden_fields: 4
   overridden_fields: 5
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
@@ -988,6 +1194,653 @@ nodes {
 }
 nodes {
   position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "type"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 63.0
+    y: 445.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "ad_type_interstitial"
+  parent: "type"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/dirtylarry/radio_label.gui"
+  template_node_child: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 64.0
+    y: 68.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "radio/radio_normal"
+  id: "ad_type_interstitial/larryradio"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "ad_type_interstitial"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 46.0
+    y: 3.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 50.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Interstitial"
+  font: "larryfont"
+  id: "ad_type_interstitial/larrylabel"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "ad_type_interstitial"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 63.0
+    y: 355.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "ad_type_rewarded"
+  parent: "type"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/dirtylarry/radio_label.gui"
+  template_node_child: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 64.0
+    y: 68.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "radio/radio_normal"
+  id: "ad_type_rewarded/larryradio"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "ad_type_rewarded"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 46.0
+    y: 3.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 50.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Rewarded"
+  font: "larryfont"
+  id: "ad_type_rewarded/larrylabel"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "ad_type_rewarded"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 63.0
+    y: 264.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "ad_type_banner"
+  parent: "type"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/dirtylarry/radio_label.gui"
+  template_node_child: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 64.0
+    y: 68.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "radio/radio_normal"
+  id: "ad_type_banner/larryradio"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "ad_type_banner"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
+    x: 46.0
+    y: 3.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 50.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Banner"
+  font: "larryfont"
+  id: "ad_type_banner/larrylabel"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "ad_type_banner"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 333.0
+    y: 447.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 950.0
+    y: 450.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: ""
+  font: "larryfont"
+  id: "console"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_NW
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: true
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: false
+  text_leading: 1.0
+  text_tracking: 0.0
+}
+nodes {
+  position {
+    x: 0.0
+    y: 37.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "banner_group"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position {
     x: 651.0
     y: 464.0
     z: 0.0
@@ -1019,6 +1872,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "banner"
+  parent: "banner_group"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1110,8 +1964,8 @@ nodes {
   }
   color {
     x: 1.0
-    y: 0.0
-    z: 0.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_TEXT
@@ -1152,7 +2006,7 @@ nodes {
 nodes {
   position {
     x: 1066.0
-    y: 463.0
+    y: 465.0
     z: 0.0
     w: 1.0
   }
@@ -1182,6 +2036,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "show_banner"
+  parent: "banner_group"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1314,8 +2169,8 @@ nodes {
 }
 nodes {
   position {
-    x: 920.0
-    y: 582.0
+    x: 876.0
+    y: 584.0
     z: 0.0
     w: 1.0
   }
@@ -1345,6 +2200,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "banner_pos"
+  parent: "banner_group"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1478,8 +2334,8 @@ nodes {
 }
 nodes {
   position {
-    x: 918.0
-    y: 682.0
+    x: 885.0
+    y: 657.0
     z: 0.0
     w: 1.0
   }
@@ -1529,68 +2385,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 1.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-}
-nodes {
-  position {
-    x: 462.0
-    y: 406.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 800.0
-    y: 400.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: ""
-  font: "larryfont"
-  id: "console"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_NW
-  outline {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: true
+  parent: "banner_group"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
