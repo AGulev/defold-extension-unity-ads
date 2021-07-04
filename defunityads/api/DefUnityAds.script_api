@@ -15,15 +15,6 @@
 
     - name: callback
       type: function
-      parameters:
-        - name: self
-          type: object
-
-        - name: message_id
-          type: string
-
-        - name: message
-          type: table
 
     - name: test_mode
       type: boolean
@@ -35,15 +26,6 @@
 
   - name: set_callback
     type: function
-    parameters:
-      - name: self
-        type: object
-
-      - name: message_id
-        type: string
-
-      - name: message
-        type: table
 
     parameters:
     - name: callback
