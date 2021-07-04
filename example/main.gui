@@ -549,7 +549,7 @@ nodes {
 nodes {
   position {
     x: 1050.0
-    y: 458.0
+    y: 497.0
     z: 0.0
     w: 1.0
   }
@@ -710,7 +710,7 @@ nodes {
 nodes {
   position {
     x: 636.0
-    y: 463.0
+    y: 502.0
     z: 0.0
     w: 1.0
   }
@@ -1726,7 +1726,7 @@ nodes {
 nodes {
   position {
     x: 333.0
-    y: 406.0
+    y: 447.0
     z: 0.0
     w: 1.0
   }
@@ -1744,7 +1744,7 @@ nodes {
   }
   size {
     x: 950.0
-    y: 400.0
+    y: 450.0
     z: 0.0
     w: 1.0
   }
@@ -1788,7 +1788,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 0.0
+    y: 37.0
     z: 0.0
     w: 1.0
   }
@@ -2170,7 +2170,7 @@ nodes {
 nodes {
   position {
     x: 876.0
-    y: 592.0
+    y: 584.0
     z: 0.0
     w: 1.0
   }
@@ -2335,7 +2335,7 @@ nodes {
 nodes {
   position {
     x: 885.0
-    y: 682.0
+    y: 657.0
     z: 0.0
     w: 1.0
   }
