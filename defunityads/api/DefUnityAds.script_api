@@ -10,7 +10,7 @@
     type: function
 
     parameters:
-    - name: gameId
+    - name: game_id
       type: table
 
     - name: callback
@@ -19,19 +19,31 @@
         - name: self
           type: object
 
-        - name: msg_type
+        - name: message_id
           type: string
 
         - name: message
           type: table
 
-    - name: testMode
-      type: table
+    - name: test_mode
+      type: boolean
+
+    - name: enable_per_placement_load
+      type: boolean
 
 #*****************************************************************************************************
 
-  - name: setCallback
+  - name: set_callback
     type: function
+    parameters:
+      - name: self
+        type: object
+
+      - name: message_id
+        type: string
+
+      - name: message
+        type: table
 
     parameters:
     - name: callback
@@ -39,49 +51,49 @@
 
 #*****************************************************************************************************
 
-  - name: setDebugMode
+  - name: set_debug_mode
     type: function
 
     parameters:
-    - name: isDebug
+    - name: is_debug
       type: boolean
 
 #*****************************************************************************************************
 
-  - name: getDebugMode
+  - name: get_debug_mode
     type: function
 
 #*****************************************************************************************************
 
-  - name: getPlacementState
+  - name: get_placement_state
     type: function
 
     parameters:
-    - name: placementId
+    - name: placement_id
       type: string
 
 #*****************************************************************************************************
 
-  - name: isReady
+  - name: is_ready
     type: function
 
     parameters:
-    - name: placementId
+    - name: placement_id
       type: string
 
 #*****************************************************************************************************
 
-  - name: isInitialized
+  - name: is_initialized
     type: function
 
 #*****************************************************************************************************
 
-  - name: isSupported
+  - name: is_supported
     type: function
 
 #*****************************************************************************************************
 
-  - name: getVersion
+  - name: get_version
     type: function
 
 #*****************************************************************************************************
@@ -90,36 +102,36 @@
     type: function
 
     parameters:
-    - name: placementId
+    - name: placement_id
       type: string
 
 #*****************************************************************************************************
 
-  - name: loadBanner
+  - name: load_banner
     type: function
 
     parameters:
-    - name: placementId
+    - name: placement_id
       type: string
 
 #*****************************************************************************************************
 
-  - name: unloadBanner
+  - name: unload_banner
     type: function
 
 #*****************************************************************************************************
 
-  - name: showBanner
+  - name: show_banner
     type: function
 
 #*****************************************************************************************************
 
-  - name: hideBanner
+  - name: hide_banner
     type: function
 
 #*****************************************************************************************************
 
-  - name: setBannerPosition
+  - name: set_banner_position
     type: function
 
     parameters:
@@ -128,69 +140,101 @@
 
 #*****************************************************************************************************
 
-  - name: TYPE_IS_READY
+  - name: MSG_INIT
     type: number
 
-  - name: TYPE_DID_START
+  - name: MSG_SHOW
     type: number
 
-  - name: TYPE_DID_ERROR
+  - name: MSG_LOAD
     type: number
 
-  - name: TYPE_DID_FINISH
+  - name: MSG_BANNER
     type: number
 
-  - name: TYPE_BANNER
+  - name: MSG_IDFA
     type: number
-
-  - name: TYPE_INITIALIZED
-    type: number
-
-  - name: TYPE_INIT_ERROR
-    type: number
-
 
 #*****************************************************************************************************
 
-  - name: ERROR_NOT_INITIALIZED
+  - name: EVENT_COMPLETED
     type: number
 
-  - name: ERROR_INITIALIZED_FAILED
+  - name: EVENT_SDK_ERROR
+    type: number
+
+  - name: EVENT_JSON_ERROR
+    type: number
+
+  - name: EVENT_CLICKED
+    type: number
+
+  - name: EVENT_START
+    type: number
+
+  - name: EVENT_LOADED
+    type: number
+
+  - name: EVENT_LEFT_APPLICATION
+    type: number
+
+  - name: EVENT_SKIPPED
+    type: number
+
+  - name: EVENT_NOT_SUPPORTED
+    type: number
+
+  - name: EVENT_STATUS_AUTORIZED
+    type: number
+
+  - name: EVENT_STATUS_DENIED
+    type: number
+
+  - name: EVENT_STATUS_NOT_DETERMINED
+    type: number
+
+  - name: EVENT_STATUS_RESTRICTED
+    type: number
+
+#*****************************************************************************************************
+
+  - name: ERROR_INTERNAL
     type: number
 
   - name: ERROR_INVALID_ARGUMENT
     type: number
 
+  - name: ERROR_NOT_INITIALIZED
+    type: number
+
+  - name: ERROR_NOT_READY
+    type: number
+
   - name: ERROR_VIDEO_PLAYER
     type: number
 
-  - name: ERROR_INIT_SANITY_CHECK_FAIL
+  - name: ERROR_NO_CONNECTION
+    type: number
+
+  - name: ERROR_ALREADY_SHOWING
+    type: number
+
+  - name: ERROR_NO_FILL
+    type: number
+
+  - name: ERROR_TIMEOUT
+    type: number
+
+  - name: ERROR_UNKNOWN
+    type: number
+
+  - name: ERROR_NATIVE
+    type: number
+
+  - name: ERROR_WEBVIEW
     type: number
 
   - name: ERROR_AD_BLOCKER_DETECTED
-    type: number
-
-  - name: ERROR_FILE_IO
-    type: number
-
-  - name: ERROR_DEVICE_ID
-    type: number
-
-  - name: ERROR_SHOW
-    type: number
-
-  - name: ERROR_INTERNAL
-    type: number
-
-#*****************************************************************************************************
-
-  - name: INIT_ERROR_INTERNAL_ERROR
-    type: number
-
-  - name: INIT_ERROR_INVALID_ARGUMENT
-    type: number
-
-  - name: INIT_ERROR_AD_BLOCKER_DETECTED
     type: number
 
 #*****************************************************************************************************
@@ -217,26 +261,6 @@
     type: number
 
   - name: BANNER_POSITION_NONE
-    type: number
-
-#*****************************************************************************************************
-    
-  - name: BANNER_EVENT_DID_LOAD
-    type: number
-
-  - name: BANNER_EVENT_DID_UNLOAD
-    type: number
-
-  - name: BANNER_EVENT_DID_SHOW
-    type: number
-
-  - name: BANNER_EVENT_DID_HIDE
-    type: number
-
-  - name: BANNER_EVENT_DID_CLICK
-    type: number
-
-  - name: BANNER_EVENT_DID_ERROR
     type: number
 
 #*****************************************************************************************************
