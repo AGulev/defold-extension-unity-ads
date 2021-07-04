@@ -35,7 +35,9 @@ Please, read [Android API docs](https://unityads.unity3d.com/help/android/api-an
 
 #### unityads.request_idfa()
 ```lua
-unityads.request_idfa() -- iOS only method that shows IDFA request popup. On Android it always fire callback with MSG_IDFA/EVENT_NOT_SUPPORTED
+unityads.request_idfa()
+-- iOS only method that shows IDFA request popup.
+-- On Android it always fire callback with MSG_IDFA/EVENT_NOT_SUPPORTED
 -- should be called before initialization
 ```
 
@@ -49,10 +51,14 @@ local function defunityads_callback(self, message_id, message)
 ...
 end
 ...
-unityads.initialize("1401815", defunityads_callback) -- `test_mode` is optional parameter
-unityads.initialize("1401815", defunityads_callback, true) -- `test_mode` is optional parameter
-unityads.initialize("1401815", defunityads_callback, true, true) -- `enable_per_placement_load` is optional parameter.
--- When `enable_per_placement_load` set to true, this parameter allows you to load content for a specific Placement prior to displaying it using `load(placement_id)` method
+unityads.initialize("1401815", defunityads_callback)
+ -- `test_mode` is optional parameter:
+unityads.initialize("1401815", defunityads_callback, true)
+ -- `enable_per_placement_load` is optional parameter:
+unityads.initialize("1401815", defunityads_callback, true, true)
+-- When `enable_per_placement_load` set to true,
+-- this parameter allows you to load content for a specific Placement prior to displaying it 
+-- using `load(placement_id)` method
 ```
 
 #### unityads.set_callback(callback)
