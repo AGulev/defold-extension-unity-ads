@@ -80,13 +80,12 @@ void SendSimpleMessage(MessageId msg, MessageEvent event, NSString *key_2, int v
     
 void Initialize(const char*game_id, bool is_debug, bool enablePerPlacementLoad) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
-    DefUnityAdsInitializationDelegate* unityAdsInitDelegate = [[DefUnityAdsInitializationDelegate alloc] init];
-    [UnityAds initialize:gameId testMode:is_debug ? YES : NO initializationDelegate:unityAdsInitDelegate 
-    enablePerPlacementLoad:enablePerPlacementLoad ? YES : NO];
     if (!enablePerPlacementLoad) {
         DefUnityAdsDelegate* unityAdsDelegate = [[DefUnityAdsDelegate alloc] init];
         [UnityAds addDelegate:unityAdsDelegate];
     }
+    DefUnityAdsInitializationDelegate* unityAdsInitDelegate = [[DefUnityAdsInitializationDelegate alloc] init];
+    [UnityAds initialize:gameId testMode:is_debug ? YES : NO enablePerPlacementLoad:enablePerPlacementLoad ? YES : NO initializationDelegate:unityAdsInitDelegate];
     
     UIWindow* window = dmGraphics::GetNativeiOSUIWindow();
     uiViewController = window.rootViewController;
@@ -125,7 +124,7 @@ void Load(char* placementId) {
     if (!unityLoadDelegate) {
         unityLoadDelegate = [[DefUnityAdsLoadDelegate alloc] init];
     }
-    [UnityAds load:uiViewController placementId:placementId_s loadDelegate:unityLoadDelegate];
+    [UnityAds load:placementId_s loadDelegate:unityLoadDelegate];
 }
 
 static DefUnityShowDelegate* unityShowDelegate;
@@ -347,7 +346,7 @@ void Finalize_Ext() {
 @implementation DefUnityAdsDelegate
 
 -(void)unityAdsReady:(NSString *)placementId {
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_LOADED, @"placementId", placementId);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_LOADED, @"placement_id", placementId);
 }
 
 -(void)unityAdsDidStart:(NSString *)placementId {
@@ -419,11 +418,11 @@ void Finalize_Ext() {
 }
 
 -(void)unityAdsShowStart:(NSString *)placementId {
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_START, @"placementId", placementId);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_START, @"placement_id", placementId);
 }
 
 -(void)unityAdsShowClick:(NSString *)placementId {
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_CLICKED, @"placementId", placementId);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_CLICKED, @"placement_id", placementId);
 }
 
 -(void)unityAdsShowComplete:(NSString *)placementId  withFinishState:(UnityAdsShowCompletionState)state {
@@ -436,7 +435,7 @@ void Finalize_Ext() {
         event = dmUnityAds::EVENT_COMPLETED;
         break;
     }
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, event, @"placementId", placementId);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, event, @"placement_id", placementId);
 }
 
 @end
@@ -444,7 +443,7 @@ void Finalize_Ext() {
 @implementation DefUnityAdsLoadDelegate
 
 -(void)unityAdsAdLoaded:(NSString *)placementId {
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_LOADED, @"placementId", placementId);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_LOADED, @"placement_id", placementId);
 }
 
 -(void)unityAdsAdFailedToLoad:(NSString *)placementId withError:(UnityAdsLoadError)error withMessage:(NSString *)message {

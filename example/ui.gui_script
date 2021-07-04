@@ -43,7 +43,7 @@ end
 
 local function print_placement_state(placement)
     if unityads then
-        local state = placement and unityads.get_placement_state(placement) or unityads.get_placement_state()
+        local state = unityads.get_placement_state(placement)
         if state == unityads.PLACEMENT_STATE_READY then
             print("PLACEMENT_STATE_READY ", placement)
         elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
@@ -165,7 +165,6 @@ function init(self)
         print_placement_state(INTERSTITIAL)
         print_placement_state(BANNER)
         print_placement_state(REWARDED)
-        print_placement_state()
         unityads.set_callback(unity_ads_callback)
     end
 end
