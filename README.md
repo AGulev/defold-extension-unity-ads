@@ -2,6 +2,8 @@ _“This plugin is not endorsed or sponsored by Unity Technologies. This is an i
 
 ![defvideoads-01](https://user-images.githubusercontent.com/2209596/50695591-6086b080-103d-11e9-9a94-77929169199e.png)
 
+[![Build Status](https://github.com/AGulev/DefVideoAds/workflows/Build%20with%20bob/badge.svg)](https://github.com/AGulev/DefVideoAds/actions)
+
 # DefVideoAds (plugin for Unity ADS)
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
