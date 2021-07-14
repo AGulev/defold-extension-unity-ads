@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param placementId The ID of the placement as defined in Unity Ads admin tools.
  * @param state An enum value indicating the finish state of the ad. Possible values are `Completed`, `Skipped`.
  */
-- (void)unityAdsShowComplete:(NSString *)placementId withFinishState:(UnityAdsShowCompletionState)state;
+- (void)unityAdsShowComplete: (NSString *)placementId withFinishState: (UnityAdsShowCompletionState)state;
 /**
  * Called when UnityAds has failed to show a specific placement with an error message and error category.
  * @param placementId The ID of the placement as defined in Unity Ads admin tools.
@@ -28,17 +28,17 @@ NS_ASSUME_NONNULL_BEGIN
  *           if `kUnityShowErrorInternalError`, show failed due to environment or internal services.
  * @param message A human readable error message
  */
-- (void)unityAdsShowFailed:(NSString *)placementId withError:(UnityAdsShowError)error withMessage:(NSString *)message;
+- (void)unityAdsShowFailed: (NSString *)placementId withError: (UnityAdsShowError)error withMessage: (NSString *)message;
 /**
  * Called when UnityAds has started to show ad with a specific placement.
  * @param placementId The ID of the placement as defined in Unity Ads admin tools.
  */
-- (void)unityAdsShowStart:(NSString *)placementId;
+- (void)unityAdsShowStart: (NSString *)placementId;
 /**
  * Called when UnityAds has received a click while showing ad with a specific placement.
  * @param placementId The ID of the placement as defined in Unity Ads admin tools.
  */
-- (void)unityAdsShowClick:(NSString *)placementId;
+- (void)unityAdsShowClick: (NSString *)placementId;
 
 @end
 

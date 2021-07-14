@@ -4,7 +4,7 @@
  *  An enumerate that describes the state of `UnityAds` placements.
  *  @note All placement states, other than `kUnityAdsPlacementStateReady`, indicate that the placement is not currently ready to show ads.
  */
-typedef NS_ENUM(NSInteger, UnityAdsPlacementState) {
+typedef NS_ENUM (NSInteger, UnityAdsPlacementState) {
     /**
      *  A state that indicates that the placement is ready to show an ad. The `show:` selector can be called.
      */

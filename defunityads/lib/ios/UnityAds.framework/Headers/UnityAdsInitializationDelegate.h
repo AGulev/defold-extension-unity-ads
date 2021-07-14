@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  *           if `kUnityInitializationErrorAdBlockerDetected`, initialization failed due to url being blocked
  * @param message A human readable error message
  */
-- (void)initializationFailed:(UnityAdsInitializationError)error withMessage:(NSString *)message;
+- (void)initializationFailed: (UnityAdsInitializationError)error withMessage: (NSString *)message;
 
 @end
 

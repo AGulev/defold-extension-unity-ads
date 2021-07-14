@@ -1,45 +1,45 @@
 /**
  *  An enumeration for the various errors that can be emitted through the `UnityAdsDelegate` `unityAdsDidError:withMessage:` method.
  */
-typedef NS_ENUM(NSInteger, UnityAdsError) {
+typedef NS_ENUM (NSInteger, UnityAdsError) {
     /**
      *  An error that indicates failure due to `UnityAds` currently being uninitialized.
      */
-            kUnityAdsErrorNotInitialized = 0,
+    kUnityAdsErrorNotInitialized = 0,
     /**
      *  An error that indicates failure due to a failure in the initialization process.
      */
-            kUnityAdsErrorInitializedFailed,
+    kUnityAdsErrorInitializedFailed,
     /**
      *  An error that indicates failure due to attempting to initialize `UnityAds` with invalid parameters.
      */
-            kUnityAdsErrorInvalidArgument,
+    kUnityAdsErrorInvalidArgument,
     /**
      *  An error that indicates failure of the video player.
      */
-            kUnityAdsErrorVideoPlayerError,
+    kUnityAdsErrorVideoPlayerError,
     /**
      *  An error that indicates failure due to having attempted to initialize the `UnityAds` class in an invalid environment.
      */
-            kUnityAdsErrorInitSanityCheckFail,
+    kUnityAdsErrorInitSanityCheckFail,
     /**
      *  An error that indicates failure due to the presence of an ad blocker.
      */
-            kUnityAdsErrorAdBlockerDetected,
+    kUnityAdsErrorAdBlockerDetected,
     /**
      *  An error that indicates failure due to inability to read or write a file.
      */
-            kUnityAdsErrorFileIoError,
+    kUnityAdsErrorFileIoError,
     /**
      *  An error that indicates failure due to a bad device identifier.
      */
-            kUnityAdsErrorDeviceIdError,
+    kUnityAdsErrorDeviceIdError,
     /**
      *  An error that indicates a failure when attempting to show an ad.
      */
-            kUnityAdsErrorShowError,
+    kUnityAdsErrorShowError,
     /**
      *  An error that indicates an internal failure in `UnityAds`.
      */
-            kUnityAdsErrorInternalError,
+    kUnityAdsErrorInternalError,
 };

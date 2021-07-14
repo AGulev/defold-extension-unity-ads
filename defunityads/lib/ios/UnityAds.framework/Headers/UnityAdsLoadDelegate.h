@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param placementId The ID of the placement as defined in Unity Ads admin tools.
  */
-- (void)unityAdsAdLoaded:(NSString *)placementId;
+- (void)unityAdsAdLoaded: (NSString *)placementId;
 
 /**
  * Called when load request has failed to load an ad for a requested placement.
@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
  * @param error UnityAdsLoadError
  * @param message A human readable error message
  */
-- (void)unityAdsAdFailedToLoad:(NSString *)placementId
-                     withError:(UnityAdsLoadError)error
-                   withMessage:(NSString *)message;
+- (void)unityAdsAdFailedToLoad: (NSString *)placementId
+                     withError: (UnityAdsLoadError)error
+                   withMessage: (NSString *)message;
 @end
 
 NS_ASSUME_NONNULL_END

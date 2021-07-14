@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param balance               Number of items that the player now has after the transaction
  * @param acquisitionType       The type of acquisition : `kUnityAnalyticsAcquisitionTypeSoft` or `kUnityAnalyticsAcquisitionTypePremium`
  */
-+(void)onItemAcquired:(NSString *)transactionId itemId:(NSString *)itemId transactionContext:(NSString *)transactionContext level:(NSString *)level itemType:(NSString *)itemType amount:(float)amount balance:(float)balance acquisitionType:(UnityAnalyticsAcquisitionType)acquisitionType;
++ (void)onItemAcquired: (NSString *)transactionId itemId: (NSString *)itemId transactionContext: (NSString *)transactionContext level: (NSString *)level itemType: (NSString *)itemType amount: (float)amount balance: (float)balance acquisitionType: (UnityAnalyticsAcquisitionType)acquisitionType;
 
 /**
  * Send an item spent event to Unity Analyitcs
@@ -33,21 +33,21 @@ NS_ASSUME_NONNULL_BEGIN
  * @param balance               Number of items that the player now has after the transaction
  * @param acquisitionType       The type of acquisition : `kUnityAnalyticsAcquisitionTypeSoft` or `kUnityAnalyticsAcquisitionTypePremium`
  */
-+(void)onItemSpent:(NSString *)transactionId itemId:(NSString *)itemId transactionContext:(NSString *)transactionContext level:(NSString *)level itemType:(NSString *)itemType amount:(float)amount balance:(float)balance acquisitionType:(UnityAnalyticsAcquisitionType)acquisitionType;
++ (void)onItemSpent: (NSString *)transactionId itemId: (NSString *)itemId transactionContext: (NSString *)transactionContext level: (NSString *)level itemType: (NSString *)itemType amount: (float)amount balance: (float)balance acquisitionType: (UnityAnalyticsAcquisitionType)acquisitionType;
 
 /**
  * Sends a level fail event to Unity Analytics
  *
  * @param levelIndex    The index for the level that the player failed
  */
-+(void)onLevelFail:(NSString *)levelIndex;
++ (void)onLevelFail: (NSString *)levelIndex;
 
 /**
  * Sends a level up event to Unity Analytics
  *
  * @param theNewLevelIndex  The index for the new level that the player just unlocked
  */
-+(void)onLevelUp:(NSString *)theNewLevelIndex;
++ (void)onLevelUp: (NSString *)theNewLevelIndex;
 
 /**
  * Send an Ad Complete event to Unity Analytics
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param network       Add network name
  * @param rewarded      Boolean indicating if the Ad was rewarded or not
  */
-+(void)onAdComplete:(NSString *)placementId network:(NSString *)network rewarded:(BOOL)rewarded;
++ (void)onAdComplete: (NSString *)placementId network: (NSString *)network rewarded: (BOOL)rewarded;
 
 /**
  * Send an In App Purchase Transaction event to Unity Analytics
@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param isPromo       A boolean specifying if the transaction came from a promo
  * @param receipt       A json string of containing information about the transaction
  */
-+(void)onIapTransaction:(NSString *)productId amount:(float)amount currency:(NSString *)currency isPromo:(BOOL)isPromo receipt:(NSString *)receipt;
++ (void)onIapTransaction: (NSString *)productId amount: (float)amount currency: (NSString *)currency isPromo: (BOOL)isPromo receipt: (NSString *)receipt;
 
 /**
  * Send an analytics event.
@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @note It is strongly encouraged to use a specific event handler so that the event format is correct
  */
-+(void)onEvent:(NSDictionary<NSString *, NSObject *> *)jsonObject;
++ (void)onEvent: (NSDictionary<NSString *, NSObject *> *)jsonObject;
 
 @end
 

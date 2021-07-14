@@ -2,6 +2,6 @@
 
 @interface UADSPlayerMetaData : UADSMetaData
 
-- (void)setServerId:(NSString *)serverId;
+- (void)setServerId: (NSString *)serverId;
 
 @end

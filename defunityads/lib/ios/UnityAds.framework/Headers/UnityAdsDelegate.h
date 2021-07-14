@@ -18,14 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  @warning To avoid error situations, it is always best to check `isReady` method status before calling show.
  *  @param placementId The ID of the placement that is ready to show, as defined in Unity Ads admin tools.
  */
-- (void)unityAdsReady:(NSString *)placementId;
+- (void)unityAdsReady: (NSString *)placementId;
 /**
  *  Called when `UnityAds` encounters an error. All errors will be logged but this method can be used as an additional debugging aid. This callback can also be used for collecting statistics from different error scenarios.
  *
  *  @param error   A `UnityAdsError` error enum value indicating the type of error encountered.
  *  @param message A human readable string indicating the type of error encountered.
  */
-- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message;
+- (void)unityAdsDidError: (UnityAdsError)error withMessage: (NSString *)message;
 /**
  *  Called on a successful start of advertisement after calling the `UnityAds` `show:` method.
  *
@@ -33,15 +33,15 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param placementId The ID of the placement that has started, as defined in Unity Ads admin tools.
  */
-- (void)unityAdsDidStart:(NSString *)placementId;
+- (void)unityAdsDidStart: (NSString *)placementId;
 /**
  *  Called after the ad has closed.
  *
  *  @param placementId The ID of the placement that has finished, as defined in Unity Ads admin tools.
  *  @param state       An enum value indicating the finish state of the ad. Possible values are `Completed`, `Skipped`, and `Error`.
  */
-- (void)unityAdsDidFinish:(NSString *)placementId
-          withFinishState:(UnityAdsFinishState)state;
+- (void)unityAdsDidFinish: (NSString *)placementId
+          withFinishState: (UnityAdsFinishState)state;
 @end
 
 NS_ASSUME_NONNULL_END

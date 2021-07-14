@@ -1,6 +1,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, UnityMonetizationPlacementContentState) {
+typedef NS_ENUM (NSInteger, UnityMonetizationPlacementContentState) {
     kPlacementContentStateReady,
     kPlacementContentStateNotAvailable,
     kPlacementContentStateDisabled,
@@ -8,7 +8,7 @@ typedef NS_ENUM(NSInteger, UnityMonetizationPlacementContentState) {
     kPlacementContentStateNoFill
 };
 
-NSString *NSStringFromPlacementContentState(UnityMonetizationPlacementContentState);
+NSString * NSStringFromPlacementContentState(UnityMonetizationPlacementContentState);
 
 UnityMonetizationPlacementContentState PlacementContentStateFromNSString(NSString *);
 

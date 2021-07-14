@@ -1,7 +1,7 @@
 /**
  *  An enumeration for the completion state of an ad.
  */
-typedef NS_ENUM(NSInteger, UnityAdsFinishState) {
+typedef NS_ENUM (NSInteger, UnityAdsFinishState) {
     /**
      *  A state that indicates that the ad did not successfully display.
      */

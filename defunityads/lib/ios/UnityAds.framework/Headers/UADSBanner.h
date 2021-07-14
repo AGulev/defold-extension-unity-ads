@@ -6,7 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * An enumeration for the various ways to position the Unity Ads banner placement.
  */
-typedef NS_ENUM(NSInteger, UnityAdsBannerPosition) {
+typedef NS_ENUM (NSInteger, UnityAdsBannerPosition) {
     kUnityAdsBannerPositionTopLeft,
     kUnityAdsBannerPositionTopCenter,
     kUnityAdsBannerPositionTopRight,
@@ -26,34 +26,34 @@ typedef NS_ENUM(NSInteger, UnityAdsBannerPosition) {
 /**
  * Loads a banner with the default banner placement.
  */
-+(void)loadBanner __attribute__((deprecated));
++ (void)loadBanner __attribute__((deprecated));
 
 /**
  * Loads the banner with the given placement.
  * @param placementId The placement ID, as defined in the Unity Ads admin tools.
  */
-+(void)loadBanner:(nonnull NSString *)placementId __attribute__((deprecated));
++ (void)loadBanner: (nonnull NSString *)placementId __attribute__((deprecated));
 
 /**
  * Destroys the current banner placement.
  */
-+(void)destroy __attribute__((deprecated));
++ (void)                                destroy __attribute__((deprecated));
 
-+(void)setBannerPosition:(UnityAdsBannerPosition)bannerPosition __attribute__((deprecated));
++ (void)setBannerPosition: (UnityAdsBannerPosition)bannerPosition __attribute__((deprecated));
 
 /**
  *  Provides the currently assigned `UnityAdsBannerDelegate`.
  *
  *  @return The current `UnityAdsBannerDelegate`.
  */
-+(nullable id <UnityAdsBannerDelegate>)getDelegate __attribute__((deprecated));
++ (nullable id <UnityAdsBannerDelegate>)getDelegate __attribute__((deprecated));
 
 /**
  *  Asigns the banner delegate.
  *
  *  @param delegate The new `UnityAdsBannerDelegate' for UnityAds to send banner callbacks to.
  */
-+(void)setDelegate:(id <UnityAdsBannerDelegate>)delegate __attribute__((deprecated));
++ (void)setDelegate: (id <UnityAdsBannerDelegate>)delegate __attribute__((deprecated));
 
 @end
 
