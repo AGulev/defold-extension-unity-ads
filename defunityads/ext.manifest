@@ -3,5 +3,5 @@ name: "DefUnityAds"
 platforms:
   ios:
     context:
-        frameworks: ["AVFoundation", "CoreMedia", "UIKit", "AppTrackingTransparency"]
-        weakFrameworks: ["AdSupport"]
+        frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
+        weakFrameworks: ["AdSupport", "AVFAudio", "AppTrackingTransparency"]
