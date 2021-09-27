@@ -77,6 +77,15 @@ void SendSimpleMessage(MessageId msg, MessageEvent event, NSString *key_2, int v
     [dict setObject:value_3 forKey:key_3];
     SendSimpleMessage(msg, dict);
 }
+
+void SendSimpleMessage(MessageId msg, MessageEvent event, NSString *key_2, int value_2, NSString *key_3, NSString *value_3, NSString *key_4, NSString *value_4) {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:[NSNumber numberWithInt:event] forKey:@"event"];
+    [dict setObject:[NSNumber numberWithInt:value_2] forKey:key_2];
+    [dict setObject:value_3 forKey:key_3];
+    [dict setObject:value_4 forKey:key_4];
+    SendSimpleMessage(msg, dict);
+}
     
 void Initialize(const char*game_id, bool is_debug, bool enablePerPlacementLoad) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
@@ -339,7 +348,7 @@ void Finalize_Ext() {
             code = dmUnityAds::ERROR_NO_FILL;
             break;
     }
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", error.localizedDescription);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", error.localizedDescription, @"placement_id", bannerView.placementId);
 }
 @end
 
@@ -414,7 +423,7 @@ void Finalize_Ext() {
             code = dmUnityAds::ERROR_INTERNAL;
             break;
     }
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", message);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", message, @"placement_id", placementId);
 }
 
 -(void)unityAdsShowStart:(NSString *)placementId {
@@ -465,7 +474,7 @@ void Finalize_Ext() {
             code = dmUnityAds::ERROR_TIMEOUT;
             break;
     }
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", message);
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", message, @"placement_id", placementId);
 }
 
 @end
