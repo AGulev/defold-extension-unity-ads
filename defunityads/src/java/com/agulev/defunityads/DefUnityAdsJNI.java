@@ -115,13 +115,28 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
-      private void sendSimpleMessage(int msg, int eventId, String key_2, int value_2, String key_3, String value_3) {
+    private void sendSimpleMessage(int msg, int eventId, String key_2, int value_2, String key_3, String value_3) {
       String message = null;
       try {
           JSONObject obj = new JSONObject();
           obj.put("event", eventId);
           obj.put(key_2, value_2);
           obj.put(key_3, value_3);
+          message = obj.toString();
+      } catch (JSONException e) {
+          message = getJsonConversionErrorMessage(e.getLocalizedMessage());
+      }
+      unityadsAddToQueue(msg, message);
+    }
+
+    private void sendSimpleMessage(int msg, int eventId, String key_2, int value_2, String key_3, String value_3, String key_4, String value_4) {
+      String message = null;
+      try {
+          JSONObject obj = new JSONObject();
+          obj.put("event", eventId);
+          obj.put(key_2, value_2);
+          obj.put(key_3, value_3);
+          obj.put(key_4, value_4);
           message = obj.toString();
       } catch (JSONException e) {
           message = getJsonConversionErrorMessage(e.getLocalizedMessage());
@@ -210,7 +225,7 @@ public class DefUnityAdsJNI {
                         code = ERROR_INTERNAL;
                         break;
                 }
-                sendSimpleMessage(MSG_SHOW, EVENT_SDK_ERROR, "code", code,"error", message);
+                sendSimpleMessage(MSG_SHOW, EVENT_SDK_ERROR, "code", code,"error", message, "placement_id", placementId);
             }
 
             @Override
@@ -267,7 +282,7 @@ public class DefUnityAdsJNI {
                         code = ERROR_TIMEOUT;
                         break;
                 }
-                sendSimpleMessage(MSG_LOAD, EVENT_SDK_ERROR, "code", code,"error", message);
+                sendSimpleMessage(MSG_LOAD, EVENT_SDK_ERROR, "code", code,"error", message, "placement_id", placementId);
             }
         });
     }
@@ -374,7 +389,7 @@ public class DefUnityAdsJNI {
                             code = ERROR_NO_FILL;
                             break;
                         }
-                    sendSimpleMessage(MSG_BANNER, EVENT_SDK_ERROR, "code", code,"error", errorInfo.errorMessage);
+                    sendSimpleMessage(MSG_BANNER, EVENT_SDK_ERROR, "code", code,"error", errorInfo.errorMessage, "placement_id", placementId);
                 }
 
                 @Override

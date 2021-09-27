@@ -123,7 +123,7 @@ local function unity_ads_callback(self, message_id, message)
             -- message = {placement_id = "string"}
             -- UnityAds has received a click while showing ad with a specific placement.
         elseif message.event == unityads.EVENT_SDK_ERROR then
-            -- message = {code = int, error = "error message string"}
+            -- message = {code = int, error = "error message string", placement_id = "string"}
             if message.code == unityads.ERROR_NOT_INITIALIZED then
                 -- show failed due to SDK not initialized.
             elseif message.code == unityads.ERROR_NOT_READY then
@@ -147,7 +147,7 @@ local function unity_ads_callback(self, message_id, message)
             -- message = {placement_id = "string"}
             -- Load request has successfully filled the specified placementId with an ad that is ready to show.
         elseif message.event == unityads.EVENT_SDK_ERROR then
-            -- message = {code = int, error = "error message string"}
+            -- message = {code = int, error = "error message string", placement_id = "string"}
             if message.code == unityads.ERROR_NOT_INITIALIZED then
                 -- Error related to SDK not initialized
             elseif message.code == unityads.ERROR_INTERNAL then
@@ -175,7 +175,7 @@ local function unity_ads_callback(self, message_id, message)
             -- message = {placement_id = "string"}
             -- Banner is clicked.
         elseif message.event == unityads.EVENT_SDK_ERROR then
-            -- message = {code = int, error = "error message string"}
+            -- message = {code = int, error = "error message string", "placement_id", placementId}
             if message.code == unityads.ERROR_UNKNOWN then
                 -- Unknown error 
             elseif message.code == unityads.ERROR_NATIVE then
