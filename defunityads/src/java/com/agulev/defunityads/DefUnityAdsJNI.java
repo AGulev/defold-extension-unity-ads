@@ -389,7 +389,7 @@ public class DefUnityAdsJNI {
                             code = ERROR_NO_FILL;
                             break;
                         }
-                    sendSimpleMessage(MSG_BANNER, EVENT_SDK_ERROR, "code", code,"error", errorInfo.errorMessage, "placement_id", placementId);
+                    sendSimpleMessage(MSG_BANNER, EVENT_SDK_ERROR, "code", code,"error", errorInfo.errorMessage, "placement_id", bannerAdView.getPlacementId());
                 }
 
                 @Override
