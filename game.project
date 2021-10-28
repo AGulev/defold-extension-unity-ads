@@ -1,6 +1,6 @@
 [project]
-title = DefVideoAds
-version = 4.0.2
+title = Extension UnityAds
+version = 4.0.3
 dependencies#0 = https://github.com/andsve/dirtylarry/archive/master.zip
 
 [bootstrap]

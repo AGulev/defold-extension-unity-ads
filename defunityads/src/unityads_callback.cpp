@@ -95,12 +95,11 @@ namespace dmUnityAds {
 
     void AddToQueueCallback(MessageId type, const char*json)
     {
-        DM_MUTEX_SCOPED_LOCK(m_mutex);
-
         CallbackData data;
         data.msg = type;
         data.json = json ? strdup(json) : NULL;
 
+        DM_MUTEX_SCOPED_LOCK(m_mutex);
         if(m_callbacksQueue.Full())
         {
             m_callbacksQueue.OffsetCapacity(2);
@@ -115,11 +114,15 @@ namespace dmUnityAds {
             return;
         }
 
-        DM_MUTEX_SCOPED_LOCK(m_mutex);
-
-        for(uint32_t i = 0; i != m_callbacksQueue.Size(); ++i)
+        dmArray<CallbackData> tmp;
         {
-            CallbackData* data = &m_callbacksQueue[i];
+            DM_MUTEX_SCOPED_LOCK(m_mutex);
+            tmp.Swap(m_callbacksQueue);
+        }
+
+        for(uint32_t i = 0; i != tmp.Size(); ++i)
+        {
+            CallbackData* data = &tmp[i];
             InvokeCallback(data->msg, data->json);
             if(data->json)
             {
@@ -127,7 +130,6 @@ namespace dmUnityAds {
                 data->json = 0;
             }
         }
-        m_callbacksQueue.SetSize(0);
     }
 
 } //namespace
