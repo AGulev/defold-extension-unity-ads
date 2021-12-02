@@ -45,7 +45,6 @@ unityads.request_idfa()
 
 #### unityads.initialize(game_id, callback)
 #### unityads.initialize(game_id, callback, test_mode)
-#### unityads.initialize(game_id, callback, test_mode, enable_per_placement_load)
 
 Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#initialize) [Android](https://unityads.unity3d.com/help/android/api-android#initialize)
 ```lua
@@ -56,11 +55,6 @@ end
 unityads.initialize("1401815", defunityads_callback)
  -- `test_mode` is optional parameter:
 unityads.initialize("1401815", defunityads_callback, true)
- -- `enable_per_placement_load` is optional parameter:
-unityads.initialize("1401815", defunityads_callback, true, true)
--- When `enable_per_placement_load` set to true,
--- this parameter allows you to load content for a specific Placement prior to displaying it 
--- using `load(placement_id)` method
 ```
 
 #### unityads.set_callback(callback)
