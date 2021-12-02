@@ -19,9 +19,6 @@
     - name: test_mode
       type: boolean
 
-    - name: enable_per_placement_load
-      type: boolean
-
 #*****************************************************************************************************
 
   - name: request_idfa
@@ -49,24 +46,6 @@
 
   - name: get_debug_mode
     type: function
-
-#*****************************************************************************************************
-
-  - name: get_placement_state
-    type: function
-
-    parameters:
-    - name: placement_id
-      type: string
-
-#*****************************************************************************************************
-
-  - name: is_ready
-    type: function
-
-    parameters:
-    - name: placement_id
-      type: string
 
 #*****************************************************************************************************
 

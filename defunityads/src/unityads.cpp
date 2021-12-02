@@ -17,15 +17,11 @@ static int Lua_Initialize(lua_State* L)
     DM_LUA_STACK_CHECK(L, 0);
     const char *gameId_lua = luaL_checkstring(L, 1);
     bool enableDebugMode_lua = false;
-    bool enablePerPlacementLoad_lua = false;
     SetLuaCallback(L, 2);
     if (lua_type(L, 3) != LUA_TNONE) {
         enableDebugMode_lua = luaL_checkbool(L, 3);
     }
-    if (lua_type(L, 4) != LUA_TNONE) {
-        enablePerPlacementLoad_lua = luaL_checkbool(L, 4);
-    }
-    Initialize(gameId_lua, enableDebugMode_lua, enablePerPlacementLoad_lua);
+    Initialize(gameId_lua, enableDebugMode_lua);
     return 0;
 }
 
@@ -50,15 +46,6 @@ static int Lua_Load(lua_State* L)
     char *placementId_lua = (char*)luaL_checkstring(L, 1);
     Load(placementId_lua);
     return 0;
-}
-
-static int Lua_IsReady(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    char *placementId_lua = (char*)luaL_checkstring(L, 1);
-    bool status = IsReady(placementId_lua);
-    lua_pushboolean(L, status);
-    return 1;
 }
 
 static int Lua_IsInitialized(lua_State* L)
@@ -90,15 +77,6 @@ static int Lua_GetVersion(lua_State* L)
     DM_LUA_STACK_CHECK(L, 1);
     const char *version = GetVersion();
     lua_pushstring(L, version);
-    return 1;
-}
-
-static int Lua_GetPlacementState(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    char *placementId_lua = (char*)luaL_checkstring(L, 1);
-    int state = GetPlacementState(placementId_lua);
-    lua_pushnumber(L, state);
     return 1;
 }
 
@@ -167,12 +145,10 @@ static const luaL_reg Module_methods[] =
     {"initialize", Lua_Initialize},
     {"show", Lua_Show},
     {"load", Lua_Load},
-    {"is_ready", Lua_IsReady},
     {"is_supported", Lua_IsSupported},
     {"is_initialized", Lua_IsInitialized},
     {"get_debug_mode", Lua_GetDebugMode},
     {"get_version", Lua_GetVersion},
-    {"get_placement_state", Lua_GetPlacementState},
     {"set_debug_mode", Lua_SetDebugMode},
     {"set_callback", Lua_SetCallback},
     {"set_banner_position", Lua_SetBannerPosition},
@@ -226,12 +202,6 @@ static void LuaInit(lua_State* L)
     SETCONSTANT(ERROR_NATIVE)
     SETCONSTANT(ERROR_WEBVIEW)
     SETCONSTANT(ERROR_AD_BLOCKER_DETECTED)
-
-    SETCONSTANT(PLACEMENT_STATE_READY)
-    SETCONSTANT(PLACEMENT_STATE_NOT_AVAILABLE)
-    SETCONSTANT(PLACEMENT_STATE_DISABLED)
-    SETCONSTANT(PLACEMENT_STATE_WAITING)
-    SETCONSTANT(PLACEMENT_STATE_NO_FILL)
 
     SETCONSTANT(BANNER_POSITION_TOP_LEFT)
     SETCONSTANT(BANNER_POSITION_TOP_CENTER)

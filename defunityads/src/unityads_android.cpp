@@ -62,12 +62,10 @@ struct DefUnityAdsClass
     jmethodID               m_show;
     jmethodID               m_load;
     jmethodID               m_setDebugMode;
-    jmethodID               m_isReady;
     jmethodID               m_isSupported;
     jmethodID               m_isInitialized;
     jmethodID               m_getDebugMode;
     jmethodID               m_getVersion;
-    jmethodID               m_getPlacementState;
     jmethodID               m_setBannerPosition;
     jmethodID               m_loadBanner;
     jmethodID               m_unloadBanner;
@@ -84,16 +82,14 @@ void Initialize_Ext()
     JNIEnv* env = threadAttacher.GetEnv();
     jclass cls = dmAndroid::LoadClass(env, "com/agulev/defunityads/DefUnityAdsJNI");
     
-    g_duads.m_initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;ZZ)V");
+    g_duads.m_initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;Z)V");
     g_duads.m_show = env->GetMethodID(cls, "show", "(Ljava/lang/String;)V");
     g_duads.m_load = env->GetMethodID(cls, "load", "(Ljava/lang/String;)V");
     g_duads.m_setDebugMode = env->GetMethodID(cls, "setDebugMode", "(Z)V");
-    g_duads.m_isReady = env->GetMethodID(cls, "isReady", "(Ljava/lang/String;)Z");
     g_duads.m_isSupported = env->GetMethodID(cls, "isSupported", "()Z");
     g_duads.m_isInitialized = env->GetMethodID(cls, "isInitialized", "()Z");
     g_duads.m_getDebugMode = env->GetMethodID(cls, "getDebugMode", "()Z");
     g_duads.m_getVersion = env->GetMethodID(cls, "getVersion", "()Ljava/lang/String;");
-    g_duads.m_getPlacementState = env->GetMethodID(cls, "getPlacementState", "(Ljava/lang/String;)I");
     g_duads.m_setBannerPosition = env->GetMethodID(cls, "setBannerPosition", "(Ljava/lang/String;)V");
     g_duads.m_loadBanner = env->GetMethodID(cls, "loadBanner", "(Ljava/lang/String;II)V");
     g_duads.m_unloadBanner = env->GetMethodID(cls, "unloadBanner", "()V");
@@ -105,14 +101,13 @@ void Initialize_Ext()
     g_duads.m_DUADS_JNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, threadAttacher.GetActivity()->clazz));
 }
 
-void Initialize(const char*game_id, bool isDebug, bool enablePerPlacementLoad)
+void Initialize(const char*game_id, bool isDebug)
 {
     dmAndroid::ThreadAttacher threadAttacher;
     JNIEnv* env = threadAttacher.GetEnv();
 
     jstring appid = env->NewStringUTF(game_id);
-    env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_initialize, appid, isDebug ? JNI_TRUE : JNI_FALSE,
-        enablePerPlacementLoad ? JNI_TRUE : JNI_FALSE);
+    env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_initialize, appid, isDebug ? JNI_TRUE : JNI_FALSE);
     env->DeleteLocalRef(appid);
 }
 
@@ -137,11 +132,6 @@ void SetDebugMode(bool is_debug)
     JNIEnv* env = threadAttacher.GetEnv();
     
     env->CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_setDebugMode, is_debug ? JNI_TRUE : JNI_FALSE);
-}
-
-bool IsReady(char* placementId)
-{
-    return CallBoolMethodChar(g_duads.m_DUADS_JNI, g_duads.m_isReady, placementId);
 }
 
 bool IsSupported()
@@ -170,18 +160,6 @@ char const* GetVersion()
     env->DeleteLocalRef(return_value);
 
     return new_char;
-}
-
-int GetPlacementState(char* placementId)
-{
-    dmAndroid::ThreadAttacher threadAttacher;
-    JNIEnv* env = threadAttacher.GetEnv();
-
-    jstring jplacementId = env->NewStringUTF(placementId);
-    jint return_value = (jint)env->CallIntMethod(g_duads.m_DUADS_JNI, g_duads.m_getPlacementState, jplacementId);
-    env->DeleteLocalRef(jplacementId);
-
-    return return_value;
 }
 
 static const char *positions[] = { "topleft", "topcenter", 

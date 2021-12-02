@@ -14,7 +14,6 @@ import android.os.Build;
 import com.unity3d.ads.IUnityAdsInitializationListener;
 import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.IUnityAdsLoadListener;
-import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
 
 import com.unity3d.services.banners.view.BannerPosition;
@@ -144,34 +143,8 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
-
-    private class DefUnityAdsListener implements IUnityAdsListener {
-        @Override
-        public void onUnityAdsReady(final String placementId) {
-            sendSimpleMessage(MSG_LOAD, EVENT_LOADED, "placement_id", placementId);
-        }
-
-        @Override
-        public void onUnityAdsStart(String placementId) {
-            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
-        }
-
-        @Override
-        public void onUnityAdsError(UnityAds.UnityAdsError error, String message) {
-            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
-        }
-
-        @Override
-        public void onUnityAdsFinish(String placementId, UnityAds.FinishState result) {
-            // this logic is in IUnityAdsShowListener or IUnityAdsInitializationListener
-        }
-    }
-
-    public void initialize(String gameId, boolean testMode, boolean enablePerPlacementLoad) {
-        if (!enablePerPlacementLoad) {
-            UnityAds.addListener(new DefUnityAdsListener());
-        }
-        UnityAds.initialize(activity, gameId, testMode, enablePerPlacementLoad, new IUnityAdsInitializationListener() {
+    public void initialize(String gameId, boolean testMode) {
+        UnityAds.initialize(activity.getApplicationContext(), gameId, testMode, new IUnityAdsInitializationListener() {
             @Override
             public void onInitializationComplete() {
                 sendSimpleMessage(MSG_INIT, EVENT_COMPLETED);
@@ -295,13 +268,6 @@ public class DefUnityAdsJNI {
         return UnityAds.getDebugMode();
     }
 
-    public boolean isReady(String placementId) {
-        if (placementId == null || placementId.isEmpty()) {
-            return UnityAds.isReady();
-        }
-        return UnityAds.isReady(placementId);
-    }
-
     public boolean isInitialized() {
         return UnityAds.isInitialized();
     }
@@ -312,13 +278,6 @@ public class DefUnityAdsJNI {
 
     public String getVersion() {
         return UnityAds.getVersion();
-    }
-
-    public int getPlacementState(String placementId) {
-        if (placementId == null || placementId.isEmpty()) {
-            return UnityAds.getPlacementState().ordinal();
-        }
-        return UnityAds.getPlacementState(placementId).ordinal();
     }
 
     public void requestIDFA() {

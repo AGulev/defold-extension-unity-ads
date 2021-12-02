@@ -41,23 +41,6 @@ function update()
 end
 -- end log logic
 
-local function print_placement_state(placement)
-    if unityads then
-        local state = unityads.get_placement_state(placement)
-        if state == unityads.PLACEMENT_STATE_READY then
-            print("PLACEMENT_STATE_READY ", placement)
-        elseif state == unityads.PLACEMENT_STATE_NOT_AVAILABLE then
-            print("PLACEMENT_STATE_NOT_AVAILABLE ", placement)
-        elseif state == unityads.PLACEMENT_STATE_DISABLED then
-            print("PLACEMENT_STATE_DISABLED ", placement)
-        elseif state == unityads.PLACEMENT_STATE_WAITING then
-            print("PLACEMENT_STATE_WAITING ", placement)
-        elseif state == unityads.PLACEMENT_STATE_NO_FILL then
-            print("PLACEMENT_STATE_NO_FILL ", placement)
-        end
-    end
-end
-
 local COLOR = {
     [true] = vmath.vector4(1, 1, 1, 1),
     [false] = vmath.vector4(1, 0, 0, 1)
@@ -65,13 +48,12 @@ local COLOR = {
 
 local function update_ui(self)
     local is_initialized = unityads.is_initialized()
-    gui.set_enabled(gui.get_node("use_load_box"), not is_initialized)
     gui.set_enabled(gui.get_node("idfa/larrybutton"), not is_initialized)
     gui.set_enabled(gui.get_node("type"), is_initialized)
     if self.ad_type then
         gui.set_enabled(gui.get_node("banner_group"), false)
-        gui.set_color(gui.get_node("load_video/larrylabel"), COLOR[self.use_load and not unityads.is_ready(self.ad_type)])
-        gui.set_color(gui.get_node("show_video/larrylabel"), COLOR[unityads.is_ready(self.ad_type)])
+        gui.set_color(gui.get_node("load_video/larrylabel"), COLOR[not self.is_ready[self.ad_type]])
+        gui.set_color(gui.get_node("show_video/larrylabel"), COLOR[self.is_ready[self.ad_type] == true])
         if self.ad_type == REWARDED then
             gui.set_enabled(gui.get_node("load_video/larrybutton"), true)
             gui.set_enabled(gui.get_node("show_video/larrybutton"), true)
@@ -82,7 +64,7 @@ local function update_ui(self)
             gui.set_enabled(gui.get_node("load_video/larrybutton"), false)
             gui.set_enabled(gui.get_node("show_video/larrybutton"), false)
             gui.set_enabled(gui.get_node("banner_group"), true)
-            gui.set_color(gui.get_node("show_banner/larrylabel"), COLOR[self.is_loaded_banner == true])
+            gui.set_color(gui.get_node("show_banner/larrylabel"), COLOR[self.is_ready[BANNER]])
         end
     else
         gui.set_enabled(gui.get_node("load_video/larrybutton"), false)
@@ -119,6 +101,7 @@ local function unity_ads_callback(self, message_id, message)
         elseif message.event == unityads.EVENT_START then
             -- message = {placement_id = "string"}
             -- UnityAds has started to show ad with a specific placement.
+            self.is_ready[message.placement_id] = nil
         elseif message.event == unityads.EVENT_CLICKED then
             -- message = {placement_id = "string"}
             -- UnityAds has received a click while showing ad with a specific placement.
@@ -146,6 +129,7 @@ local function unity_ads_callback(self, message_id, message)
         if message.event == unityads.EVENT_LOADED then
             -- message = {placement_id = "string"}
             -- Load request has successfully filled the specified placementId with an ad that is ready to show.
+            self.is_ready[message.placement_id] = true
         elseif message.event == unityads.EVENT_SDK_ERROR then
             -- message = {code = int, error = "error message string", placement_id = "string"}
             if message.code == unityads.ERROR_NOT_INITIALIZED then
@@ -166,7 +150,7 @@ local function unity_ads_callback(self, message_id, message)
         if message.event == unityads.EVENT_LOADED then
             -- message = {placement_id = "string"}
             -- Banner is loaded and ready to be placed in the view hierarchy.
-            self.is_loaded_banner = true
+            self.is_ready[message.placement_id] = true
             gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
         elseif message.event == unityads.EVENT_LEFT_APPLICATION then
             -- message = {placement_id = "string"}
@@ -206,17 +190,13 @@ function init(self)
     if not unityads then
         return
     end
-    self.use_load = true
+    self.is_ready = {}
     msg.post(".", "acquire_input_focus")
     update_ui(self)
     if unityads then
         unityads.set_debug_mode(true)
         print("VERSION: ", unityads.get_version(), "DEBUG:", unityads.get_debug_mode())
         print("isInitialized:", unityads.is_initialized(),"isSupported:", unityads.is_supported())
-        print("isReady video:", unityads.is_ready(INTERSTITIAL), " banner:", unityads.is_ready(BANNER), " rewardedVideo", unityads.is_ready(REWARDED))
-        print_placement_state(INTERSTITIAL)
-        print_placement_state(BANNER)
-        print_placement_state(REWARDED)
         unityads.set_callback(unity_ads_callback)
     end
 end
@@ -232,7 +212,7 @@ local function init_unity_ads(self, appId)
     if unityads and appId then
         if not unityads.is_initialized() then
             print("Init SDK with id", appId)
-            unityads.initialize(appId, unity_ads_callback, true, self.use_load)
+            unityads.initialize(appId, unity_ads_callback, true)
         else
             print("UnityADS already inited. Just set callback one more time")
             unityads.set_callback(unity_ads_callback)
@@ -256,11 +236,11 @@ end
 
 local function loadbanner(self)
     if unityads then
-        if not self.is_loaded_banner then
+        if not self.is_ready[BANNER] then
             print("loadBanner('banner')")
-            unityads.load_banner("banner")
+            unityads.load_banner(BANNER)
         else
-            self.is_loaded_banner = nil
+            self.is_ready[BANNER] = nil
             self.is_show_banner = false
             print("unloadBanner()")
             gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
@@ -329,9 +309,6 @@ function on_input(self, action_id, action)
             unityads.request_idfa()
         end)
     end
-
-
-    self.use_load = dirtylarry:checkbox("use_load", action_id, action, self.use_load)
         
     dirtylarry:button("init", action_id, action, function ()
         init_unity_ads(self, gameIDs[sys_name])

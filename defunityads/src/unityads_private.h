@@ -2,15 +2,6 @@
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
 
 namespace dmUnityAds {
-    
-enum DefUnityAdsPlacementState
-{
-    PLACEMENT_STATE_READY,
-    PLACEMENT_STATE_NOT_AVAILABLE,
-    PLACEMENT_STATE_DISABLED,
-    PLACEMENT_STATE_WAITING,
-    PLACEMENT_STATE_NO_FILL
-};
 
 enum DefUnityBannerPosition
 {
@@ -26,7 +17,7 @@ enum DefUnityBannerPosition
 void Initialize_Ext();
 void Finalize_Ext();
 
-void Initialize(const char*game_id, bool isDebug, bool enablePerPlacementLoad);
+void Initialize(const char*game_id, bool isDebug);
 void Load(char* placementId);
 void Show(char* placementId);
 void SetDebugMode(bool is_debug);
@@ -37,13 +28,11 @@ void ShowBanner();
 void HideBanner();
 void RequestIDFA();
 
-bool IsReady(char* placementId);
 bool IsSupported();
 bool IsInitialized();
 bool GetDebugMode();
 
 char const* GetVersion();
-int GetPlacementState(char* placementId);
 
 } //namespace
 

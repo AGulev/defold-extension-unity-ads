@@ -9,9 +9,6 @@
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #endif
 
-@interface DefUnityAdsDelegate : NSObject<UnityAdsDelegate>
-@end
-
 @interface DefUnityAdsInitializationDelegate : NSObject<UnityAdsInitializationDelegate>
 @end
 
@@ -87,14 +84,10 @@ void SendSimpleMessage(MessageId msg, MessageEvent event, NSString *key_2, int v
     SendSimpleMessage(msg, dict);
 }
     
-void Initialize(const char*game_id, bool is_debug, bool enablePerPlacementLoad) {
+void Initialize(const char*game_id, bool is_debug) {
     NSString* gameId = [NSString stringWithUTF8String:game_id];
-    if (!enablePerPlacementLoad) {
-        DefUnityAdsDelegate* unityAdsDelegate = [[DefUnityAdsDelegate alloc] init];
-        [UnityAds addDelegate:unityAdsDelegate];
-    }
     DefUnityAdsInitializationDelegate* unityAdsInitDelegate = [[DefUnityAdsInitializationDelegate alloc] init];
-    [UnityAds initialize:gameId testMode:is_debug ? YES : NO enablePerPlacementLoad:enablePerPlacementLoad ? YES : NO initializationDelegate:unityAdsInitDelegate];
+    [UnityAds initialize:gameId testMode:is_debug ? YES : NO initializationDelegate:unityAdsInitDelegate];
     
     UIWindow* window = dmGraphics::GetNativeiOSUIWindow();
     uiViewController = window.rootViewController;
@@ -151,13 +144,6 @@ void SetDebugMode(bool is_debug) {
     [UnityAds setDebugMode:enableDebugMode];
 }
 
-bool IsReady(char* placementId) {
-    BOOL status;
-    NSString* placementId_s = [NSString stringWithUTF8String:placementId];
-    status = [UnityAds isReady:placementId_s];
-    return status == YES;
-}
-
 bool IsSupported() {
     BOOL status = [UnityAds isSupported];
     return status == YES;
@@ -177,18 +163,6 @@ char const* GetVersion() {
     NSString *version = [UnityAds getVersion];
     const char *version_lua = [version UTF8String];
     return version_lua;
-}
-
-int GetPlacementState(char* placementId) {
-    UnityAdsPlacementState state;
-    if ((placementId != NULL) && (placementId[0] == '\0')) {
-        state =[UnityAds getPlacementState];
-    }
-    else {
-        NSString* placementId_s = [NSString stringWithUTF8String:placementId];
-        state =[UnityAds getPlacementState:placementId_s];
-    }
-    return (int)state;
 }
 
 //Banner:
@@ -350,26 +324,6 @@ void Finalize_Ext() {
     }
     dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", error.localizedDescription, @"placement_id", bannerView.placementId);
 }
-@end
-
-@implementation DefUnityAdsDelegate
-
--(void)unityAdsReady:(NSString *)placementId {
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_LOAD, dmUnityAds::EVENT_LOADED, @"placement_id", placementId);
-}
-
--(void)unityAdsDidStart:(NSString *)placementId {
-    // this logic is in UnityAdsShowDelegate
-}
-
--(void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message {
-    // this logic is in UnityAdsShowDelegate
-}
-
--(void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state {
-    // this logic is in UnityAdsShowDelegate
-}
-
 @end
 
 @implementation DefUnityAdsInitializationDelegate

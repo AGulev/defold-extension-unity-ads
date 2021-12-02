@@ -85,28 +85,6 @@ Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#setdebugmode) 
 local is_debig_mode = unityads.getDebugMode() -- Returns true if current mod is debug
 ```
 
-#### unityads.get_placement_state()
-#### unityads.get_placement_state(placement_id)
-Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#unityadsplacementstate) [Android](https://unityads.unity3d.com/help/android/api-android#placementstate)
-```lua
-```lua
-local state = unityads.get_placement_state("rewardedVideo") -- Returns `rewardedVideo` ad state
-
---possible states:
-unityads.PLACEMENT_STATE_READY -- The Placement is ready to show ads.
-unityads.PLACEMENT_STATE_NOT_AVAILABLE -- The Placement is not available.
-unityads.PLACEMENT_STATE_DISABLED -- The Placement was disabled.
-unityads.PLACEMENT_STATE_WAITING --  The Placement is waiting to be ready.
-unityads.PLACEMENT_STATE_NO_FILL -- The Placement has no advertisements to show.
-```
-
-#### unityads.is_ready()
-#### unityads.is_ready(placement_id)
-Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#isready) [Android](https://unityads.unity3d.com/help/android/api-android#isready)
-```lua
-local is_ready = unityads.is_ready("rewardedVideo") -- Returns `true` if rewardedVideo is ready
-```
-
 #### unityads.is_initialized()
 Original Docs [iOS](https://unityads.unity3d.com/help/ios/api-ios#initialize) [Android](https://unityads.unity3d.com/help/android/api-android#initialize)
 ```lua
