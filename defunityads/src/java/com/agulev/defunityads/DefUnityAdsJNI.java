@@ -293,16 +293,16 @@ public class DefUnityAdsJNI {
 
     private boolean isShown = false;
 
-    private void ApplyBannerPosition() {
-
-    }
-
-    public void setBannerPosition(String position) {
-        m_bannerPosition = BannerPosition.fromString(position);
+    public void applyBannerPosition() {
         if (isShown) {
             _hideBanner();
             showBanner();
         }
+    }
+
+    public void setBannerPosition(String position) {
+        m_bannerPosition = BannerPosition.fromString(position);
+        applyBannerPosition();
     }
 
     public void loadBanner(String placementId, int width, int height) {
@@ -315,7 +315,8 @@ public class DefUnityAdsJNI {
 
                     layout = new LinearLayout(activity);
                     layout.setOrientation(LinearLayout.VERTICAL);
-
+                    layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
+                    
                     MarginLayoutParams params = new MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     params.setMargins(0, 0, 0, 0);
 
@@ -417,6 +418,7 @@ public class DefUnityAdsJNI {
             @Override
             public void run() {
                 WindowManager wm = activity.getWindowManager();
+                layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
                 windowParams.gravity = m_bannerPosition.getGravity();
                 wm.addView(layout, windowParams);
             }

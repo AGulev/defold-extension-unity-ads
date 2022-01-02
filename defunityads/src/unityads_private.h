@@ -27,6 +27,7 @@ void UnloadBanner();
 void ShowBanner();
 void HideBanner();
 void RequestIDFA();
+void ActivateApp();
 
 bool IsSupported();
 bool IsInitialized();

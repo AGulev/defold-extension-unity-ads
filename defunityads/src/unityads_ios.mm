@@ -265,6 +265,10 @@ void HideBanner() {
     }
 }
 
+void ActivateApp()
+{
+}
+
 void SetBannerPosition(DefUnityBannerPosition bannerPosition) {
     currentPosition = bannerPosition;
     if (isBannerVisible) {

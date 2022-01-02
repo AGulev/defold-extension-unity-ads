@@ -250,6 +250,16 @@ static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
     return dmExtension::RESULT_OK;
 }
 
+static void OnEventUnityAds(dmExtension::Params* params, const dmExtension::Event* event)
+{
+    switch(event->m_Event)
+    {
+        case dmExtension::EVENT_ID_ACTIVATEAPP:
+            dmUnityAds::ActivateApp();
+            break;
+    }
+}
+
 #else // unsupported platforms
 
 static dmExtension::Result AppInitializeUnityAds(dmExtension::AppParams* params)
@@ -277,7 +287,11 @@ static dmExtension::Result UpdateUnityAds(dmExtension::Params* params)
     return dmExtension::RESULT_OK;
 }
 
+static void OnEventUnityAds(dmExtension::Params* params, const dmExtension::Event* event)
+{
+}
+
 #endif // platforms
 
 
-DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitializeUnityAds, AppFinalizeUnityAds, InitializeUnityAds, UpdateUnityAds, 0, FinalizeUnityAds)
+DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitializeUnityAds, AppFinalizeUnityAds, InitializeUnityAds, UpdateUnityAds, OnEventUnityAds, FinalizeUnityAds)
