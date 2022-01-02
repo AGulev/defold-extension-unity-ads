@@ -315,12 +315,8 @@ public class DefUnityAdsJNI {
 
                     layout = new LinearLayout(activity);
                     layout.setOrientation(LinearLayout.VERTICAL);
-                    layout.setSystemUiVisibility(
-                       View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                       View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                       View.SYSTEM_UI_FLAG_FULLSCREEN |
-                       View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
+                    layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
+                    
                     MarginLayoutParams params = new MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     params.setMargins(0, 0, 0, 0);
 
