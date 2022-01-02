@@ -72,6 +72,7 @@ struct DefUnityAdsClass
     jmethodID               m_showBanner;
     jmethodID               m_hideBanner;
     jmethodID               m_requestIDFA;
+    jmethodID               m_applyBannerPosition;
 };
 
 DefUnityAdsClass g_duads;
@@ -96,6 +97,7 @@ void Initialize_Ext()
     g_duads.m_showBanner = env->GetMethodID(cls, "showBanner", "()V");
     g_duads.m_hideBanner = env->GetMethodID(cls, "hideBanner", "()V");
     g_duads.m_requestIDFA = env->GetMethodID(cls, "requestIDFA", "()V");
+    g_duads.m_applyBannerPosition = env->GetMethodID(cls, "applyBannerPosition", "()V");
 
     jmethodID jni_constructor = env->GetMethodID(cls, "<init>", "(Landroid/app/Activity;)V");
     g_duads.m_DUADS_JNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, threadAttacher.GetActivity()->clazz));
@@ -203,6 +205,11 @@ void HideBanner()
 void RequestIDFA()
 {
     CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_requestIDFA);
+}
+
+void ActivateApp()
+{
+    CallVoidMethod(g_duads.m_DUADS_JNI, g_duads.m_applyBannerPosition);
 }
 
 } //namespaces
