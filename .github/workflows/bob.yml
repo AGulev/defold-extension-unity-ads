@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   VERSION_FILENAME: 'info.json'
-  BUILD_SERVER: 'https://build-stage.defold.com'
+  BUILD_SERVER: 'https://build.defold.com'
 
 jobs:
   build_with_bob:
