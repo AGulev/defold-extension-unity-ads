@@ -1,8 +1,9 @@
 #define EXTENSION_NAME DefUnityAds
 #define LIB_NAME "DefUnityAds"
 #define MODULE_NAME "unityads"
-
+#ifndef DLIB_LOG_DOMAIN
 #define DLIB_LOG_DOMAIN LIB_NAME
+#endif
 #include <dmsdk/sdk.h>
 
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
