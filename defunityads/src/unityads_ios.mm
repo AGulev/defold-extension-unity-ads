@@ -380,6 +380,9 @@ void Finalize_Ext() {
         case kUnityShowErrorInternalError:
             code = dmUnityAds::ERROR_INTERNAL;
             break;
+            case kUnityShowErrorTimeout:
+            code = dmUnityAds::ERROR_TIMEOUT;
+            break;
     }
     dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_SHOW, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", message, @"placement_id", placementId);
 }

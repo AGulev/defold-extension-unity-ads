@@ -121,6 +121,8 @@ local function unity_ads_callback(self, message_id, message)
                 -- show failed due to ad is already being showen.
             elseif message.code == unityads.ERROR_INTERNAL then
                 -- show failed due to environment or internal services.
+            elseif message.code == unityads.ERROR_TIMEOUT then
+                -- Error related to an Ad being unable to show within a specified time frame
             end
         elseif message.event == unityads.EVENT_JSON_ERROR then
             -- message = {error = "error message string"}

@@ -197,6 +197,9 @@ public class DefUnityAdsJNI {
                     case INTERNAL_ERROR:
                         code = ERROR_INTERNAL;
                         break;
+                    case TIMEOUT:
+                        code = ERROR_TIMEOUT;
+                        break;
                 }
                 sendSimpleMessage(MSG_SHOW, EVENT_SDK_ERROR, "code", code,"error", message, "placement_id", placementId);
             }
