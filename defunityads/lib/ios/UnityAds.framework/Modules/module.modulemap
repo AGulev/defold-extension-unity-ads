@@ -4,3 +4,8 @@ framework module UnityAds {
   export *
   module * { export * }
 }
+
+module UnityAds.Swift {
+    header "UnityAds-Swift.h"
+    requires objc
+}
