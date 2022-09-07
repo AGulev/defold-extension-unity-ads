@@ -1,0 +1,106 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name UnityAds
+import CommonCrypto
+import CoreTelephony
+import CryptoKit
+import Foundation
+import Swift
+import UIKit
+@_exported import UnityAds
+import _Concurrency
+@_hasMissingDesignatedInitializers @objc final public class NetworkLayerObjCBridge : ObjectiveC.NSObject {
+  @objc final public func sendRequest(using dictionary: [Swift.String : Any], success: @escaping UnityAds.Closure<[Swift.String : Any]>, failure: @escaping UnityAds.Closure<[Swift.String : Any]>)
+  @objc final public func downloadWebViewSync(completion: @escaping UnityAds.Closure<Foundation.URL>, error: @escaping UnityAds.Closure<Swift.Error>)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc final public class ServiceProviderObjCBridge : ObjectiveC.NSObject {
+  @objc public static let shared: UnityAds.ServiceProviderObjCBridge
+  @objc final public var mainNetworkLayer: UnityAds.NetworkLayerObjCBridge {
+    @objc get
+  }
+  @objc final public var nativeNetworkLayer: UnityAds.NetworkLayerObjCBridge {
+    @objc get
+  }
+  @objc final public func saveSDKConfig(from dictionary: [Swift.String : Any])
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension Swift.Optional {
+  public func filter(if predicate: (Wrapped) -> Swift.Bool) -> Wrapped?
+  public func filter(if predicate: (Wrapped) -> Swift.Bool, default: Wrapped) -> Wrapped?
+  @discardableResult
+  public func `do`(_ work: (Wrapped) -> Swift.Void) -> Wrapped?
+  @discardableResult
+  public func onNone(_ work: () -> Swift.Void) -> Wrapped?
+  @discardableResult
+  public func debug(message: Swift.String? = nil) -> Wrapped?
+}
+extension Swift.Result {
+  @discardableResult
+  @inlinable public func `do`(_ work: (Success) -> Swift.Void) -> Swift.Result<Success, Failure> {
+        if case .success(let val) = self {
+            work(val)
+        }
+        return self
+    }
+  @discardableResult
+  @inlinable public func onFailure(_ work: (Failure) -> Swift.Void) -> Swift.Result<Success, Failure> {
+        if case .failure(let err) = self {
+            work(err)
+        }
+        return self
+    }
+  @inlinable public func sink(_ completion: @escaping (Swift.Result<Success, Failure>) -> Swift.Void) {
+        completion(self)
+    }
+}
+extension Swift.Result where Failure == Swift.Error {
+  @inlinable public func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Swift.Result<NewSuccess, Failure> {
+
+        switch self {
+        case let .success(val):
+            do {
+                return try .success(transform(val))
+            } catch {
+                return .failure(error)
+            }
+
+        case let .failure(err):
+            return .failure(err)
+        }
+    }
+  @inlinable public func tryFlatMap<NewSuccess>(_ transform: (Success) throws -> Swift.Result<NewSuccess, Failure>) -> Swift.Result<NewSuccess, Failure> {
+        switch self {
+        case let .success(val):
+            do {
+                return try transform(val)
+            } catch {
+                return .failure(error)
+            }
+
+        case let .failure(err):
+            return .failure(err)
+        }
+    }
+}
+@_inheritsConvenienceInitializers @objc final public class LoggerWrapper : ObjectiveC.NSObject {
+  @objc final public func log(_ message: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public typealias UResult<T> = Swift.Result<T, Swift.Error>
+public typealias ResultClosure<T> = UnityAds.Closure<UnityAds.UResult<T>>
+public typealias Closure<T> = (T) -> Swift.Void
+public typealias VoidClosure = () -> Swift.Void
+public protocol URLRequestConvertible {
+  var baseURL: Swift.String { get }
+  var path: Swift.String { get }
+  var parameters: [Swift.String : Swift.String] { get }
+  var headers: [Swift.String : Swift.String] { get }
+  var body: Foundation.Data? { get }
+  var method: Swift.String { get }
+  var scheme: Swift.String? { get }
+  var port: Swift.Int? { get }
+  var requestTimeout: Foundation.TimeInterval? { get }
+}
