@@ -27,7 +27,7 @@ include_dirs = defunityads
 bundle_identifier = com.agulev.test
 
 [android]
-package = com.agulev.test
+package = com.agulev.defvideoads.test
 immersive_mode = 1
 minimum_sdk_version = 19
 
