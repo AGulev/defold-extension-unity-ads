@@ -190,7 +190,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_warning("-Watimport-in-framework-header")
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
-@import Foundation;
 @import ObjectiveC;
 #endif
 
@@ -216,27 +215,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 SWIFT_CLASS("_TtC8UnityAds13LoggerWrapper")
 @interface LoggerWrapper : NSObject
 - (void)log:(NSString * _Nonnull)message;
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
-
-@class NSURL;
-
-SWIFT_CLASS("_TtC8UnityAds22NetworkLayerObjCBridge")
-@interface NetworkLayerObjCBridge : NSObject
-- (void)sendRequestUsing:(NSDictionary<NSString *, id> * _Nonnull)dictionary success:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))success failure:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))failure;
-- (void)downloadWebViewSyncWithCompletion:(void (^ _Nonnull)(NSURL * _Nonnull))completion error:(void (^ _Nonnull)(NSError * _Nonnull))error;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-SWIFT_CLASS("_TtC8UnityAds25ServiceProviderObjCBridge")
-@interface ServiceProviderObjCBridge : NSObject
-SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) ServiceProviderObjCBridge * _Nonnull shared;)
-+ (ServiceProviderObjCBridge * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
-@property (nonatomic, readonly, strong) NetworkLayerObjCBridge * _Nonnull mainNetworkLayer;
-@property (nonatomic, readonly, strong) NetworkLayerObjCBridge * _Nonnull nativeNetworkLayer;
-- (void)saveSDKConfigFrom:(NSDictionary<NSString *, id> * _Nonnull)dictionary;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -438,7 +416,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_warning("-Watimport-in-framework-header")
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
-@import Foundation;
 @import ObjectiveC;
 #endif
 
@@ -464,27 +441,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 SWIFT_CLASS("_TtC8UnityAds13LoggerWrapper")
 @interface LoggerWrapper : NSObject
 - (void)log:(NSString * _Nonnull)message;
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
-
-@class NSURL;
-
-SWIFT_CLASS("_TtC8UnityAds22NetworkLayerObjCBridge")
-@interface NetworkLayerObjCBridge : NSObject
-- (void)sendRequestUsing:(NSDictionary<NSString *, id> * _Nonnull)dictionary success:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))success failure:(void (^ _Nonnull)(NSDictionary<NSString *, id> * _Nonnull))failure;
-- (void)downloadWebViewSyncWithCompletion:(void (^ _Nonnull)(NSURL * _Nonnull))completion error:(void (^ _Nonnull)(NSError * _Nonnull))error;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-SWIFT_CLASS("_TtC8UnityAds25ServiceProviderObjCBridge")
-@interface ServiceProviderObjCBridge : NSObject
-SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) ServiceProviderObjCBridge * _Nonnull shared;)
-+ (ServiceProviderObjCBridge * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
-@property (nonatomic, readonly, strong) NetworkLayerObjCBridge * _Nonnull mainNetworkLayer;
-@property (nonatomic, readonly, strong) NetworkLayerObjCBridge * _Nonnull nativeNetworkLayer;
-- (void)saveSDKConfigFrom:(NSDictionary<NSString *, id> * _Nonnull)dictionary;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 

@@ -5,3 +5,5 @@ platforms:
     context:
         frameworks: ["AVFoundation", "CoreMedia", "UIKit"]
         weakFrameworks: ["AdSupport", "AVFAudio", "AppTrackingTransparency"]
+        linkFlags:  ["-ObjC", '-Wl,-rpath,/usr/lib/swift', '-Wl,-rpath,@executable_path/Frameworks']
+        libs:       ["swiftCompatibility51", "swiftCompatibility50"]

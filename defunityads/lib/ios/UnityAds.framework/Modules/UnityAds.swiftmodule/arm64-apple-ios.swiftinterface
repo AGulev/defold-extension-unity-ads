@@ -9,23 +9,6 @@ import Swift
 import UIKit
 @_exported import UnityAds
 import _Concurrency
-@_hasMissingDesignatedInitializers @objc final public class NetworkLayerObjCBridge : ObjectiveC.NSObject {
-  @objc final public func sendRequest(using dictionary: [Swift.String : Any], success: @escaping UnityAds.Closure<[Swift.String : Any]>, failure: @escaping UnityAds.Closure<[Swift.String : Any]>)
-  @objc final public func downloadWebViewSync(completion: @escaping UnityAds.Closure<Foundation.URL>, error: @escaping UnityAds.Closure<Swift.Error>)
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objc final public class ServiceProviderObjCBridge : ObjectiveC.NSObject {
-  @objc public static let shared: UnityAds.ServiceProviderObjCBridge
-  @objc final public var mainNetworkLayer: UnityAds.NetworkLayerObjCBridge {
-    @objc get
-  }
-  @objc final public var nativeNetworkLayer: UnityAds.NetworkLayerObjCBridge {
-    @objc get
-  }
-  @objc final public func saveSDKConfig(from dictionary: [Swift.String : Any])
-  @objc override dynamic public init()
-  @objc deinit
-}
 extension Swift.Optional {
   public func filter(if predicate: (Wrapped) -> Swift.Bool) -> Wrapped?
   public func filter(if predicate: (Wrapped) -> Swift.Bool, default: Wrapped) -> Wrapped?
@@ -89,10 +72,6 @@ extension Swift.Result where Failure == Swift.Error {
   @objc override dynamic public init()
   @objc deinit
 }
-public typealias UResult<T> = Swift.Result<T, Swift.Error>
-public typealias ResultClosure<T> = UnityAds.Closure<UnityAds.UResult<T>>
-public typealias Closure<T> = (T) -> Swift.Void
-public typealias VoidClosure = () -> Swift.Void
 public protocol URLRequestConvertible {
   var baseURL: Swift.String { get }
   var path: Swift.String { get }
