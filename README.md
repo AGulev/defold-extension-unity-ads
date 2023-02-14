@@ -10,17 +10,10 @@ This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [De
 Extension supported IOS (minimum iOS version is 9.0) and Android.
 
 ## Installation
+To use this library in your Defold project, add the needed version URL to your `game.project` dependencies from [Releases](https://github.com/AGulev/DefVideoAds/releases)
 
-You can use the DefVideoAds extension in your own project by adding this project as a [Defold library dependency](http://www.defold.com/manuals/libraries/).
-Open your game.project file and in the dependencies field under project add:
+<img width="401" alt="image" src="https://user-images.githubusercontent.com/2209596/202223571-c77f0304-5202-4314-869d-7a90bbeec5ec.png">
 
->https://github.com/AGulev/DefVideoAds/archive/master.zip
-
-or point to the ZIP file of a [specific release](https://github.com/AGulev/DefVideoAds/releases).
-
-`Minimum SDK version` in `game.project->Android` should be 19 or above.
-
-<img width="791" alt="image" src="https://user-images.githubusercontent.com/2209596/119895871-8ed2f680-bf3e-11eb-90bc-cf3159a76d0a.png">
 
 
 ## Example
