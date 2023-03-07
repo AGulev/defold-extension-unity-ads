@@ -6,6 +6,6 @@ framework module UnityAds {
 }
 
 module UnityAds.Swift {
-    header "UnityAds-Swift.h"
-    requires objc
+  header "UnityAds-Swift.h"
+  requires objc
 }
