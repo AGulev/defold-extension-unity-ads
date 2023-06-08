@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   VERSION_FILENAME: 'info.json'
-  CHANNEL: 'alpha'
+  CHANNEL: 'beta'
   BUILD_SERVER: 'https://build-stage.defold.com'
 
 jobs:
