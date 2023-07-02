@@ -49,6 +49,7 @@ public class DefUnityAdsJNI {
     private static final int EVENT_LEFT_APPLICATION =     7;
     private static final int EVENT_SKIPPED =              8;
     private static final int EVENT_NOT_SUPPORTED =        9;
+    private static final int EVENT_DID_SHOW =            14;
 
     private static final int ERROR_INTERNAL =             1;
     private static final int ERROR_INVALID_ARGUMENT =     2;
@@ -363,6 +364,11 @@ public class DefUnityAdsJNI {
                 @Override
                 public void onBannerLeftApplication(BannerView bannerAdView) {
                     sendSimpleMessage(MSG_BANNER, EVENT_LEFT_APPLICATION, "placement_id", bannerAdView.getPlacementId());
+                }
+                
+                @Override
+                public void onBannerShown(BannerView bannerAdView) {
+                    sendSimpleMessage(MSG_BANNER, EVENT_DID_SHOW, "placement_id", bannerAdView.getPlacementId());
                 }
             });
             banner.load();

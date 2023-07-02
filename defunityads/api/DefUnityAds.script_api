@@ -162,6 +162,9 @@
   - name: EVENT_STATUS_RESTRICTED
     type: number
 
+  - name: EVENT_DID_SHOW
+    type: number
+
 #*****************************************************************************************************
 
   - name: ERROR_INTERNAL

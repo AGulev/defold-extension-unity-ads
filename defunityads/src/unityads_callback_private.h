@@ -31,7 +31,8 @@ enum MessageEvent
     EVENT_STATUS_AUTORIZED =        10,
     EVENT_STATUS_DENIED =           11,
     EVENT_STATUS_NOT_DETERMINED =   12,
-    EVENT_STATUS_RESTRICTED =       13
+    EVENT_STATUS_RESTRICTED =       13,
+    EVENT_DID_SHOW =                14
 };
 
 enum Errors

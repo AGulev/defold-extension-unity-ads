@@ -328,6 +328,10 @@ void Finalize_Ext() {
     }
     dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_SDK_ERROR, @"code", code, @"error", error.localizedDescription, @"placement_id", bannerView.placementId);
 }
+
+- (void)bannerViewDidShow: (UADSBannerView *)bannerView{
+    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_DID_SHOW, @"placement_id", bannerView.placementId);
+}
 @end
 
 @implementation DefUnityAdsInitializationDelegate

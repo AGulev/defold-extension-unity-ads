@@ -160,6 +160,9 @@ local function unity_ads_callback(self, message_id, message)
         elseif message.event == unityads.EVENT_CLICKED then
             -- message = {placement_id = "string"}
             -- Banner is clicked.
+        elseif message.event == unityads.EVENT_DID_SHOW then
+            -- message = {placement_id = "string"}
+            -- Banner has shown.
         elseif message.event == unityads.EVENT_SDK_ERROR then
             -- message = {code = int, error = "error message string", "placement_id", placementId}
             if message.code == unityads.ERROR_UNKNOWN then
