@@ -1,3 +1,7 @@
+repositories {
+     mavenCentral()
+ }
+
 dependencies {
   implementation 'com.unity3d.ads:unity-ads:4.8.0'
 }
