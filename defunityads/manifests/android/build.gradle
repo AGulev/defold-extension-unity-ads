@@ -3,5 +3,5 @@ repositories {
  }
 
 dependencies {
-  implementation 'com.unity3d.ads:unity-ads:4.9.1'
+  implementation 'com.unity3d.ads:unity-ads:4.9.2'
 }
