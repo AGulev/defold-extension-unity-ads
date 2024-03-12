@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManager;
@@ -316,7 +317,9 @@ public class DefUnityAdsJNI {
                 @Override
                 public void onBannerLoaded(BannerView bannerAdView) {
                     bannerView = bannerAdView;
-
+                    if(bannerView.getParent() != null) {
+                        ((ViewGroup)bannerView.getParent()).removeView(bannerView);
+                    }
                     layout = new LinearLayout(activity);
                     layout.setOrientation(LinearLayout.VERTICAL);
                     layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
