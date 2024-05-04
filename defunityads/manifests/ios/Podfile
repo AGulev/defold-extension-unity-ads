@@ -1,2 +1,2 @@
 platform :ios, '10.0'
-pod 'UnityAds', '4.9.3'
+pod 'UnityAds', '4.10.0'
