@@ -4,6 +4,7 @@
 
 #include <UIKit/UIKit.h>
 #include <UnityAds/UnityAds.h>
+#include <UnityAds/UnityAds-Swift.h>
 
 #if __has_include(<AppTrackingTransparency/ATTrackingManager.h>)
 #import <AppTrackingTransparency/ATTrackingManager.h>
