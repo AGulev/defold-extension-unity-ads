@@ -12,3 +12,4 @@ builtins
 /bundle.sh
 /debug.keystore
 /debug.keystore.pass.txt
+/.editor_settings
