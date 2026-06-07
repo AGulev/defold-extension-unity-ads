@@ -2,12 +2,86 @@
 #include "unityads_callback_private.h"
 #include "utils/LuaUtils.h"
 #include <stdlib.h>
+#include <string.h>
 
 namespace dmUnityAds {
+
+    static const dmhash_t MASTER_SOUND_GROUP = dmHashString64("master");
 
     static dmScript::LuaCallbackInfo* m_luaCallback = 0x0;
     static dmArray<CallbackData> m_callbacksQueue;
     static dmMutex::HMutex m_mutex;
+    static bool m_wasMutedBeforeAd = false;
+    static bool m_hasSavedMuteState = false;
+
+    static bool GetEventFromJson(const char* json, int* event)
+    {
+        if (!json || !event)
+        {
+            return false;
+        }
+
+        const char* event_key = "\"event\"";
+        const char* event_pos = strstr(json, event_key);
+        if (!event_pos)
+        {
+            return false;
+        }
+
+        const char* event_value = strchr(event_pos + strlen(event_key), ':');
+        if (!event_value)
+        {
+            return false;
+        }
+
+        char* end = 0;
+        long parsed_event = strtol(event_value + 1, &end, 10);
+        if (end == event_value + 1)
+        {
+            return false;
+        }
+
+        *event = (int)parsed_event;
+        return true;
+    }
+
+    static void UpdateAdSoundState(MessageId type, const char* json)
+    {
+        if (type != MSG_SHOW)
+        {
+            return;
+        }
+
+        int event = 0;
+        if (!GetEventFromJson(json, &event))
+        {
+            return;
+        }
+
+        switch ((MessageEvent)event)
+        {
+            case EVENT_START:
+                if (!m_hasSavedMuteState)
+                {
+                    m_wasMutedBeforeAd = dmSound::IsGroupMuted(MASTER_SOUND_GROUP);
+                    m_hasSavedMuteState = true;
+                }
+                dmSound::SetGroupMute(MASTER_SOUND_GROUP, true);
+                break;
+            case EVENT_COMPLETED:
+            case EVENT_SDK_ERROR:
+            case EVENT_JSON_ERROR:
+            case EVENT_SKIPPED:
+                if (m_hasSavedMuteState)
+                {
+                    dmSound::SetGroupMute(MASTER_SOUND_GROUP, m_wasMutedBeforeAd);
+                    m_hasSavedMuteState = false;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     static void DestroyCallback()
     {
@@ -51,6 +125,11 @@ namespace dmUnityAds {
 
     void FinalizeCallback()
     {
+        if (m_hasSavedMuteState)
+        {
+            dmSound::SetGroupMute(MASTER_SOUND_GROUP, m_wasMutedBeforeAd);
+            m_hasSavedMuteState = false;
+        }
         dmMutex::Delete(m_mutex);
         DestroyCallback();
     }
@@ -98,6 +177,7 @@ namespace dmUnityAds {
         for(uint32_t i = 0; i != tmp.Size(); ++i)
         {
             CallbackData* data = &tmp[i];
+            UpdateAdSoundState(data->msg, data->json);
             InvokeCallback(data->msg, data->json);
             if(data->json)
             {
