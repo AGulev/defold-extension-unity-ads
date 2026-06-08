@@ -93,6 +93,7 @@ local version = unityads.get_version() -- Returns the Unity Ads SDK version as a
 ```lua
 unityads.show("rewardedVideo") -- show rewardedVideo
 ```
+The extension automatically mutes the Defold `master` sound group when an ad starts and restores the previous mute state when the ad completes, is skipped, or fails.
 
 #### unityads.load(placement_id)
 ```lua
