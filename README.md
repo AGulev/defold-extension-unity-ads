@@ -7,7 +7,7 @@ _“This plugin is not endorsed or sponsored by Unity Technologies. This is an i
 # DefVideoAds (plugin for Unity ADS)
 
 This is [UnityAds](https://unity3d.com/ru/services/ads) native extension for [Defold engine](http://www.defold.com).
-Extension supported IOS (minimum iOS version is 9.0) and Android.
+The extension supports iOS 13.0 and later, and Android.
 
 ## Installation
 To use this library in your Defold project, add the needed version URL to your `game.project` dependencies from [Releases](https://github.com/AGulev/DefVideoAds/releases)
@@ -25,7 +25,7 @@ See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/examp
 
 
 ## LUA Api
-Please, read [Android API docs](https://unityads.unity3d.com/help/android/api-android#iunityadsshowlistener) and [iOS API docs](https://unityads.unity3d.com/help/ios/api-ios#unityadsloaddelegate)
+Please read the Unity Ads 4.19.0 [Android API documentation](https://docs.unity.com/en-us/ads-android/4.19.0/sdk-integration/api/android-api) and [iOS Objective-C API documentation](https://docs.unity.com/en-us/ads-ios/4.19.0/sdk-integration/api/ios-api-objc).
 ### Methods
 
 #### unityads.request_idfa()
