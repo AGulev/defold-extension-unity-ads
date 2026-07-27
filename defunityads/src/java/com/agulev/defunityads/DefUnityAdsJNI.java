@@ -338,10 +338,21 @@ public class DefUnityAdsJNI {
     private boolean isShown = false;
 
     public void applyBannerPosition() {
-        if (isShown) {
-            _hideBanner();
-            showBanner();
+        if (!isShown || layout == null || windowParams == null) {
+            return;
         }
+
+        final LinearLayout currentLayout = layout;
+        final WindowManager.LayoutParams currentWindowParams = windowParams;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (currentLayout.getParent() != null) {
+                    currentWindowParams.gravity = m_bannerPosition.getGravity();
+                    activity.getWindowManager().updateViewLayout(currentLayout, currentWindowParams);
+                }
+            }
+        });
     }
 
     public void setBannerPosition(String position) {
@@ -352,9 +363,13 @@ public class DefUnityAdsJNI {
     public void loadBanner(String placementId, int width, int height) {
         if (bannerView == null) {
             BannerView banner = new BannerView(activity, placementId, new UnityBannerSize(width, height));
+            bannerView = banner;
             banner.setListener(new BannerView.IListener() {
                 @Override
                 public void onBannerLoaded(BannerView bannerAdView) {
+                    if (bannerView != bannerAdView) {
+                        return;
+                    }
                     bannerView = bannerAdView;
                     if(bannerView.getParent() != null) {
                         ((ViewGroup)bannerView.getParent()).removeView(bannerView);
@@ -417,70 +432,67 @@ public class DefUnityAdsJNI {
         }
     }
 
-    private void _unloadBanner() {
-        bannerView.destroy();
-        layout = null;
-        bannerView = null;
-        windowParams = null;
-        isShown = false;
-    }
-
     public void unloadBanner() {
         if (bannerView == null) {
             return;
         }
-        if (!isShown) {
-            _unloadBanner();
-        } else {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WindowManager wm = activity.getWindowManager();
-                    wm.removeView(layout);
-                    _unloadBanner();
-                }
 
-            });
-        }
-    }
-
-    private void _hideBanner() {
-        if (!isShown) {
-            return;
-        }
-
+        final BannerView bannerToDestroy = bannerView;
+        final LinearLayout layoutToRemove = layout;
+        bannerView = null;
+        layout = null;
+        windowParams = null;
         isShown = false;
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WindowManager wm = activity.getWindowManager();
-                wm.removeView(layout);
-            }
-
-        });
-    }
-
-    public void showBanner() {
-        if (isShown || bannerView == null) {
-            return;
-        }
-        isShown = true;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                WindowManager wm = activity.getWindowManager();
-                layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
-                windowParams.gravity = m_bannerPosition.getGravity();
-                wm.addView(layout, windowParams);
+                if (layoutToRemove != null && layoutToRemove.getParent() != null) {
+                    activity.getWindowManager().removeView(layoutToRemove);
+                }
+                bannerToDestroy.destroy();
             }
         });
     }
 
     public void hideBanner() {
-        if (bannerView == null) {
+        if (!isShown || layout == null) {
             return;
         }
 
-        _hideBanner();
+        final LinearLayout currentLayout = layout;
+        isShown = false;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Keep the banner attached. Detaching Unity's BannerView during a
+                // temporary hide destroys its WebView while OMID may still use it.
+                currentLayout.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void showBanner() {
+        if (isShown || bannerView == null || layout == null || windowParams == null) {
+            return;
+        }
+
+        final LinearLayout currentLayout = layout;
+        final WindowManager.LayoutParams currentWindowParams = windowParams;
+        isShown = true;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                currentLayout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
+                currentWindowParams.gravity = m_bannerPosition.getGravity();
+                currentLayout.setVisibility(View.VISIBLE);
+                if (currentLayout.getParent() == null) {
+                    wm.addView(currentLayout, currentWindowParams);
+                } else {
+                    wm.updateViewLayout(currentLayout, currentWindowParams);
+                }
+            }
+        });
     }
 }

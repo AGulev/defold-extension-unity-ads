@@ -117,18 +117,22 @@ unityads.load_banner("banner", 320, 50) -- load banner
 
 #### unityads.unload_banner()
 ```lua
-unityads.unload_banner() -- unload banner
+unityads.unload_banner() -- destroy the loaded banner
 ```
 
 #### unityads.show_banner()
 ```lua
-unityads.show_banner() -- show banner
+unityads.show_banner() -- show or restore the loaded banner
 ```
 
 #### unityads.hide_banner()
 ```lua
-unityads.hide_banner() -- hide banner
+unityads.hide_banner() -- temporarily hide the banner without unloading it
 ```
+
+Use `hide_banner()` when the same banner will be shown again. Use
+`unload_banner()` only when the banner is no longer needed; load a new banner
+before calling `show_banner()` again.
 
 #### unityads.set_banner_position(position)
 ```lua
