@@ -200,14 +200,14 @@ function init(self)
     update_ui(self)
     if unityads then
         unityads.set_debug_mode(true)
-        print("VERSION: ", unityads.get_version(), "DEBUG:", unityads.get_debug_mode())
-        print("isInitialized:", unityads.is_initialized(),"isSupported:", unityads.is_supported())
+        print("unityads.get_version():", unityads.get_version(), "unityads.get_debug_mode():", unityads.get_debug_mode())
+        print("unityads.is_initialized():", unityads.is_initialized(), "unityads.is_supported():", unityads.is_supported())
         unityads.set_callback(unity_ads_callback)
     end
 end
 
 function final(self)
-    print("Final! Remove Callback!")
+    print("final(): removing the Unity Ads callback")
     if unityads then
         unityads.set_callback()
     end
@@ -216,10 +216,10 @@ end
 local function init_unity_ads(self, appId)
     if unityads and appId then
         if not unityads.is_initialized() then
-            print("Init SDK with id", appId)
-            unityads.initialize(appId, unity_ads_callback, true)
+            print("unityads.initialize('"..appId.."', nil, true)")
+            unityads.initialize(appId, nil, true)
         else
-            print("UnityADS already inited. Just set callback one more time")
+            print("Unity Ads is already initialized; updating the callback")
             unityads.set_callback(unity_ads_callback)
         end
     end
@@ -227,14 +227,14 @@ end
 
 local function set_callback(self)
     if unityads then
-        print("setCallback(unity_ads_callback)")
+        print("unityads.set_callback(unity_ads_callback)")
         unityads.set_callback(unity_ads_callback)
     end
 end
 
 local function remove_callback(self)
     if unityads then
-        print("setCallback(nil)")
+        print("unityads.set_callback(nil)")
         unityads.set_callback(nil) -- same as unityads.set_callback()
     end
 end
@@ -242,12 +242,12 @@ end
 local function loadbanner(self)
     if unityads then
         if not self.is_ready[BANNER] then
-            print("loadBanner('banner')")
+            print("unityads.load_banner('banner')")
             unityads.load_banner(BANNER)
         else
             self.is_ready[BANNER] = nil
             self.is_show_banner = false
-            print("unloadBanner()")
+            print("unityads.unload_banner()")
             gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
             gui.set_color(gui.get_node("show_banner/larrylabel"), vmath.vector4(1, 0, 0, 1))
             gui.set_text(gui.get_node("banner/larrylabel"), "Load Banner")
@@ -262,12 +262,12 @@ local function showbanner(self)
         if not self.is_show_banner then
             self.is_show_banner = true
             gui.set_text(gui.get_node("show_banner/larrylabel"), "Hide Banner")
-            print("showBanner()")
+            print("unityads.show_banner()")
             unityads.show_banner()
         else
             self.is_show_banner = false
             gui.set_text(gui.get_node("show_banner/larrylabel"), "Show Banner")
-            print("hideBanner()")
+            print("unityads.hide_banner()")
             unityads.hide_banner()
         end
     end
@@ -340,12 +340,12 @@ function on_input(self, action_id, action)
         end)
     elseif self.ad_type then
         dirtylarry:button("load_video", action_id, action, function ()
-            print("unityads.load("..self.ad_type..")")
+            print("unityads.load('"..self.ad_type.."')")
             unityads.load(self.ad_type)
         end)
 
         dirtylarry:button("show_video", action_id, action, function ()
-            print("unityads.show("..self.ad_type..")")
+            print("unityads.show('"..self.ad_type.."')")
             unityads.show(self.ad_type)
         end)
         

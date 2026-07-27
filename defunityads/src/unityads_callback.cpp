@@ -96,7 +96,7 @@ namespace dmUnityAds {
     {
         if (!dmScript::IsCallbackValid(m_luaCallback))
         {
-            dmLogError("UnityADS callback is invalid. Set new callback unsing `unityads.setCallback()` funciton.");
+            dmLogError("Unity Ads callback is invalid. Set a new callback using `unityads.set_callback()`.");
             return;
         }
 
@@ -143,7 +143,9 @@ namespace dmUnityAds {
         }
         else
         {
-            m_luaCallback = dmScript::CreateCallback(L, pos);
+            dmScript::LuaCallbackInfo* callback = dmScript::CreateCallback(L, pos);
+            DestroyCallback();
+            m_luaCallback = callback;
         }
     }
 

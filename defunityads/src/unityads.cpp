@@ -18,7 +18,10 @@ static int Lua_Initialize(lua_State* L)
     DM_LUA_STACK_CHECK(L, 0);
     const char *gameId_lua = luaL_checkstring(L, 1);
     bool enableDebugMode_lua = false;
-    SetLuaCallback(L, 2);
+    int callback_type = lua_type(L, 2);
+    if (callback_type != LUA_TNONE && callback_type != LUA_TNIL) {
+        SetLuaCallback(L, 2);
+    }
     if (lua_type(L, 3) != LUA_TNONE) {
         enableDebugMode_lua = luaL_checkbool(L, 3);
     }

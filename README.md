@@ -50,6 +50,14 @@ unityads.initialize("1401815", defunityads_callback)
 unityads.initialize("1401815", defunityads_callback, true)
 ```
 
+If a callback was set beforehand, omitting the callback or passing `nil` preserves it:
+```lua
+unityads.set_callback(defunityads_callback)
+unityads.initialize("1401815")
+-- or:
+unityads.initialize("1401815", nil, true)
+```
+
 #### unityads.set_callback(callback)
 
 ```lua
