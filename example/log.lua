@@ -47,6 +47,9 @@ function M.get_msg_log(message_id, message)
     if message.placement_id then
         str = str.. " placement_id:"..message.placement_id
     end
+    if message.width and message.height then
+        str = str.. " size:"..message.width.."x"..message.height
+    end
     if message.code then
         str = str.. " error_code:"..ERRORS[message.code]
     end

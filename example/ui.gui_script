@@ -150,7 +150,7 @@ local function unity_ads_callback(self, message_id, message)
         end
     elseif message_id == unityads.MSG_BANNER then
         if message.event == unityads.EVENT_LOADED then
-            -- message = {placement_id = "string"}
+            -- message = {placement_id = "string", width = int, height = int}
             -- Banner is loaded and ready to be placed in the view hierarchy.
             self.is_ready[message.placement_id] = true
             gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
@@ -161,7 +161,7 @@ local function unity_ads_callback(self, message_id, message)
             -- message = {placement_id = "string"}
             -- Banner is clicked.
         elseif message.event == unityads.EVENT_DID_SHOW then
-            -- message = {placement_id = "string"}
+            -- message = {placement_id = "string", width = int, height = int}
             -- Banner has shown.
         elseif message.event == unityads.EVENT_SDK_ERROR then
             -- message = {code = int, error = "error message string", "placement_id", placementId}

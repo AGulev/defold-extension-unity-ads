@@ -111,7 +111,7 @@ unityads.load("rewardedVideo") -- load rewardedVideo
 #### unityads.load_banner(placement_id)
 #### unityads.load_banner(placement_id, banner_width, banner_height)
 ```lua
-unityads.load_banner("banner") -- load banner, by defaulf width = 320, height = 50
+unityads.load_banner("banner") -- load banner, by default width = 320, height = 50
 unityads.load_banner("banner", 320, 50) -- load banner
 ```
 
@@ -253,14 +253,18 @@ end
 ```lua
 local function defunityads_callback(self, message_id, message)
   if message.event == unityads.EVENT_LOADED then
-      -- message = {placement_id = "string"}
+      -- message = {placement_id = "string", width = int, height = int}
       -- Banner is loaded and ready to be placed in the view hierarchy.
+      -- width and height are screen pixels, matching window.get_size().
   elseif message.event == unityads.EVENT_LEFT_APPLICATION then
       -- message = {placement_id = "string"}
       -- Banner links outside the application.
   elseif message.event == unityads.EVENT_CLICKED then
       -- message = {placement_id = "string"}
       -- Banner is clicked.
+  elseif message.event == unityads.EVENT_DID_SHOW then
+      -- message = {placement_id = "string", width = int, height = int}
+      -- The displayed banner size in screen pixels.
   elseif message.event == unityads.EVENT_SDK_ERROR then
       -- message = {code = int, error = "error message string", placement_id = "string"}
       if message.code == unityads.ERROR_UNKNOWN then
@@ -277,6 +281,17 @@ local function defunityads_callback(self, message_id, message)
   end
 end
 ```
+
+Banner dimensions use Defold screen coordinates. To reserve the equivalent
+height in a GUI scene:
+```lua
+local _, screen_height = window.get_size()
+local banner_gui_height = message.height * gui.get_height() / screen_height
+```
+
+For banners anchored at the top or bottom, use `window.get_safe_area()` if the
+GUI extends into the unsafe area. Add `inset_top` or `inset_bottom` before
+converting the reserved height to GUI coordinates.
 
 ##### unityads.MSG_IDFA
 ```lua

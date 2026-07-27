@@ -145,6 +145,45 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
+    private int getBannerWidthInScreenPixels(BannerView bannerAdView) {
+        int width = bannerAdView.getWidth();
+        if (width <= 0) {
+            width = bannerAdView.getMeasuredWidth();
+        }
+        if (width <= 0 && bannerAdView.getSize() != null) {
+            float density = activity.getResources().getDisplayMetrics().density;
+            width = Math.round(bannerAdView.getSize().getWidth() * density);
+        }
+        return width;
+    }
+
+    private int getBannerHeightInScreenPixels(BannerView bannerAdView) {
+        int height = bannerAdView.getHeight();
+        if (height <= 0) {
+            height = bannerAdView.getMeasuredHeight();
+        }
+        if (height <= 0 && bannerAdView.getSize() != null) {
+            float density = activity.getResources().getDisplayMetrics().density;
+            height = Math.round(bannerAdView.getSize().getHeight() * density);
+        }
+        return height;
+    }
+
+    private void sendBannerMessage(int eventId, BannerView bannerAdView) {
+        String message = null;
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("event", eventId);
+            obj.put("placement_id", bannerAdView.getPlacementId());
+            obj.put("width", getBannerWidthInScreenPixels(bannerAdView));
+            obj.put("height", getBannerHeightInScreenPixels(bannerAdView));
+            message = obj.toString();
+        } catch (JSONException e) {
+            message = getJsonConversionErrorMessage(e.getLocalizedMessage());
+        }
+        unityadsAddToQueue(MSG_BANNER, message);
+    }
+
     public void initialize(String gameId, boolean testMode) {
         UnityAds.initialize(activity.getApplicationContext(), gameId, testMode, new IUnityAdsInitializationListener() {
             @Override
@@ -336,7 +375,7 @@ public class DefUnityAdsJNI {
                     windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-                    sendSimpleMessage(MSG_BANNER, EVENT_LOADED, "placement_id", bannerAdView.getPlacementId());
+                    sendBannerMessage(EVENT_LOADED, bannerAdView);
                 }
 
                 @Override
@@ -371,7 +410,7 @@ public class DefUnityAdsJNI {
                 
                 @Override
                 public void onBannerShown(BannerView bannerAdView) {
-                    sendSimpleMessage(MSG_BANNER, EVENT_DID_SHOW, "placement_id", bannerAdView.getPlacementId());
+                    sendBannerMessage(EVENT_DID_SHOW, bannerAdView);
                 }
             });
             banner.load();

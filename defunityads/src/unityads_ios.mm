@@ -5,6 +5,7 @@
 #include <UIKit/UIKit.h>
 #include <UnityAds/UnityAds.h>
 #include <UnityAds/UnityAds-Swift.h>
+#include <math.h>
 
 #if __has_include(<AppTrackingTransparency/ATTrackingManager.h>)
 #import <AppTrackingTransparency/ATTrackingManager.h>
@@ -25,6 +26,7 @@
 namespace dmUnityAds {
 
 static UIViewController *uiViewController;
+static CGSize requestedBannerSize;
 
 void SendSimpleMessage(MessageId msg, id obj) {
     NSError* error;
@@ -83,6 +85,32 @@ void SendSimpleMessage(MessageId msg, MessageEvent event, NSString *key_2, int v
     [dict setObject:value_3 forKey:key_3];
     [dict setObject:value_4 forKey:key_4];
     SendSimpleMessage(msg, dict);
+}
+
+void SendBannerMessage(MessageEvent event, UADSBannerView *bannerView) {
+    CGFloat screenScale = uiViewController.view.contentScaleFactor;
+    if (screenScale <= 0.0f) {
+        screenScale = [UIScreen mainScreen].nativeScale;
+    }
+
+    CGRect bounds = bannerView.bounds;
+    CGFloat widthInPoints = CGRectGetWidth(bounds);
+    CGFloat heightInPoints = CGRectGetHeight(bounds);
+    if (widthInPoints <= 0.0f) {
+        widthInPoints = requestedBannerSize.width;
+    }
+    if (heightInPoints <= 0.0f) {
+        heightInPoints = requestedBannerSize.height;
+    }
+    int width = (int)lround(widthInPoints * screenScale);
+    int height = (int)lround(heightInPoints * screenScale);
+
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:[NSNumber numberWithInt:event] forKey:@"event"];
+    [dict setObject:bannerView.placementId forKey:@"placement_id"];
+    [dict setObject:[NSNumber numberWithInt:width] forKey:@"width"];
+    [dict setObject:[NSNumber numberWithInt:height] forKey:@"height"];
+    SendSimpleMessage(MSG_BANNER, dict);
 }
     
 void Initialize(const char*game_id, bool is_debug) {
@@ -232,8 +260,9 @@ static void ApplyBannerPosition() {
 
 void LoadBanner(char* placementId, int width, int height) {
     if (!gDefVideoAdsBannerView){
+        requestedBannerSize = CGSizeMake(width, height);
         NSString* placementId_s = [NSString stringWithUTF8String:placementId];
-        UADSBannerView *localBannerView = [[UADSBannerView alloc] initWithPlacementId: placementId_s size: CGSizeMake(width, height)];
+        UADSBannerView *localBannerView = [[UADSBannerView alloc] initWithPlacementId: placementId_s size: requestedBannerSize];
         if (!unityBannerDelegate) {
             unityBannerDelegate = [[DefUnityAdsBannerDelegate alloc] init];
         }
@@ -247,6 +276,7 @@ void UnloadBanner() {
     if (gDefVideoAdsBannerView){
         [gDefVideoAdsBannerView release];
         gDefVideoAdsBannerView = nil;
+        requestedBannerSize = CGSizeZero;
     }
 }
 
@@ -293,6 +323,7 @@ void Finalize_Ext() {
         [gDefVideoAdsBannerView release];
         gDefVideoAdsBannerView = nil;
     }
+    requestedBannerSize = CGSizeZero;
 }
 
 } //namespace
@@ -300,7 +331,7 @@ void Finalize_Ext() {
 @implementation DefUnityAdsBannerDelegate
 - (void)bannerViewDidLoad:(UADSBannerView *)bannerView {
     dmUnityAds::gDefVideoAdsBannerView = bannerView;
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_LOADED, @"placement_id", bannerView.placementId);
+    dmUnityAds::SendBannerMessage(dmUnityAds::EVENT_LOADED, bannerView);
 }
 
 - (void)bannerViewDidClick:(UADSBannerView *)bannerView {
@@ -331,7 +362,7 @@ void Finalize_Ext() {
 }
 
 - (void)bannerViewDidShow: (UADSBannerView *)bannerView{
-    dmUnityAds::SendSimpleMessage(dmUnityAds::MSG_BANNER, dmUnityAds::EVENT_DID_SHOW, @"placement_id", bannerView.placementId);
+    dmUnityAds::SendBannerMessage(dmUnityAds::EVENT_DID_SHOW, bannerView);
 }
 @end
 
