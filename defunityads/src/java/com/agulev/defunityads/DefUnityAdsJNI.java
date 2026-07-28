@@ -145,6 +145,45 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
+    private int getBannerWidthInScreenPixels(BannerView bannerAdView) {
+        int width = bannerAdView.getWidth();
+        if (width <= 0) {
+            width = bannerAdView.getMeasuredWidth();
+        }
+        if (width <= 0 && bannerAdView.getSize() != null) {
+            float density = activity.getResources().getDisplayMetrics().density;
+            width = Math.round(bannerAdView.getSize().getWidth() * density);
+        }
+        return width;
+    }
+
+    private int getBannerHeightInScreenPixels(BannerView bannerAdView) {
+        int height = bannerAdView.getHeight();
+        if (height <= 0) {
+            height = bannerAdView.getMeasuredHeight();
+        }
+        if (height <= 0 && bannerAdView.getSize() != null) {
+            float density = activity.getResources().getDisplayMetrics().density;
+            height = Math.round(bannerAdView.getSize().getHeight() * density);
+        }
+        return height;
+    }
+
+    private void sendBannerMessage(int eventId, BannerView bannerAdView) {
+        String message = null;
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("event", eventId);
+            obj.put("placement_id", bannerAdView.getPlacementId());
+            obj.put("width", getBannerWidthInScreenPixels(bannerAdView));
+            obj.put("height", getBannerHeightInScreenPixels(bannerAdView));
+            message = obj.toString();
+        } catch (JSONException e) {
+            message = getJsonConversionErrorMessage(e.getLocalizedMessage());
+        }
+        unityadsAddToQueue(MSG_BANNER, message);
+    }
+
     public void initialize(String gameId, boolean testMode) {
         UnityAds.initialize(activity.getApplicationContext(), gameId, testMode, new IUnityAdsInitializationListener() {
             @Override
@@ -299,10 +338,21 @@ public class DefUnityAdsJNI {
     private boolean isShown = false;
 
     public void applyBannerPosition() {
-        if (isShown) {
-            _hideBanner();
-            showBanner();
+        if (!isShown || layout == null || windowParams == null) {
+            return;
         }
+
+        final LinearLayout currentLayout = layout;
+        final WindowManager.LayoutParams currentWindowParams = windowParams;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (currentLayout.getParent() != null) {
+                    currentWindowParams.gravity = m_bannerPosition.getGravity();
+                    activity.getWindowManager().updateViewLayout(currentLayout, currentWindowParams);
+                }
+            }
+        });
     }
 
     public void setBannerPosition(String position) {
@@ -313,9 +363,13 @@ public class DefUnityAdsJNI {
     public void loadBanner(String placementId, int width, int height) {
         if (bannerView == null) {
             BannerView banner = new BannerView(activity, placementId, new UnityBannerSize(width, height));
+            bannerView = banner;
             banner.setListener(new BannerView.IListener() {
                 @Override
                 public void onBannerLoaded(BannerView bannerAdView) {
+                    if (bannerView != bannerAdView) {
+                        return;
+                    }
                     bannerView = bannerAdView;
                     if(bannerView.getParent() != null) {
                         ((ViewGroup)bannerView.getParent()).removeView(bannerView);
@@ -336,7 +390,7 @@ public class DefUnityAdsJNI {
                     windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-                    sendSimpleMessage(MSG_BANNER, EVENT_LOADED, "placement_id", bannerAdView.getPlacementId());
+                    sendBannerMessage(EVENT_LOADED, bannerAdView);
                 }
 
                 @Override
@@ -371,77 +425,74 @@ public class DefUnityAdsJNI {
                 
                 @Override
                 public void onBannerShown(BannerView bannerAdView) {
-                    sendSimpleMessage(MSG_BANNER, EVENT_DID_SHOW, "placement_id", bannerAdView.getPlacementId());
+                    sendBannerMessage(EVENT_DID_SHOW, bannerAdView);
                 }
             });
             banner.load();
         }
     }
 
-    private void _unloadBanner() {
-        bannerView.destroy();
-        layout = null;
-        bannerView = null;
-        windowParams = null;
-        isShown = false;
-    }
-
     public void unloadBanner() {
         if (bannerView == null) {
             return;
         }
-        if (!isShown) {
-            _unloadBanner();
-        } else {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WindowManager wm = activity.getWindowManager();
-                    wm.removeView(layout);
-                    _unloadBanner();
-                }
 
-            });
-        }
-    }
-
-    private void _hideBanner() {
-        if (!isShown) {
-            return;
-        }
-
+        final BannerView bannerToDestroy = bannerView;
+        final LinearLayout layoutToRemove = layout;
+        bannerView = null;
+        layout = null;
+        windowParams = null;
         isShown = false;
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                WindowManager wm = activity.getWindowManager();
-                wm.removeView(layout);
-            }
-
-        });
-    }
-
-    public void showBanner() {
-        if (isShown || bannerView == null) {
-            return;
-        }
-        isShown = true;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                WindowManager wm = activity.getWindowManager();
-                layout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
-                windowParams.gravity = m_bannerPosition.getGravity();
-                wm.addView(layout, windowParams);
+                if (layoutToRemove != null && layoutToRemove.getParent() != null) {
+                    activity.getWindowManager().removeView(layoutToRemove);
+                }
+                bannerToDestroy.destroy();
             }
         });
     }
 
     public void hideBanner() {
-        if (bannerView == null) {
+        if (!isShown || layout == null) {
             return;
         }
 
-        _hideBanner();
+        final LinearLayout currentLayout = layout;
+        isShown = false;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Keep the banner attached. Detaching Unity's BannerView during a
+                // temporary hide destroys its WebView while OMID may still use it.
+                currentLayout.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void showBanner() {
+        if (isShown || bannerView == null || layout == null || windowParams == null) {
+            return;
+        }
+
+        final LinearLayout currentLayout = layout;
+        final WindowManager.LayoutParams currentWindowParams = windowParams;
+        isShown = true;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                WindowManager wm = activity.getWindowManager();
+                currentLayout.setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility());
+                currentWindowParams.gravity = m_bannerPosition.getGravity();
+                currentLayout.setVisibility(View.VISIBLE);
+                if (currentLayout.getParent() == null) {
+                    wm.addView(currentLayout, currentWindowParams);
+                } else {
+                    wm.updateViewLayout(currentLayout, currentWindowParams);
+                }
+            }
+        });
     }
 }
