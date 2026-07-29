@@ -145,38 +145,14 @@ public class DefUnityAdsJNI {
       unityadsAddToQueue(msg, message);
     }
 
-    private int getBannerWidthInScreenPixels(BannerView bannerAdView) {
-        int width = bannerAdView.getWidth();
-        if (width <= 0) {
-            width = bannerAdView.getMeasuredWidth();
-        }
-        if (width <= 0 && bannerAdView.getSize() != null) {
-            float density = activity.getResources().getDisplayMetrics().density;
-            width = Math.round(bannerAdView.getSize().getWidth() * density);
-        }
-        return width;
-    }
-
-    private int getBannerHeightInScreenPixels(BannerView bannerAdView) {
-        int height = bannerAdView.getHeight();
-        if (height <= 0) {
-            height = bannerAdView.getMeasuredHeight();
-        }
-        if (height <= 0 && bannerAdView.getSize() != null) {
-            float density = activity.getResources().getDisplayMetrics().density;
-            height = Math.round(bannerAdView.getSize().getHeight() * density);
-        }
-        return height;
-    }
-
-    private void sendBannerMessage(int eventId, BannerView bannerAdView) {
+    private void sendBannerMessage(int eventId, BannerView bannerAdView, int width, int height) {
         String message = null;
         try {
             JSONObject obj = new JSONObject();
             obj.put("event", eventId);
             obj.put("placement_id", bannerAdView.getPlacementId());
-            obj.put("width", getBannerWidthInScreenPixels(bannerAdView));
-            obj.put("height", getBannerHeightInScreenPixels(bannerAdView));
+            obj.put("width", width);
+            obj.put("height", height);
             message = obj.toString();
         } catch (JSONException e) {
             message = getJsonConversionErrorMessage(e.getLocalizedMessage());
@@ -362,7 +338,11 @@ public class DefUnityAdsJNI {
 
     public void loadBanner(String placementId, int width, int height) {
         if (bannerView == null) {
-            BannerView banner = new BannerView(activity, placementId, new UnityBannerSize(width, height));
+            final UnityBannerSize bannerSize = new UnityBannerSize(width, height);
+            final float density = activity.getResources().getDisplayMetrics().density;
+            final int bannerWidth = Math.round(bannerSize.getWidth() * density);
+            final int bannerHeight = Math.round(bannerSize.getHeight() * density);
+            BannerView banner = new BannerView(activity, placementId, bannerSize);
             bannerView = banner;
             banner.setListener(new BannerView.IListener() {
                 @Override
@@ -390,7 +370,7 @@ public class DefUnityAdsJNI {
                     windowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     windowParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-                    sendBannerMessage(EVENT_LOADED, bannerAdView);
+                    sendBannerMessage(EVENT_LOADED, bannerAdView, bannerWidth, bannerHeight);
                 }
 
                 @Override
@@ -425,7 +405,7 @@ public class DefUnityAdsJNI {
                 
                 @Override
                 public void onBannerShown(BannerView bannerAdView) {
-                    sendBannerMessage(EVENT_DID_SHOW, bannerAdView);
+                    sendBannerMessage(EVENT_DID_SHOW, bannerAdView, bannerWidth, bannerHeight);
                 }
             });
             banner.load();
