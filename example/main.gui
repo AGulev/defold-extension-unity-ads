@@ -14,6 +14,20 @@ background_color {
   w: 1.0
 }
 nodes {
+  size {
+    x: 20.0
+  }
+  color {
+    x: 0.6
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "height_b"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
   position {
     x: 171.0
     y: 654.0

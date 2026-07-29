@@ -46,6 +46,25 @@ local COLOR = {
     [false] = vmath.vector4(1, 0, 0, 1)
 }
 
+local function set_block_height(height)
+    -- Unity Ads reports banner size in physical pixels; convert to GUI units.
+    local screen_width, screen_height = window.get_size()
+    local project_width = sys.get_config_int("display.width", screen_width)
+    local project_height = sys.get_config_int("display.height", screen_height)
+    local scale_x = screen_width / project_width
+    local scale_y = screen_height / project_height
+    local scale = math.min(scale_x, scale_y)
+    if scale <= 0 then
+        return
+    end
+
+    local height_b_node = gui.get_node("height_b")
+    local size = gui.get_size(height_b_node)
+    size.y = height / scale
+    gui.set_size(height_b_node, size)
+    gui.set_screen_position(height_b_node, vmath.vector3(0))
+end
+
 local function update_ui(self)
     local is_initialized = unityads.is_initialized()
     gui.set_enabled(gui.get_node("idfa/larrybutton"), not is_initialized)
@@ -154,6 +173,7 @@ local function unity_ads_callback(self, message_id, message)
             -- Banner is loaded and ready to be placed in the view hierarchy.
             self.is_ready[message.placement_id] = true
             gui.set_text(gui.get_node("banner/larrylabel"), "Unload Banner")
+            set_block_height(message.height)
         elseif message.event == unityads.EVENT_LEFT_APPLICATION then
             -- message = {placement_id = "string"}
             -- Banner links outside the application.
