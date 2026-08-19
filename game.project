@@ -29,6 +29,7 @@ bundle_identifier = com.agulev.test
 [android]
 package = com.agulev.defvideoads.test
 immersive_mode = 1
+r8_keep_rules = /builtins/manifests/android/dmengine.keep
 
 [unityads]
 tracking_usage_description = Your data will be used to provide you a better and personalized ad experience.

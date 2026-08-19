@@ -1,0 +1,2 @@
+# Native DefUnityAds code loads the extension's Java classes and methods by name through JNI.
+-keep,allowoptimization class com.agulev.defunityads.** { *; }
