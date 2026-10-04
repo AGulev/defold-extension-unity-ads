@@ -25,7 +25,7 @@ See the [example folder](https://github.com/AGulev/DefVideoAds/tree/master/examp
 
 
 ## LUA Api
-Please read the Unity Ads 4.19.0 [Android API documentation](https://docs.unity.com/en-us/ads-android/4.19.0/sdk-integration/api/android-api) and [iOS Objective-C API documentation](https://docs.unity.com/en-us/ads-ios/4.19.0/sdk-integration/api/ios-api-objc).
+Please read the Unity Ads 4.21.0 [Android API documentation](https://docs.unity.com/en-us/ads-android/4.21.0/sdk-integration/api/android-api) and [iOS Objective-C API documentation](https://docs.unity.com/en-us/ads-ios/4.21.0/sdk-integration/api/ios-api-objc).
 ### Methods
 
 #### unityads.request_idfa()
