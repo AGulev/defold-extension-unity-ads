@@ -1,0 +1,11 @@
+{
+  "platform": "ios",
+  "minVersion": "13.0",
+  "packages": [
+    {
+      "url": "https://github.com/Unity-Technologies/unity-ads-swift-package.git",
+      "version": "4.21.0",
+      "products": ["UnityAds"]
+    }
+  ]
+}
